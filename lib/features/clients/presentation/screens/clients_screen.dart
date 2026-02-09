@@ -20,7 +20,6 @@ class ClientsScreen extends StatefulWidget {
 class _ClientsScreenState extends State<ClientsScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
   }
