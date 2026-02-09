@@ -46,6 +46,7 @@ dependencies:
   toggle_switch: ^2.3.0
   flutter_riverpod: ^3.0.3
   flutter_launcher_icons: ^0.14.4
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
