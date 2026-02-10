@@ -11,12 +11,23 @@ class OrderItem extends StatelessWidget {
   final OrderModel order;
   final ClientModel client;
   final String clientName;
-  const OrderItem({super.key, required this.order, required this.client,required this.clientName});
+  const OrderItem({super.key, required this.order, required this.client, required this.clientName});
+
+  static String _statusLabel(BuildContext context, OrderStatus status) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (status) {
+      case OrderStatus.pending:
+        return l10n.orderStatusPending;
+      case OrderStatus.partial:
+        return l10n.orderStatusPartial;
+      case OrderStatus.paid:
+        return l10n.orderStatusPaid;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
-    final l10n = AppLocalizations.of(context)!;
     return Card(
       child:  SizedBox(
         height: 90,
@@ -44,7 +55,7 @@ class OrderItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30.r(context)),
                     ),
                     // padding: EdgeInsets.all(12),
-                    child: Center(child: Text(order.status.name,style: theme.bodySmall!.copyWith(fontWeight: FontWeight.bold),)),
+                    child: Center(child: Text(_statusLabel(context, order.status), style: theme.bodySmall!.copyWith(fontWeight: FontWeight.bold),)),
                   ),
                 ],
               ),

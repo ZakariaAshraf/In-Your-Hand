@@ -12,7 +12,9 @@ class LanguageToggleButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final locale = ref.watch(localeProvider);
-    final isEnglish = locale?.languageCode == 'en';
+    // When no preference (null), follow system: use current resolved locale
+    final resolvedLocale = locale ?? Localizations.localeOf(context);
+    final isEnglish = resolvedLocale.languageCode == 'en';
     final l10n = AppLocalizations.of(context);
     return SettingsToggleButton(
       leadingIconData: CupertinoIcons.globe,

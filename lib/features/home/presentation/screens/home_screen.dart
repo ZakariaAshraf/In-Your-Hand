@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   SizedBox(height: 10.h(context)),
                                   Text(
-                                    "Total Orders",
+                                    l10n.totalOrders,
                                     style: theme.bodySmall!.copyWith(
                                       fontSize: 16.sp(context),
                                     ),
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   SizedBox(height: 10.h(context)),
                                   Text(
-                                    "Unpaid",
+                                    l10n.unpaid,
                                     style: theme.bodySmall!.copyWith(
                                       fontSize: 16.sp(context),
                                     ),
@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 SizedBox(height: 10.h(context)),
                                 Text(
-                                  "Total Orders",
+                                  l10n.totalOrders,
                                   style: theme.bodySmall!.copyWith(
                                     fontSize: 16.sp(context),
                                   ),
@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 SizedBox(height: 10.h(context)),
                                 Text(
-                                  "Unpaid",
+                                  l10n.unpaid,
                                   style: theme.bodySmall!.copyWith(
                                     fontSize: 16.sp(context),
                                   ),
@@ -239,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 130.h(context)),
             CustomButton(
-              title: "+ Add Order",
+              title: l10n.addOrder,
               onTap: () {
                 Navigator.push(
                   context,
@@ -251,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 30.h(context)),
             CustomButton(
-              title: "+ Add Client",
+              title: l10n.addClient,
               onTap: () {
                 Navigator.push(
                   context,

@@ -14,9 +14,11 @@ class ThemeNotifier extends Notifier<ThemeMode> {
 
     if (savedTheme == 'dark') {
       return ThemeMode.dark;
-    } else if (savedTheme == 'light') {
+    }
+    if (savedTheme == 'light') {
       return ThemeMode.light;
     }
+    // First-time / no preference: follow system theme (device light/dark)
     return ThemeMode.system;
   }
 

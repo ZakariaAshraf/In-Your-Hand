@@ -49,7 +49,7 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: false,
-          title: Text("Add Client", style: theme.titleLarge),
+          title: Text(l10n.addClientTitle, style: theme.titleLarge),
         ),
         body: Column(
           children: [
@@ -57,8 +57,8 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
               padding: const EdgeInsets.all(10.0),
               child: CustomTextField(
                 controller: nameController,
-                title: "Name",
-                hintText: "Client Name",
+                title: l10n.name,
+                hintText: l10n.clientName,
               ),
             ),
             SizedBox(height: 20.h(context)),
@@ -66,8 +66,8 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
               padding: const EdgeInsets.all(10.0),
               child: CustomTextField(
                 controller: phoneController,
-                title: "Phone",
-                hintText: "Phone Number",
+                title: l10n.phone,
+                hintText: l10n.phoneNumber,
               ),
             ),
             SizedBox(height: 20.h(context)),
@@ -76,8 +76,8 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
               child: CustomTextField(
                 maxLines: 3,
                 controller: notesController,
-                title: "Notes",
-                hintText: "Notes about this client",
+                title: l10n.notes,
+                hintText: l10n.notesAboutClient,
               ),
             ),
             SizedBox(height: 20.h(context)),
@@ -85,7 +85,7 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
               builder: (context, state) {
                 final isLoading = state is ClientsLoading;
                 return CustomButton(
-                  title: isLoading ? "Processing" : " ✓ Save Client",
+                  title: isLoading ? l10n.processing : l10n.saveClient,
                   onTap: (isNameEmpty || isLoading) ? null : () {
                     final uid = FirebaseAuth.instance.currentUser?.uid;
                     final client = ClientModel(

@@ -11,20 +11,22 @@ class ThemeToggleButton extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final l10n = AppLocalizations.of(context);
     final themeMode = ref.watch(themeProvider);
-    final isLight = themeMode == ThemeMode.light;
+    // When theme is system, show switch based on current device brightness
+    final isLight = themeMode == ThemeMode.light ||
+        (themeMode == ThemeMode.system &&
+            Theme.of(context).brightness == Brightness.light);
     return SettingsToggleButton(
-      leadingIconData:Icons.color_lens_outlined,
+      leadingIconData: Icons.color_lens_outlined,
       leadingIconColor: Colors.orange,
       title: l10n!.themeMode,
       falseIcon: Icons.dark_mode_outlined,
       trueIcon: Icons.light_mode_outlined,
       value: isLight,
-      onChanged: (isLight) {
-        ref.read(themeProvider.notifier).state =
-        isLight ? ThemeMode.light : ThemeMode.dark;
+      onChanged: (value) {
+        ref.read(themeProvider.notifier).toggleTheme(!value);
       },
-      trueLabel: 'Light',
-      falseLabel: 'Dark',
+      trueLabel: l10n.light,
+      falseLabel: l10n.dark,
     );
   }
 }

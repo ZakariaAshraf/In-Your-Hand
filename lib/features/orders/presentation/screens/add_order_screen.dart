@@ -53,14 +53,14 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
           Navigator.pop(context);
       },
       child: Scaffold(
-        appBar: AppBar(title: Text("Add Order", style: theme.titleLarge)),
+        appBar: AppBar(title: Text(l10n.addOrderTitle, style: theme.titleLarge)),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("Client", style: theme.titleSmall),
+                child: Text(l10n.client, style: theme.titleSmall),
               ),
               BlocBuilder<ClientsCubit, ClientsState>(
                 builder: (context, state) {
@@ -72,7 +72,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                     if (clients.isEmpty) {
                       return Padding(
                         padding: const EdgeInsets.all(12),
-                        child: Text("No clients found"),
+                        child: Text(l10n.noClientsFound),
                       );
                     }
                     // return DropdownButtonFormField<String>(
@@ -110,7 +110,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              _selectedClientName ?? "Select a client",
+                              _selectedClientName ?? l10n.selectClient,
                               style: TextStyle(
                                 color: _selectedClientName == null
                                     ? Colors.grey
@@ -124,7 +124,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                     );
                   }
                   if (state is ClientsError) {
-                    return Text("Error loading clients");
+                    return Text(l10n.errorLoadingClients);
                   }
 
                   return const SizedBox();
@@ -134,8 +134,8 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                 padding: const EdgeInsets.all(10.0),
                 child: CustomTextField(
                   controller: descriptionController,
-                  title: "Description",
-                  hintText: "What is the order for?",
+                  title: l10n.description,
+                  hintText: l10n.whatIsOrderFor,
                   maxLines: 3,
                 ),
               ),
@@ -144,7 +144,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                 padding: const EdgeInsets.all(10.0),
                 child: CustomTextField(
                   controller: totalAmountController,
-                  title: "Total Amount (\$) *",
+                  title: l10n.totalAmount,
                   hintText: "0",
                 ),
               ),
@@ -153,7 +153,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                 padding: const EdgeInsets.all(10.0),
                 child: CustomTextField(
                   controller: paidAmountController,
-                  title: "Paid Amount (\$)",
+                  title: l10n.paidAmount,
                   hintText: "0",
                 ),
               ),
@@ -225,7 +225,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                           isLoading;
                   return Center(
                     child: CustomButton(
-                      title: isLoading ? "Processing" : " ✓ Save Order",
+                      title: isLoading ? l10n.processing : l10n.saveOrder,
                       onTap: isButtonDisabled
                           ? null
                           : () {
@@ -240,12 +240,11 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                                 createdAt: DateTime.now(),
                                 id: '',
                                 clientId: _selectedClientId ?? "",
-                                // status: _selectedStatus!,
                               );
                         if (!order.isValidPayment) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("Paid amount cannot exceed total amount"),
+                              content: Text(l10n.paidAmountCannotExceedTotal),
                             ),
                           );
                           return;
@@ -274,7 +273,8 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) {
+      builder: (modalContext) {
+        final modalL10n = AppLocalizations.of(modalContext)!;
         TextEditingController searchController = TextEditingController();
         List<ClientModel> filteredClients = List.from(clients);
 
@@ -306,9 +306,9 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TextField(
                       controller: searchController,
-                      decoration: const InputDecoration(
-                        hintText: "Search client...",
-                        prefixIcon: Icon(Icons.search),
+                      decoration: InputDecoration(
+                        hintText: modalL10n.searchClient,
+                        prefixIcon: const Icon(Icons.search),
                       ),
                       onChanged: (value) {
                         setModalState(() {
@@ -328,7 +328,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                   SizedBox(
                     height: 350,
                     child: filteredClients.isEmpty
-                        ? const Center(child: Text("No clients found"))
+                        ? Center(child: Text(modalL10n.noClientsFound))
                         : ListView.builder(
                       itemCount: filteredClients.length,
                       itemBuilder: (context, index) {

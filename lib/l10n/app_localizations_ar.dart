@@ -18,10 +18,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get search => 'بحث';
 
   @override
-  String get themeMode => 'وضع الالوان';
+  String get themeMode => 'وضع الألوان';
 
   @override
-  String get language => 'اللغه';
+  String get language => 'اللغة';
 
   @override
   String get changePassword => 'تغيير كلمة المرور';
@@ -72,10 +72,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get alreadyHaveAccount => 'لديك حساب بالفعل';
 
   @override
-  String get loginFailed => 'فشل تسجيل الدخول يرجى التحقق من البريد الإلكتروني أو كلمة المرور';
+  String get loginFailed =>
+      'فشل تسجيل الدخول. يرجى التحقق من البريد الإلكتروني أو كلمة المرور';
 
   @override
-  String get registerFailed => 'فشل التسجيل يرجى التحقق من جميع الحقول';
+  String get registerFailed => 'فشل التسجيل. يرجى التحقق من جميع الحقول';
 
   @override
   String get continuee => 'متابعة';
@@ -89,34 +90,23 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get errorTitle => 'خطأ';
+
+  @override
   String get skip => 'تخطي';
 
   @override
   String get letsStart => 'لنبدأ ->';
 
   @override
-  String get unlockEurope => 'افتح أوروبا';
+  String get chooseYourCharacter => 'اختر شخصيتك';
 
   @override
-  String get onboardingDescription1 => 'استكشف آلاف برامج الماجستير في جميع أنحاء القارة المفلترة حسب احتياجاتك المحددة.';
+  String get chooseCharacterDescription =>
+      'اختر الملف الشخصي الذي يصفك بشكل أفضل لتخصيص رحلتك.';
 
   @override
-  String get filterByWhatMatters => 'فلتر حسب ما يهم';
-
-  @override
-  String get onboardingDescription2 => 'قلص آلاف البرامج الأوروبية بناءً على ميزانيتك ولغتك واهتماماتك.';
-
-  @override
-  String get yourFutureAwaits => 'مستقبلك ينتظر';
-
-  @override
-  String get onboardingDescription3 => 'الوصول إلى آلاف برامج الماجستير الأوروبية المصممة خصيصاً لأهدافك. دعنا نجد لك المطابقة المثالية اليوم.';
-
-  @override
-  String get welcomeBack => 'مرحباً بعودتك،';
-
-  @override
-  String get signInDescription => 'ابحث عن مستقبلك في أوروبا. استمر في رحلتك للحصول على درجة الماجستير';
+  String get pleaseSelectCharacter => 'يرجى اختيار شخصية أولاً';
 
   @override
   String get continueAsGuest => 'المتابعة كضيف';
@@ -125,154 +115,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get joinApplication => 'انضم إلى التطبيق';
 
   @override
-  String get signUpDescription => 'ابحث عن برنامج الماجستير الذي تحلم به في أوروبا';
-
-  @override
   String get pleaseFillAllFields => 'يرجى ملء جميع الحقول';
 
   @override
   String get orContinueWith => 'أو المتابعة مع';
-
-  @override
-  String get chooseYourCharacter => 'اختر شخصيتك';
-
-  @override
-  String get chooseCharacterDescription => 'اختر الملف الشخصي الذي يصفك بشكل أفضل لتخصيص رحلتك إلى أوروبا.';
-
-  @override
-  String get pleaseSelectCharacter => 'يرجى اختيار شخصية أولاً';
-
-  @override
-  String get directScholarshipApplications => 'طلبات المنح الدراسية المباشرة! ترقبوا';
-
-  @override
-  String get comingSoon => 'قريباً';
-
-  @override
-  String get willBeAvailableSoon => 'سيكون متاحاً قريباً';
-
-  @override
-  String get savedPrograms => 'البرامج المحفوظة';
-
-  @override
-  String get noSavedPrograms => 'لم تحفظ أي برامج';
-
-  @override
-  String get favorite => 'مفضل';
-
-  @override
-  String get reloadPage => 'إعادة تحميل الصفحة';
-
-  @override
-  String get findYourDreamMasters => 'ابحث عن حلمك\nماجستير في أوروبا';
-
-  @override
-  String get searchOverDegrees => 'ابحث عن أكثر من 5000 درجة';
-
-  @override
-  String get startNewSearch => 'بدء بحث جديد';
-
-  @override
-  String get errorFetchingProperties => 'خطأ في جلب الخصائص';
-
-  @override
-  String get noPropertiesFound => 'لم يتم العثور على خصائص';
-
-  @override
-  String get noResults => 'لا توجد نتائج';
-
-  @override
-  String get programFilter => 'فلتر البرنامج';
-
-  @override
-  String get reset => 'إعادة تعيين';
-
-  @override
-  String get filters => 'المرشحات';
-
-  @override
-  String get whereDoYouWantToStudy => 'أين تريد الدراسة؟';
-
-  @override
-  String get selectDestination => 'اختر الوجهة';
-
-  @override
-  String get academics => 'الأكاديمية';
-
-  @override
-  String get fieldOfStudy => 'مجال الدراسة';
-
-  @override
-  String get degreeType => 'نوع الدرجة';
-
-  @override
-  String get requirements => 'المتطلبات';
-
-  @override
-  String get languageOfInstructions => 'لغة التعليمات';
-
-  @override
-  String get languageDetails => 'تفاصيل اللغة';
-
-  @override
-  String get moi => 'MOI';
-
-  @override
-  String get previousStudyCertificate => 'شهادة الدراسة السابقة';
-
-  @override
-  String get englishCertificate => 'شهادة اللغة الإنجليزية';
-
-  @override
-  String get certificatesLikeIelts => 'شهادات مثل IELTS..إلخ';
-
-  @override
-  String get showPrograms => 'عرض البرامج';
-
-  @override
-  String get pleaseFillMissingFields => 'يرجى ملء الحقول المفقودة';
-
-  @override
-  String get universityDetails => 'تفاصيل الجامعة';
-
-  @override
-  String get removedFromBookmarks => 'تمت إزالته من الإشارات المرجعية';
-
-  @override
-  String get addedToSavedPrograms => 'تمت إضافته إلى البرامج المحفوظة';
-
-  @override
-  String get tuition => 'الرسوم الدراسية';
-
-  @override
-  String get notAvailable => 'غير متاح';
-
-  @override
-  String get countryLanguage => 'لغة البلد';
-
-  @override
-  String get english => 'الإنجليزية';
-
-  @override
-  String get duration => 'المدة';
-
-  @override
-  String get admissionRequirements => 'متطلبات القبول';
-
-  @override
-  String get officialWebsite => 'الموقع الرسمي';
-
-  @override
-  String get viewPortal => 'عرض البوابة';
-
-  @override
-  String get bookmarks => 'الإشارات المرجعية';
-
-  @override
-  String get noFavorites => 'لم تعجبك أي شيء ';
-
-  @override
-  String get notifications => 'الإشعارات';
 
   @override
   String get selectAvatar => 'اختر الصورة الرمزية';
@@ -293,17 +139,192 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cairoEgypt => 'القاهرة، مصر';
 
   @override
-  String get searchResults => 'نتائج البحث';
-
-  @override
-  String get listIsEmpty => 'قائمتك فارغة';
-
-  @override
   String get home => 'الرئيسية';
 
   @override
-  String get favourite => 'المفضلة';
+  String get profile => 'الملف الشخصي';
 
   @override
-  String get profile => 'الملف الشخصي';
+  String get notAvailable => 'غير متاح';
+
+  @override
+  String get orders => 'الطلبات';
+
+  @override
+  String get clients => 'العملاء';
+
+  @override
+  String get totalOrders => 'إجمالي الطلبات';
+
+  @override
+  String get unpaid => 'غير مدفوع';
+
+  @override
+  String get addOrder => '+ إضافة طلب';
+
+  @override
+  String get addOrderTitle => 'إضافة طلب';
+
+  @override
+  String get addClient => '+ إضافة عميل';
+
+  @override
+  String get addClientTitle => 'إضافة عميل';
+
+  @override
+  String get noOrders => 'لا توجد طلبات';
+
+  @override
+  String get noOrdersForThisStatus => 'لا توجد طلبات لهذه الحالة';
+
+  @override
+  String get youDontHaveAnyOrders => 'ليس لديك أي طلبات';
+
+  @override
+  String get client => 'العميل';
+
+  @override
+  String get selectClient => 'اختر عميلاً';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get totalAmountLabel => 'المبلغ الإجمالي';
+
+  @override
+  String get whatIsOrderFor => 'ما هو الطلب؟';
+
+  @override
+  String get totalAmount => 'المبلغ الإجمالي (\$) *';
+
+  @override
+  String get paidAmount => 'المبلغ المدفوع (\$)';
+
+  @override
+  String get processing => 'جاري المعالجة';
+
+  @override
+  String get saveOrder => '✓ حفظ الطلب';
+
+  @override
+  String get paidAmountCannotExceedTotal =>
+      'المبلغ المدفوع لا يمكن أن يتجاوز الإجمالي';
+
+  @override
+  String get noClientsFound => 'لم يتم العثور على عملاء';
+
+  @override
+  String get searchClient => 'بحث عن عميل...';
+
+  @override
+  String get orderDetails => 'تفاصيل الطلب';
+
+  @override
+  String get deletedClient => 'عميل محذوف';
+
+  @override
+  String get unknownClient => 'عميل غير معروف';
+
+  @override
+  String get totalUnpaid => 'إجمالي غير المدفوع';
+
+  @override
+  String get addPayment => 'إضافة دفعة';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get created => 'تاريخ الإنشاء';
+
+  @override
+  String get status => 'الحالة';
+
+  @override
+  String get deleteOrder => 'حذف الطلب';
+
+  @override
+  String get deleteOrderConfirm => 'هل أنت متأكد أنك تريد حذف هذا الطلب؟';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get name => 'الاسم';
+
+  @override
+  String get clientName => 'اسم العميل';
+
+  @override
+  String get phone => 'الهاتف';
+
+  @override
+  String get notes => 'ملاحظات';
+
+  @override
+  String get notesAboutClient => 'ملاحظات عن هذا العميل';
+
+  @override
+  String get saveClient => '✓ حفظ العميل';
+
+  @override
+  String get noResults => 'لا توجد نتائج';
+
+  @override
+  String get noClientsMatchSearch => 'لا يوجد عملاء يطابقون بحثك';
+
+  @override
+  String get emptyList => 'قائمة فارغة';
+
+  @override
+  String get youDontHaveAnyClients => 'ليس لديك أي عملاء';
+
+  @override
+  String get editClient => 'تعديل العميل';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get deleteClient => 'حذف العميل';
+
+  @override
+  String get deleteClientConfirm => 'هل أنت متأكد أنك تريد حذف هذا العميل؟';
+
+  @override
+  String get light => 'فاتح';
+
+  @override
+  String get dark => 'داكن';
+
+  @override
+  String get orderFilterAll => 'الكل';
+
+  @override
+  String get orderFilterPending => 'قيد الانتظار';
+
+  @override
+  String get orderFilterPartial => 'جزئي';
+
+  @override
+  String get orderFilterPaid => 'مدفوع';
+
+  @override
+  String get orderStatusPending => 'قيد الانتظار';
+
+  @override
+  String get orderStatusPartial => 'جزئي';
+
+  @override
+  String get orderStatusPaid => 'مدفوع';
+
+  @override
+  String get errorLoadingClients => 'خطأ في تحميل العملاء';
+
+  @override
+  String get whatsappDefaultMessage => 'مرحباً، من تطبيق إن يور هاند';
 }

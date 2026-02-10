@@ -80,7 +80,7 @@ class _ChooseYourCharacterScreenState extends State<ChooseYourCharacterScreen> {
               child: Column(
                 children: [
                   Text(
-                    "Choose Your Character",
+                    l10n.chooseYourCharacter,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -90,7 +90,7 @@ class _ChooseYourCharacterScreenState extends State<ChooseYourCharacterScreen> {
                   ),
                   SizedBox(height: 10.h(context)),
                   Text(
-                    '''Select the profile that best describes you''',
+                    l10n.chooseCharacterDescription,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black26,

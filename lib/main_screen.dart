@@ -25,9 +25,8 @@ class MainScreen extends StatefulWidget {
     final l10n = AppLocalizations.of(context);
     return [
       l10n!.home,
-      // l10n.search,
-      "Orders",
-      "Clients",
+      l10n.orders,
+      l10n.clients,
       l10n.profile,
     ];
   }

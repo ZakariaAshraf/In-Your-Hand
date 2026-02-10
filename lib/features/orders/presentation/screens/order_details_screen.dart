@@ -10,6 +10,7 @@ import 'package:in_your_hand/features/orders/data/order_model.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../cubit/orders_cubit.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
@@ -40,10 +41,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     super.initState();
   }
 
+  static String _statusLabel(BuildContext context, OrderStatus status) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (status) {
+      case OrderStatus.pending:
+        return l10n.orderStatusPending;
+      case OrderStatus.partial:
+        return l10n.orderStatusPartial;
+      case OrderStatus.paid:
+        return l10n.orderStatusPaid;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentStatus = _selectedStatus ?? widget.order.status;
     var theme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
     final totalUnpaid = widget.order.totalAmount - widget.order.paidAmount;
     return BlocListener<OrdersCubit, OrdersState>(
       listenWhen: (prev, curr) =>
@@ -53,7 +67,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Order Details", style: theme.titleLarge),
+          title: Text(l10n.orderDetails, style: theme.titleLarge),
           // actions: [
           //   if (hasStatusChanged)
           //     TextButton(
@@ -90,7 +104,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       title: Text(
                         widget.client.isDeleted == false
                             ? widget.client.name
-                            : "Deleted Client",
+                            : l10n.deletedClient,
                         style: theme.titleMedium,
                       ),
                       // client Name
@@ -116,7 +130,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             // padding: EdgeInsets.all(12),
                             child: Center(
                               child: Text(
-                                (_selectedStatus ?? widget.order.status).name,
+                                _statusLabel(context, _selectedStatus ?? widget.order.status),
                                 style: theme.bodySmall!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -129,7 +143,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     Divider(),
                     ListTile(
                       title: Text(
-                        "Total Amount",
+                        l10n.totalAmountLabel,
                         style: theme.bodySmall?.copyWith(
                           color: Colors.grey[700],
                         ),
@@ -145,21 +159,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (context) {
+                            builder: (dialogContext) {
+                              final dialogL10n = AppLocalizations.of(dialogContext)!;
                               return AlertDialog(
-                                title: const Text("Add Payment"),
+                                title: Text(dialogL10n.addPayment),
                                 content: SizedBox(
                                   width: MediaQuery.of(context).size.width * 0.8,
                                   height: MediaQuery.of(context).size.height * 0.1,
                                   child: CustomTextField(
-                                    hintText:"0" ,
+                                    hintText: "0",
                                     controller: paymentController,
                                   ),
                                 ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: Text("Cancel",style: theme.titleMedium),
+                                    child: Text(dialogL10n.cancel, style: theme.titleMedium),
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
@@ -175,8 +190,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       );
                                       Navigator.pop(context);
                                     },
-                                    style: ButtonStyle(backgroundColor:WidgetStatePropertyAll(Colors.blue)),
-                                    child: Text("Save",style: theme.titleMedium),
+                                    style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.blue)),
+                                    child: Text(dialogL10n.save, style: theme.titleMedium),
                                   ),
                                 ],
                               );
@@ -189,7 +204,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         ),
                       ),
                       title: Text(
-                        "Total Unpaid",
+                        l10n.totalUnpaid,
                         style: theme.bodySmall?.copyWith(
                           color: Colors.grey[700],
                         ),
@@ -205,7 +220,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     Divider(),
                     ListTile(
                       title: Text(
-                        "Created",
+                        l10n.created,
                         style: theme.bodySmall?.copyWith(
                           color: Colors.grey[700],
                         ),
@@ -220,7 +235,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text("Status", style: theme.titleMedium),
+                child: Text(l10n.status, style: theme.titleMedium),
               ),
               // SizedBox(
               //   height: 60,
@@ -276,7 +291,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   backgroundColor: widget.order.status.color,
                   side: BorderSide.none,
                   label: Text(
-                    widget.order.status.name,
+                    _statusLabel(context, widget.order.status),
                     style: TextStyle(color: Colors.white),
                   ),
                   labelStyle: TextStyle(
@@ -291,34 +306,34 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Center(
                   child: CustomButton(
-                    title: "Delete Order",
+                    title: l10n.deleteOrder,
                     onTap: () async {
                       showDialog(
                         context: context,
-                        builder: (context) {
+                        builder: (dialogContext) {
+                          final dialogL10n = AppLocalizations.of(dialogContext)!;
                           return BackdropFilter(
                             filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
                             child: AlertDialog(
-                              title: const Text("Delete Order"),
+                              title: Text(dialogL10n.deleteOrder),
                               content: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.8,
-                                // height: MediaQuery.of(context).size.height * 0.1,
-                                child: Text("Are you sure you want to delete this order"),
+                                child: Text(dialogL10n.deleteOrderConfirm),
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text("Cancel",style: theme.titleMedium),
+                                  child: Text(dialogL10n.cancel, style: theme.titleMedium),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () async{
+                                  onPressed: () async {
                                     await context.read<OrdersCubit>().deleteOrder(
                                       widget.order,
                                     );
                                     Navigator.pop(context);
                                   },
-                                  style: ButtonStyle(backgroundColor:WidgetStatePropertyAll(Colors.red) ),
-                                  child: Text("Delete",style: theme.titleMedium,),
+                                  style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.red)),
+                                  child: Text(dialogL10n.delete, style: theme.titleMedium),
                                 ),
                               ],
                             ),

@@ -30,7 +30,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editProfile => 'Edit Profile';
 
   @override
-  String get logout => 'logout';
+  String get logout => 'Logout';
 
   @override
   String get pleaseWriteEmail => 'Please write your Email Address';
@@ -72,10 +72,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alreadyHaveAccount => 'Already have an account';
 
   @override
-  String get loginFailed => 'Login failed Please check your email or password';
+  String get loginFailed => 'Login failed. Please check your email or password';
 
   @override
-  String get registerFailed => 'Register failed please check all fields';
+  String get registerFailed => 'Register failed. Please check all fields';
 
   @override
   String get continuee => 'Continue';
@@ -89,34 +89,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get errorTitle => 'Error';
+
+  @override
   String get skip => 'Skip';
 
   @override
   String get letsStart => 'Let\'s Start ->';
 
   @override
-  String get unlockEurope => 'Unlock Europe';
+  String get chooseYourCharacter => 'Choose Your Character';
 
   @override
-  String get onboardingDescription1 => 'Explore thousands of Master\'s programs across the continent filtered by your specific needs.';
+  String get chooseCharacterDescription =>
+      'Select the profile that best describes you to personalize your journey.';
 
   @override
-  String get filterByWhatMatters => 'Filter by what matters';
-
-  @override
-  String get onboardingDescription2 => 'Narrow down thousands of European programs based on your budget, language, and interests.';
-
-  @override
-  String get yourFutureAwaits => 'Your Future Awaits';
-
-  @override
-  String get onboardingDescription3 => 'Access thousands of European master\'s programs tailored to your goals. Let\'s find your perfect match today.';
-
-  @override
-  String get welcomeBack => 'Welcome Back,';
-
-  @override
-  String get signInDescription => 'Find your future in Europe. Continue your journey to a Master\'s degree';
+  String get pleaseSelectCharacter => 'Please select a character first';
 
   @override
   String get continueAsGuest => 'Continue as a Guest';
@@ -125,154 +114,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get joinApplication => 'Join Application';
 
   @override
-  String get signUpDescription => 'Find your dream Master\'s program in Europe';
-
-  @override
   String get pleaseFillAllFields => 'Please fill all fields';
 
   @override
   String get orContinueWith => 'or continue with';
-
-  @override
-  String get chooseYourCharacter => 'Choose Your Character';
-
-  @override
-  String get chooseCharacterDescription => 'Select the profile that best describes you to personalize your journey to Europe.';
-
-  @override
-  String get pleaseSelectCharacter => 'Please select a character first';
-
-  @override
-  String get directScholarshipApplications => 'Direct Scholarship Applications! Stay tuned';
-
-  @override
-  String get comingSoon => 'COMING SOON';
-
-  @override
-  String get willBeAvailableSoon => 'Will be available soon';
-
-  @override
-  String get savedPrograms => 'Saved Programs';
-
-  @override
-  String get noSavedPrograms => 'You don\'t save any programmes';
-
-  @override
-  String get favorite => 'favorite';
-
-  @override
-  String get reloadPage => 'Reload page';
-
-  @override
-  String get findYourDreamMasters => 'Find your dream\nMaster\'s in Europe';
-
-  @override
-  String get searchOverDegrees => 'Search over 5,000 degrees';
-
-  @override
-  String get startNewSearch => 'Start New Search';
-
-  @override
-  String get errorFetchingProperties => 'Error fetching properties';
-
-  @override
-  String get noPropertiesFound => 'No properties found';
-
-  @override
-  String get noResults => 'No Results';
-
-  @override
-  String get programFilter => 'Program Filter';
-
-  @override
-  String get reset => 'Reset';
-
-  @override
-  String get filters => 'Filters';
-
-  @override
-  String get whereDoYouWantToStudy => 'Where do you want to study ?';
-
-  @override
-  String get selectDestination => 'Select Destination';
-
-  @override
-  String get academics => 'Academics';
-
-  @override
-  String get fieldOfStudy => 'Field of study';
-
-  @override
-  String get degreeType => 'degree type';
-
-  @override
-  String get requirements => 'Requirements';
-
-  @override
-  String get languageOfInstructions => 'LANGUAGE OF INSTRUCTIONS';
-
-  @override
-  String get languageDetails => 'Language details';
-
-  @override
-  String get moi => 'MOI';
-
-  @override
-  String get previousStudyCertificate => 'previous study certificate';
-
-  @override
-  String get englishCertificate => 'English Certificate';
-
-  @override
-  String get certificatesLikeIelts => 'certificates like IELTS..etc';
-
-  @override
-  String get showPrograms => 'Show Programs';
-
-  @override
-  String get pleaseFillMissingFields => 'Please fill missing fields';
-
-  @override
-  String get universityDetails => 'University Details';
-
-  @override
-  String get removedFromBookmarks => 'removed from bookmarks';
-
-  @override
-  String get addedToSavedPrograms => 'added to saved programs';
-
-  @override
-  String get tuition => 'TUITION';
-
-  @override
-  String get notAvailable => 'NOT AVAILABLE';
-
-  @override
-  String get countryLanguage => 'Country Language';
-
-  @override
-  String get english => 'English';
-
-  @override
-  String get duration => 'DURATION';
-
-  @override
-  String get admissionRequirements => 'Admission Requirements';
-
-  @override
-  String get officialWebsite => 'Official Website';
-
-  @override
-  String get viewPortal => 'View Portal';
-
-  @override
-  String get bookmarks => 'Bookmarks';
-
-  @override
-  String get noFavorites => 'You don\'t like anything ';
-
-  @override
-  String get notifications => 'Notifications';
 
   @override
   String get selectAvatar => 'Select Avatar';
@@ -293,17 +138,194 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cairoEgypt => 'Cairo, Egypt';
 
   @override
-  String get searchResults => 'Search Results';
-
-  @override
-  String get listIsEmpty => 'Your list is empty';
-
-  @override
   String get home => 'Home';
 
   @override
-  String get favourite => 'Favourite';
+  String get profile => 'Profile';
 
   @override
-  String get profile => 'Profile';
+  String get notAvailable => 'NOT AVAILABLE';
+
+  @override
+  String get orders => 'Orders';
+
+  @override
+  String get clients => 'Clients';
+
+  @override
+  String get totalOrders => 'Total Orders';
+
+  @override
+  String get unpaid => 'Unpaid';
+
+  @override
+  String get addOrder => '+ Add Order';
+
+  @override
+  String get addOrderTitle => 'Add Order';
+
+  @override
+  String get addClient => '+ Add Client';
+
+  @override
+  String get addClientTitle => 'Add Client';
+
+  @override
+  String get noOrders => 'No orders';
+
+  @override
+  String get noOrdersForThisStatus => 'No orders for this status';
+
+  @override
+  String get youDontHaveAnyOrders => 'You don\'t have any orders';
+
+  @override
+  String get client => 'Client';
+
+  @override
+  String get selectClient => 'Select a client';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get totalAmountLabel => 'Total Amount';
+
+  @override
+  String get whatIsOrderFor => 'What is the order for?';
+
+  @override
+  String get totalAmount => 'Total Amount (\$) *';
+
+  @override
+  String get paidAmount => 'Paid Amount (\$)';
+
+  @override
+  String get processing => 'Processing';
+
+  @override
+  String get saveOrder => '✓ Save Order';
+
+  @override
+  String get paidAmountCannotExceedTotal =>
+      'Paid amount cannot exceed total amount';
+
+  @override
+  String get noClientsFound => 'No clients found';
+
+  @override
+  String get searchClient => 'Search client...';
+
+  @override
+  String get orderDetails => 'Order Details';
+
+  @override
+  String get deletedClient => 'Deleted Client';
+
+  @override
+  String get unknownClient => 'Unknown Client';
+
+  @override
+  String get totalUnpaid => 'Total Unpaid';
+
+  @override
+  String get addPayment => 'Add Payment';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get created => 'Created';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get deleteOrder => 'Delete Order';
+
+  @override
+  String get deleteOrderConfirm =>
+      'Are you sure you want to delete this order?';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get clientName => 'Client Name';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get notesAboutClient => 'Notes about this client';
+
+  @override
+  String get saveClient => '✓ Save Client';
+
+  @override
+  String get noResults => 'No results';
+
+  @override
+  String get noClientsMatchSearch => 'No clients match your search';
+
+  @override
+  String get emptyList => 'Empty List';
+
+  @override
+  String get youDontHaveAnyClients => 'You don\'t have any clients';
+
+  @override
+  String get editClient => 'Edit Client';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get deleteClient => 'Delete Client';
+
+  @override
+  String get deleteClientConfirm =>
+      'Are you sure you want to delete this client?';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get orderFilterAll => 'All';
+
+  @override
+  String get orderFilterPending => 'Pending';
+
+  @override
+  String get orderFilterPartial => 'Partial';
+
+  @override
+  String get orderFilterPaid => 'Paid';
+
+  @override
+  String get orderStatusPending => 'Pending';
+
+  @override
+  String get orderStatusPartial => 'Partial';
+
+  @override
+  String get orderStatusPaid => 'Paid';
+
+  @override
+  String get errorLoadingClients => 'Error loading clients';
+
+  @override
+  String get whatsappDefaultMessage => 'Hello, from In Your Hand app';
 }

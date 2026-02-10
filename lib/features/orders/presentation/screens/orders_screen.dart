@@ -8,6 +8,7 @@ import 'package:in_your_hand/features/orders/presentation/screens/add_order_scre
 import 'package:in_your_hand/features/orders/presentation/widgets/order_item.dart';
 
 import '../../../../core/widgets/default_message_card.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../clients/presentation/cubit/clients_cubit.dart';
 import '../../data/order_model.dart';
 import '../cubit/orders_cubit.dart';
@@ -24,13 +25,28 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
 
 
+  String _filterLabel(BuildContext context, OrdersFilter filter) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (filter) {
+      case OrdersFilter.all:
+        return l10n.orderFilterAll;
+      case OrdersFilter.pending:
+        return l10n.orderFilterPending;
+      case OrdersFilter.partial:
+        return l10n.orderFilterPartial;
+      case OrdersFilter.paid:
+        return l10n.orderFilterPaid;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Orders", style: theme.titleLarge),
+        title: Text(l10n.orders, style: theme.titleLarge),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -46,7 +62,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: ChoiceChip(
-                        label: Text(filter.name),
+                        label: Text(_filterLabel(context, filter)),
                         selected: isSelected,
                         selectedColor: AppColors.primary,
                         backgroundColor: Colors.grey.shade200,
@@ -72,9 +88,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   if (state is OrdersLoading) {
                     return Center(child: CircularProgressIndicator());
                   } else if (state is OrdersError) {
-                    DefaultMessageCard(
+                    return DefaultMessageCard(
                       sign: "😡",
-                      title: "Error",
+                      title: l10n.errorTitle,
                       subTitle: state.errorMessage,
                     );
                   } else if (state is OrdersSuccess) {
@@ -100,10 +116,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     if (filteredOrders.isEmpty) {
                       return DefaultMessageCard(
                         sign: "📭",
-                        title: "No orders",
-                        subTitle: "No orders for this status",
+                        title: l10n.noOrders,
+                        subTitle: l10n.noOrdersForThisStatus,
                       );
-                    }else {
+                    } else {
                       return ListView.builder(
                       itemBuilder: (context, index) {
                         final order = filteredOrders[index];
@@ -111,9 +127,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             .read<ClientsCubit>()
                             .clientsMap[order.clientId];
                         final clientName = client == null
-                            ? "Unknown Client"
+                            ? l10n.unknownClient
                             : client.isDeleted
-                            ? "Deleted Client"
+                            ? l10n.deletedClient
                             : client.name;
                         return OrderItem(
                           order: order,
@@ -125,17 +141,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       physics: NeverScrollableScrollPhysics(),
                     );
                     }
-                  }else if (state is OrdersError) {
-                    DefaultMessageCard(
-                      sign: "😡",
-                      title: "Error",
-                      subTitle: state.errorMessage,
-                    );
-                  }
+                    }
                   return DefaultMessageCard(
                     sign: "📭",
-                    title: "No orders",
-                    subTitle: "You don't have any orders",
+                    title: l10n.noOrders,
+                    subTitle: l10n.youDontHaveAnyOrders,
                   );
                 },
               ),
@@ -144,7 +154,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Center(
                 child: CustomButton(
-                  title: "+ Add Order",
+                  title: l10n.addOrder,
                   onTap: () {
                     Navigator.push(
                       context,

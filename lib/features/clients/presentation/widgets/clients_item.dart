@@ -93,7 +93,7 @@ class ClientsItem extends StatelessWidget {
                                         .replaceAll(':', '')
                                         .trim();
                                     final encoded = Uri.encodeComponent(
-                                      '''مرحبًا، من برنامج ان يور هاند''',
+                                      l10n.whatsappDefaultMessage,
                                     );
                                     final url = Uri.parse(
                                       "https://wa.me/$phone?text=$encoded",
@@ -129,7 +129,7 @@ class ClientsItem extends StatelessWidget {
                             ),
                             border: BoxBorder.all(color: Colors.grey),
                           ),
-                          child: Center(child: Text("Edit",style: theme.titleSmall,)),
+                          child: Center(child: Text(l10n.edit, style: theme.titleSmall)),
                         ),
                       ),
                     ],
@@ -166,7 +166,7 @@ class ClientsItem extends StatelessWidget {
                       ),
                       border: BoxBorder.all(color: Colors.grey),
                     ),
-                    child: Center(child: Text("Edit",style: theme.titleSmall,)),
+                    child: Center(child: Text(l10n.edit, style: theme.titleSmall)),
                   ),
                 ),
               ),

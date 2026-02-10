@@ -8,6 +8,7 @@ import 'package:in_your_hand/features/clients/data/clients_model.dart';
 
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../cubit/clients_cubit.dart';
 
 class EditClientScreen extends StatelessWidget {
@@ -16,6 +17,7 @@ class EditClientScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
     TextEditingController phoneController = TextEditingController(text: client.phone);
     TextEditingController nameController = TextEditingController(text: client.name);
     TextEditingController notesController = TextEditingController(text: client.notes);
@@ -28,43 +30,47 @@ class EditClientScreen extends StatelessWidget {
   child: Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text("Edit Client", style: theme.titleLarge),
+        title: Text(l10n.editClient, style: theme.titleLarge),
         actions: [
           Container(
             padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(color: Colors.red.withOpacity(0.1),shape: BoxShape.circle,),
-            child: IconButton(onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return BackdropFilter(
-                    filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
-                    child: AlertDialog(
-                      title: const Text("Delete Order"),
-                      content: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        // height: MediaQuery.of(context).size.height * 0.1,
-                        child: Text("Are you sure you want to delete this client"),
+            decoration: BoxDecoration(color: Colors.red.withOpacity(0.1), shape: BoxShape.circle),
+            child: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) {
+                    final dialogL10n = AppLocalizations.of(dialogContext)!;
+                    return BackdropFilter(
+                      filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
+                      child: AlertDialog(
+                        title: Text(dialogL10n.deleteClient),
+                        content: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Text(dialogL10n.deleteClientConfirm),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(dialogL10n.cancel, style: theme.titleMedium),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              await context.read<ClientsCubit>().deleteClient(client);
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.red)),
+                            child: Text(dialogL10n.delete, style: theme.titleMedium),
+                          ),
+                        ],
                       ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text("Cancel",style: theme.titleMedium),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async{
-                           await context.read<ClientsCubit>().deleteClient(client);
-                            Navigator.pop(context);
-                          },
-                          style: ButtonStyle(backgroundColor:WidgetStatePropertyAll(Colors.red) ),
-                          child: Text("Delete",style: theme.titleMedium,),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            }, icon: Icon(Icons.delete_outline,color: Colors.red,),iconSize: 25,),
+                    );
+                  },
+                );
+              },
+              icon: Icon(Icons.delete_outline, color: Colors.red),
+              iconSize: 25,
+            ),
           )
         ],
       ),
@@ -74,8 +80,8 @@ class EditClientScreen extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: CustomTextField(
               controller: nameController,
-              title: "Name",
-              hintText: "Client Name",
+              title: l10n.name,
+              hintText: l10n.clientName,
             ),
           ),
           SizedBox(height: 20.h(context)),
@@ -83,8 +89,8 @@ class EditClientScreen extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: CustomTextField(
               controller: phoneController,
-              title: "Phone",
-              hintText: "Phone Number",
+              title: l10n.phone,
+              hintText: l10n.phoneNumber,
             ),
           ),
           SizedBox(height: 20.h(context)),
@@ -93,8 +99,8 @@ class EditClientScreen extends StatelessWidget {
             child: CustomTextField(
               maxLines: 3,
               controller: notesController,
-              title: "Notes",
-              hintText: "Notes about this client",
+              title: l10n.notes,
+              hintText: l10n.notesAboutClient,
             ),
           ),
           SizedBox(height: 20.h(context)),
@@ -102,7 +108,7 @@ class EditClientScreen extends StatelessWidget {
             builder: (context, state) {
               final isLoading = state is ClientsLoading;
               return CustomButton(
-                title: isLoading ? "Processing" : " ✓ Save Client",
+                title: isLoading ? l10n.processing : l10n.saveClient,
                 onTap: () {
                   final newClient = ClientModel(
                     userId: client.userId,

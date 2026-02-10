@@ -4,11 +4,11 @@ import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/core/widgets/default_message_card.dart';
 import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/clients/presentation/cubit/clients_cubit.dart';
-import 'package:in_your_hand/features/clients/presentation/cubit/clients_cubit.dart';
 import 'package:in_your_hand/features/clients/presentation/screens/add_clients_screen.dart';
 import 'package:in_your_hand/features/clients/presentation/widgets/clients_item.dart';
 
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ClientsScreen extends StatefulWidget {
   const ClientsScreen({super.key});
@@ -33,13 +33,12 @@ class _ClientsScreenState extends State<ClientsScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    var theme = Theme
-        .of(context)
-        .textTheme;
+    var theme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Clients", style: theme.titleLarge),
+        title: Text(l10n.clients, style: theme.titleLarge),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -49,7 +48,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
               child: TextField(
                 controller: searchController,
                 decoration: InputDecoration(
-                  hintText: "Search client...",
+                  hintText: l10n.searchClient,
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -70,9 +69,9 @@ class _ClientsScreenState extends State<ClientsScreen> {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
-                  }  else if (state is ClientsError) {
-                    DefaultMessageCard(sign: "😡", title: "Error", subTitle: state.errorMessage);
-                  }else if (state is ClientsSuccess) {
+                  } else if (state is ClientsError) {
+                    return DefaultMessageCard(sign: "😡", title: l10n.errorTitle, subTitle: state.errorMessage);
+                  } else if (state is ClientsSuccess) {
                     final allClients = state.clients.where((c) => !c.isDeleted).toList();
                     final filteredClients = searchQuery.isEmpty
                         ? allClients
@@ -85,8 +84,8 @@ class _ClientsScreenState extends State<ClientsScreen> {
                     if (filteredClients.isEmpty) {
                       return DefaultMessageCard(
                         sign: "🔍",
-                        title: "No results",
-                        subTitle: "No clients match your search",
+                        title: l10n.noResults,
+                        subTitle: l10n.noClientsMatchSearch,
                       );
                     }
                     return ListView.builder(
@@ -98,7 +97,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
                       physics: NeverScrollableScrollPhysics(),
                     );
                   }
-                  return DefaultMessageCard(sign: "😊", title: "Empty List", subTitle: "You don't have any clients");
+                  return DefaultMessageCard(sign: "😊", title: l10n.emptyList, subTitle: l10n.youDontHaveAnyClients);
 
                 },
               ),
@@ -107,7 +106,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Center(
                 child: CustomButton(
-                  title: "+ Add Client",
+                  title: l10n.addClient,
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => AddClientsScreen(),));
                   },

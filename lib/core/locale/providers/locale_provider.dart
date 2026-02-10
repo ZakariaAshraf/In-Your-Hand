@@ -12,10 +12,11 @@ class LocaleNotifier extends Notifier<Locale?> {
   Locale? build() {
     final String? savedLang = CacheHelper.getString(key: CacheKeys.language);
 
-    if (savedLang != null) {
+    if (savedLang != null && savedLang.isNotEmpty) {
       return Locale(savedLang);
     }
-    return const Locale('en');
+    // First-time / no preference: follow system locale (null = use device language)
+    return null;
   }
 
   void setLocale(Locale newLocale) async {
