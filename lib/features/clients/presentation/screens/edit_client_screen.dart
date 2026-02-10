@@ -91,6 +91,7 @@ class EditClientScreen extends StatelessWidget {
               controller: phoneController,
               title: l10n.phone,
               hintText: l10n.phoneNumber,
+              keyboardType: TextInputType.number,
             ),
           ),
           SizedBox(height: 20.h(context)),

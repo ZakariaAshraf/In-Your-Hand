@@ -67,6 +67,7 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
               child: CustomTextField(
                 controller: phoneController,
                 title: l10n.phone,
+                keyboardType: TextInputType.number,
                 hintText: l10n.phoneNumber,
               ),
             ),

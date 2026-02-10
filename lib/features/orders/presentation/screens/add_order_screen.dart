@@ -145,6 +145,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                 child: CustomTextField(
                   controller: totalAmountController,
                   title: l10n.totalAmount,
+                  keyboardType: TextInputType.number,
                   hintText: "0",
                 ),
               ),
@@ -154,6 +155,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                 child: CustomTextField(
                   controller: paidAmountController,
                   title: l10n.paidAmount,
+                  keyboardType: TextInputType.number,
                   hintText: "0",
                 ),
               ),
