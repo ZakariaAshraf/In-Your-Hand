@@ -83,7 +83,7 @@ class _ChooseYourCharacterScreenState extends State<ChooseYourCharacterScreen> {
                     l10n.chooseYourCharacter,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.black,
+                      // color: Colors.black,
                       fontSize: 28.0.sp(context),
                       fontWeight: FontWeight.w600,
                     ),
@@ -93,7 +93,7 @@ class _ChooseYourCharacterScreenState extends State<ChooseYourCharacterScreen> {
                     l10n.chooseCharacterDescription,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.black26,
+                      // color: Colors.black26,
                       fontSize: 18.0.sp(context),
                       fontWeight: FontWeight.w600,
                     ),

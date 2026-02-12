@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:in_your_hand/core/generated/extentions.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
-
 import '../../../../l10n/app_localizations.dart';
 import '../../../clients/data/clients_model.dart';
 import '../screens/order_details_screen.dart';
@@ -29,36 +28,45 @@ class OrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
     return Card(
-      child:  SizedBox(
-        height: 90,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsScreen(order: order,client:client),));
-          },
-          child: ClipRect(
-            child: ListTile(
-              title: Text(clientName, style: theme.titleMedium),
-              subtitle: Text(
-                order.description,
-                style: theme.bodySmall?.copyWith(color: Colors.grey[700]),
-              ),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("${order.totalAmount}", style: theme.titleMedium),
-                  SizedBox(height: 10.h(context),),
-                  Container(
-                    height: 30.h(context),
-                    width: 80.w(context),
-                    decoration: BoxDecoration(
-                      color: order.status.color,
-                      borderRadius: BorderRadius.circular(30.r(context)),
-                    ),
-                    // padding: EdgeInsets.all(12),
-                    child: Center(child: Text(_statusLabel(context, order.status), style: theme.bodySmall!.copyWith(fontWeight: FontWeight.bold),)),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OrderDetailsScreen(order: order, client: client),
+            ),
+          );
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.h(context)),
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 16.w(context)),
+            title: Text(clientName, style: theme.titleMedium),
+            subtitle: Text(
+              order.description,
+              style: theme.bodySmall?.copyWith(color: Colors.grey[700]),
+            ),
+            trailing: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("${order.totalAmount}", style: theme.titleMedium),
+                SizedBox(height: 4.h(context)),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w(context), vertical: 4.h(context)),
+                  decoration: BoxDecoration(
+                    color: order.status.color,
+                    borderRadius: BorderRadius.circular(30.r(context)),
                   ),
-                ],
-              ),
+                  child: Text(
+                    _statusLabel(context, order.status),
+                    style: theme.bodySmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

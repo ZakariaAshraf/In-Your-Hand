@@ -7,6 +7,7 @@ import 'package:in_your_hand/features/clients/presentation/cubit/clients_cubit.d
 import 'package:in_your_hand/features/clients/presentation/screens/add_clients_screen.dart';
 import 'package:in_your_hand/features/clients/presentation/widgets/clients_item.dart';
 
+import '../../../../core/utils/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -21,8 +22,8 @@ class _ClientsScreenState extends State<ClientsScreen> {
   @override
   void initState() {
     super.initState();
-
   }
+
   final TextEditingController searchController = TextEditingController();
   String searchQuery = "";
 
@@ -31,13 +32,26 @@ class _ClientsScreenState extends State<ClientsScreen> {
     searchController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        actions: [
+          IconButton(
+            color: AppColors.primary,
+            icon: Center(child: Icon(Icons.person_add_rounded, size: 33)),
+            // title: l10n.addOrder,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddClientsScreen()),
+              );
+            },
+          ),
+        ],
         title: Text(l10n.clients, style: theme.titleLarge),
       ),
       body: SingleChildScrollView(
@@ -66,18 +80,24 @@ class _ClientsScreenState extends State<ClientsScreen> {
               child: BlocBuilder<ClientsCubit, ClientsState>(
                 builder: (context, state) {
                   if (state is ClientsLoading) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return Center(child: CircularProgressIndicator());
                   } else if (state is ClientsError) {
-                    return DefaultMessageCard(sign: "😡", title: l10n.errorTitle, subTitle: state.errorMessage);
+                    return DefaultMessageCard(
+                      sign: "😡",
+                      title: l10n.errorTitle,
+                      subTitle: state.errorMessage,
+                    );
                   } else if (state is ClientsSuccess) {
-                    final allClients = state.clients.where((c) => !c.isDeleted).toList();
+                    final allClients = state.clients
+                        .where((c) => !c.isDeleted)
+                        .toList();
                     final filteredClients = searchQuery.isEmpty
                         ? allClients
                         : allClients.where((client) {
-                      return client.name.toLowerCase().contains(searchQuery);
-                    }).toList();
+                            return client.name.toLowerCase().contains(
+                              searchQuery,
+                            );
+                          }).toList();
                     // final visibleClients = clients
                     //     .where((client) => !client.isDeleted)
                     //     .toList();
@@ -90,15 +110,16 @@ class _ClientsScreenState extends State<ClientsScreen> {
                     }
                     return ListView.builder(
                       itemBuilder: (context, index) =>
-                          ClientsItem(
-                            client: filteredClients[index],
-                          ),
-                      itemCount:filteredClients.length,
+                          ClientsItem(client: filteredClients[index]),
+                      itemCount: filteredClients.length,
                       physics: NeverScrollableScrollPhysics(),
                     );
                   }
-                  return DefaultMessageCard(sign: "😊", title: l10n.emptyList, subTitle: l10n.youDontHaveAnyClients);
-
+                  return DefaultMessageCard(
+                    sign: "😊",
+                    title: l10n.emptyList,
+                    subTitle: l10n.youDontHaveAnyClients,
+                  );
                 },
               ),
             ),
@@ -108,7 +129,12 @@ class _ClientsScreenState extends State<ClientsScreen> {
                 child: CustomButton(
                   title: l10n.addClient,
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddClientsScreen(),));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddClientsScreen(),
+                      ),
+                    );
                   },
                   height: 70.h(context),
                   width: 330.w(context),

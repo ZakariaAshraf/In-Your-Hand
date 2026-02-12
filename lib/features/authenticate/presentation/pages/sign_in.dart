@@ -50,7 +50,7 @@ class _SignInState extends State<SignIn> {
 
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(l10n!.loginFailed),
+                content: Text(l10n.loginFailed),
                 backgroundColor: Colors.red,
               ),
             );
@@ -94,7 +94,9 @@ class _SignInState extends State<SignIn> {
                       // ),
                       Image(
                         height: 200.h(context),
-                        width: 150.w(context), image: AssetImage("assets/icons/icon_foreground.png",),fit: BoxFit.contain,
+                        width: 150.w(context),
+                        image: AssetImage("assets/icons/icon_foreground.png"),
+                        fit: BoxFit.contain,
                       ),
                       const SizedBox(height: 60),
                       CustomTextField(
@@ -138,6 +140,7 @@ class _SignInState extends State<SignIn> {
                       Center(
                         child: CustomButton(
                           title: l10n.login,
+                          width: 300.w(context),
                           onTap: () {
                             context.read<AuthCubit>().signIn(
                               emailController.text,
@@ -148,40 +151,40 @@ class _SignInState extends State<SignIn> {
                       ),
 
                       SizedBox(height: 50.h(context)),
-                      Center(
-                        child: CustomButton(
-                          width: 300.w(context),
-                          isInvert: true,
-                          title: l10n.continueAsGuest,
-                          onTap: () {},
-                        ),
-                      ),
+                      // Center(
+                      //   child: CustomButton(
+                      //     width: 300.w(context),
+                      //     isInvert: true,
+                      //     title: l10n.continueAsGuest,
+                      //     onTap: () {},
+                      //   ),
+                      // ),
                       SizedBox(height: 90.h(context)),
 
-                      Divider(),
-                      Row(
-                        children: [
-                          Text(
-                            l10n.dontHaveAccount,
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SignUp(),
-                                ),
-                                (route) => true,
-                              );
-                            },
-                            child: Text(
-                              l10n.create,
-                              style: TextStyle(color: Color(0xff1F4C6B)),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Divider(),
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       l10n.dontHaveAccount,
+                      //       style: TextStyle(color: Colors.grey),
+                      //     ),
+                      //     TextButton(
+                      //       onPressed: () {
+                      //         Navigator.pushAndRemoveUntil(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => const SignUp(),
+                      //           ),
+                      //           (route) => true,
+                      //         );
+                      //       },
+                      //       child: Text(
+                      //         l10n.create,
+                      //         style: TextStyle(color: Color(0xff1F4C6B)),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),

@@ -45,7 +45,19 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        actions: [
+          IconButton(
+            color: AppColors.primary,
+            icon: Icon(Icons.add_circle, size: 33),
+            // title: l10n.addOrder,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddOrderScreen()),
+              );
+            },
+          ),
+        ],
         title: Text(l10n.orders, style: theme.titleLarge),
       ),
       body: SingleChildScrollView(
@@ -121,7 +133,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       );
                     } else {
                       return ListView.builder(
-                      itemBuilder: (context, index) {
+                        // physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
                         final order = filteredOrders[index];
                         final client = context
                             .read<ClientsCubit>()
@@ -138,7 +151,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         );
                       },
                       itemCount: filteredOrders.length,
-                      physics: NeverScrollableScrollPhysics(),
                     );
                     }
                     }
@@ -148,22 +160,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     subTitle: l10n.youDontHaveAnyOrders,
                   );
                 },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Center(
-                child: CustomButton(
-                  title: l10n.addOrder,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddOrderScreen()),
-                    );
-                  },
-                  height: 70.h(context),
-                  width: 330.w(context),
-                ),
               ),
             ),
           ],

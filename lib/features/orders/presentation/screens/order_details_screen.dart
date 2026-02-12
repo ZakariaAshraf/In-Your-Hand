@@ -1,13 +1,10 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/generated/extentions.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
-
-import '../../../../core/utils/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -40,7 +37,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     _selectedStatus = widget.order.status;
     super.initState();
   }
-
   static String _statusLabel(BuildContext context, OrderStatus status) {
     final l10n = AppLocalizations.of(context)!;
     switch (status) {
@@ -53,6 +49,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    paymentController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final currentStatus = _selectedStatus ?? widget.order.status;
@@ -173,7 +174,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 ),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.pop(context),
+                                    onPressed: () => Navigator.pop(dialogContext),
                                     child: Text(dialogL10n.cancel, style: theme.titleMedium),
                                   ),
                                   ElevatedButton(
@@ -188,7 +189,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           paidAmount: newPaidAmount,
                                         ),
                                       );
-                                      Navigator.pop(context);
+                                      Navigator.pop(dialogContext);
                                     },
                                     style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.blue)),
                                     child: Text(dialogL10n.save, style: theme.titleMedium),
@@ -209,11 +210,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           color: Colors.grey[700],
                         ),
                       ),
-                      subtitle: totalUnpaid == 0 ?Text(
-                        "- $totalUnpaid",
+                      subtitle: totalUnpaid == 0 as num ?Text(
+                        "- 0",
                         style: theme.displaySmall,
                       ):Text(
-                        "- $totalUnpaid",
+                          "- $totalUnpaid",
                         style: theme.displaySmall!.copyWith(color: Colors.red),
                       ),
                     ),
@@ -322,7 +323,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               ),
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.pop(context),
+                                  onPressed: () => Navigator.pop(dialogContext),
                                   child: Text(dialogL10n.cancel, style: theme.titleMedium),
                                 ),
                                 ElevatedButton(
@@ -330,7 +331,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                     await context.read<OrdersCubit>().deleteOrder(
                                       widget.order,
                                     );
-                                    Navigator.pop(context);
+                                    Navigator.pop(dialogContext);
                                   },
                                   style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.red)),
                                   child: Text(dialogL10n.delete, style: theme.titleMedium),

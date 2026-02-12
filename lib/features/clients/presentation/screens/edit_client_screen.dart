@@ -11,16 +11,29 @@ import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/clients_cubit.dart';
 
-class EditClientScreen extends StatelessWidget {
+class EditClientScreen extends StatefulWidget {
   final ClientModel client;
   const EditClientScreen({super.key, required this.client});
+
+  @override
+  State<EditClientScreen> createState() => _EditClientScreenState();
+}
+
+class _EditClientScreenState extends State<EditClientScreen> {
+  late TextEditingController phoneController ;
+  late TextEditingController nameController ;
+  late TextEditingController notesController;
+  @override
+  void initState() {
+    phoneController = TextEditingController(text: widget.client.phone);
+    nameController = TextEditingController(text: widget.client.name);
+    notesController = TextEditingController(text: widget.client.notes);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context)!;
-    TextEditingController phoneController = TextEditingController(text: client.phone);
-    TextEditingController nameController = TextEditingController(text: client.name);
-    TextEditingController notesController = TextEditingController(text: client.notes);
     return BlocListener<ClientsCubit, ClientsState>(
       listenWhen: (prev, curr) =>
       prev is ClientsLoading && curr is ClientsSuccess,
@@ -51,13 +64,13 @@ class EditClientScreen extends StatelessWidget {
                         ),
                         actions: [
                           TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.pop(dialogContext),
                             child: Text(dialogL10n.cancel, style: theme.titleMedium),
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              await context.read<ClientsCubit>().deleteClient(client);
-                              Navigator.pop(context);
+                              await context.read<ClientsCubit>().deleteClient(widget.client);
+                              Navigator.pop(dialogContext);
                             },
                             style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.red)),
                             child: Text(dialogL10n.delete, style: theme.titleMedium),
@@ -74,60 +87,69 @@ class EditClientScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CustomTextField(
-              controller: nameController,
-              title: l10n.name,
-              hintText: l10n.clientName,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: CustomTextField(
+                controller: nameController,
+                title: l10n.name,
+                hintText: l10n.clientName,
+              ),
             ),
-          ),
-          SizedBox(height: 20.h(context)),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CustomTextField(
-              controller: phoneController,
-              title: l10n.phone,
-              hintText: l10n.phoneNumber,
-              keyboardType: TextInputType.number,
+            SizedBox(height: 20.h(context)),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: CustomTextField(
+                controller: phoneController,
+                title: l10n.phone,
+                hintText: l10n.phoneNumber,
+                keyboardType: TextInputType.number,
+              ),
             ),
-          ),
-          SizedBox(height: 20.h(context)),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CustomTextField(
-              maxLines: 3,
-              controller: notesController,
-              title: l10n.notes,
-              hintText: l10n.notesAboutClient,
+            SizedBox(height: 20.h(context)),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: CustomTextField(
+                maxLines: 3,
+                controller: notesController,
+                title: l10n.notes,
+                hintText: l10n.notesAboutClient,
+              ),
             ),
-          ),
-          SizedBox(height: 20.h(context)),
-          BlocBuilder<ClientsCubit, ClientsState>(
-            builder: (context, state) {
-              final isLoading = state is ClientsLoading;
-              return CustomButton(
-                title: isLoading ? l10n.processing : l10n.saveClient,
-                onTap: () {
-                  final newClient = ClientModel(
-                    userId: client.userId,
-                    name: nameController.text,
-                    notes: notesController.text,
-                    phone: phoneController.text,
-                    createdAt: DateTime.now(),
-                  );
-                  context.read<ClientsCubit>().updateClient(client,newClient);
-                },
-                height: 70.h(context),
-                width: 300.w(context),
-              );
-            },
-          ),
-        ],
+            SizedBox(height: 20.h(context)),
+            BlocBuilder<ClientsCubit, ClientsState>(
+              builder: (context, state) {
+                final isLoading = state is ClientsLoading;
+                return CustomButton(
+                  title: isLoading ? l10n.processing : l10n.saveClient,
+                  onTap: () {
+                    final newClient = ClientModel(
+                      userId: widget.client.userId,
+                      name: nameController.text,
+                      notes: notesController.text,
+                      phone: phoneController.text,
+                      createdAt: widget.client.createdAt,
+                    );
+                    context.read<ClientsCubit>().updateClient(widget.client,newClient);
+                  },
+                  height: 70.h(context),
+                  width: 300.w(context),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     ),
 );
+  }
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneController.dispose();
+    notesController.dispose();
+    super.dispose();
   }
 }

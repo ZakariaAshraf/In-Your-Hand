@@ -21,15 +21,13 @@ class ClientsItem extends StatelessWidget {
       child: ClipRect(
         child: client.phone != ""
             ? ExpansionTile(
-          shape: BoxBorder.all(color: Colors.transparent),
+                shape: BoxBorder.all(color: Colors.transparent),
                 childrenPadding: EdgeInsets.all(12),
                 title: Text(client.name, style: theme.titleMedium),
                 subtitle: client.notes != ""
                     ? Text(
                         client.notes ?? "",
-                        style: theme.titleMedium!.copyWith(
-                          color: Colors.grey,
-                        ),
+                        style: theme.titleMedium!.copyWith(color: Colors.grey),
                       )
                     : null,
                 trailing: Icon(
@@ -44,7 +42,19 @@ class ClientsItem extends StatelessWidget {
                           ? Row(
                               children: [
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    final phone = client.phone
+                                        ?.replaceAll('+', '')
+                                        .replaceAll(':', '')
+                                        .trim();
+                                    final url = Uri(scheme: 'tel', path: phone);
+                                    if (await canLaunchUrl(url)) {
+                                      await launchUrl(
+                                        url,
+                                        mode: LaunchMode.externalApplication,
+                                      );
+                                    }
+                                  },
                                   child: Container(
                                     height: 50.h(context),
                                     width: 60.w(context),
@@ -53,9 +63,7 @@ class ClientsItem extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(
                                         30.r(context),
                                       ),
-                                      border: BoxBorder.all(
-                                        color: Colors.grey,
-                                      ),
+                                      border: BoxBorder.all(color: Colors.grey),
                                     ),
                                     child: Icon(
                                       CupertinoIcons.phone,
@@ -77,9 +85,7 @@ class ClientsItem extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(
                                         30.r(context),
                                       ),
-                                      border: BoxBorder.all(
-                                        color: Colors.grey,
-                                      ),
+                                      border: BoxBorder.all(color: Colors.grey),
                                     ),
                                     child: Image.asset(
                                       "assets/icons/ic_whatsapp.png",
@@ -124,12 +130,12 @@ class ClientsItem extends StatelessWidget {
                           height: 50.h(context),
                           width: 60.w(context),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              30.r(context),
-                            ),
+                            borderRadius: BorderRadius.circular(30.r(context)),
                             border: BoxBorder.all(color: Colors.grey),
                           ),
-                          child: Center(child: Text(l10n.edit, style: theme.titleSmall)),
+                          child: Center(
+                            child: Text(l10n.edit, style: theme.titleSmall),
+                          ),
                         ),
                       ),
                     ],
@@ -137,40 +143,40 @@ class ClientsItem extends StatelessWidget {
                 ],
               )
             : ClipRect(
-              child: ListTile(
-                subtitle: client.notes != ""
-                    ? Text(
-                  client.notes ?? "",
-                  style: theme.titleMedium!.copyWith(
-                    color: Colors.grey,
-                  ),
-                )
-                    : null,
-                title: Text(client.name, style: theme.titleMedium),
-                trailing: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EditClientScreen(client: client),
+                child: ListTile(
+                  subtitle: client.notes != ""
+                      ? Text(
+                          client.notes ?? "",
+                          style: theme.titleMedium!.copyWith(
+                            color: Colors.grey,
+                          ),
+                        )
+                      : null,
+                  title: Text(client.name, style: theme.titleMedium),
+                  trailing: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditClientScreen(client: client),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 50.h(context),
+                      width: 60.w(context),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.r(context)),
+                        border: BoxBorder.all(color: Colors.grey),
                       ),
-                    );
-                  },
-                  child: Container(
-                    height: 50.h(context),
-                    width: 60.w(context),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        30.r(context),
+                      child: Center(
+                        child: Text(l10n.edit, style: theme.titleSmall),
                       ),
-                      border: BoxBorder.all(color: Colors.grey),
                     ),
-                    child: Center(child: Text(l10n.edit, style: theme.titleSmall)),
                   ),
                 ),
               ),
-            ),
       ),
     );
   }

@@ -39,6 +39,10 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
         () => isDescriptionEmpty = descriptionController.text.trim().isEmpty,
       );
     });
+
+    paidAmountController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -160,59 +164,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                 ),
               ),
               SizedBox(height: 15.h(context)),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Text("Status", style: theme.titleSmall),
-              // ),
-              // SizedBox(
-              //   height: 60,
-              //   child: ListView(
-              //     scrollDirection: Axis.horizontal,
-              //     children: [
-              //       SizedBox(width: 8.w(context)),
-              //       ...OrderStatus.values.map((state) {
-              //         return Padding(
-              //           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              //           child: FilterChip(
-              //             selectedColor: _selectedStatus?.color,
-              //             backgroundColor: _selectedStatus?.backgroundColor,
-              //             side: BorderSide.none,
-              //             showCheckmark: false,
-              //             label: Text(
-              //               state.name,
-              //               style: TextStyle(
-              //                 color: _selectedStatus == state
-              //                     ? Colors.white
-              //                     : Colors.black,
-              //               ),
-              //             ),
-              //             selected: _selectedStatus == state,
-              //             onSelected: (selected) {
-              //               setState(() {
-              //                 _selectedStatus = selected ? state : null;
-              //               });
-              //               if (selected) {}
-              //             },
-              //             labelStyle: TextStyle(
-              //               decoration: _selectedStatus == state
-              //                   ? TextDecoration.none
-              //                   : TextDecoration.none,
-              //               // fontSize: _selectedStatus == state
-              //               //     ? 18.sp(context)
-              //               //     : 13.sp(context),
-              //               fontSize: 28.sp(context),
-              //               color: _selectedStatus == state
-              //                   ? Colors.white
-              //                   : Colors.black,
-              //             ),
-              //           ),
-              //         );
-              //       }),
-              //       SizedBox(width: 8.w(context)),
-              //     ],
-              //   ),
-              // ),
-              // SizedBox(height: 20.h(context)),
               BlocBuilder<OrdersCubit, OrdersState>(
                 builder: (context, state) {
                   final isLoading = state is OrdersLoading;
@@ -231,9 +182,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                       onTap: isButtonDisabled
                           ? null
                           : () {
-
-                        final uid =
-                                  FirebaseAuth.instance.currentUser?.uid;
+                        final uid = FirebaseAuth.instance.currentUser?.uid;
                               final order = OrderModel(
                                 userId: uid ?? "",
                                 totalAmount: total,
@@ -251,7 +200,8 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                           );
                           return;
                         }
-                              context.read<OrdersCubit>().addOrder(order);
+                        print("Debug: Total: $total, Paid: $paid");
+                        context.read<OrdersCubit>().addOrder(order);
                             },
                       height: 70.h(context),
                       width: 330.w(context),
