@@ -4,12 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_your_hand/features/clients/presentation/cubit/clients_cubit.dart';
+import 'package:in_your_hand/features/dashboard/presentation/cubit/dashboard_cubit.dart';
+import 'package:in_your_hand/features/orders/presentation/cubit/payments_cubit.dart';
 import 'package:in_your_hand/features/home/presentation/screens/home_screen.dart';
 import 'package:in_your_hand/features/orders/presentation/cubit/orders_cubit.dart';
 
 import 'core/cache/cache_helper.dart';
 import 'core/locale/providers/locale_provider.dart';
 import 'core/themes/providers/theme_provider.dart';
+import 'core/themes/text_theme.dart';
+import 'core/widgets/connectivity_overlay.dart';
 import 'features/authenticate/data/repositories/auth_repository_impl.dart';
 import 'features/authenticate/domain/use_cases/auth_usecases.dart';
 import 'features/authenticate/presentation/manager/auth_cubit.dart';
@@ -59,6 +63,8 @@ class MyApp extends ConsumerWidget {
           ),
         ),
         BlocProvider(create: (context) => ClientsCubit()..getClients(),),
+        BlocProvider(create: (context) => PaymentsCubit(),),
+        BlocProvider(create: (context) => DashboardCubit(),),
         BlocProvider(create: (context) => OrdersCubit()..getOrders(),),
         BlocProvider(
           create: (context) {
@@ -72,6 +78,18 @@ class MyApp extends ConsumerWidget {
         ),
       ],
       child: MaterialApp(
+        builder: (context, child) {
+          final currentTheme = Theme.of(context);
+          final isDark = currentTheme.brightness == Brightness.dark;
+          return Theme(
+            data: currentTheme.copyWith(
+              textTheme: isDark
+                  ? AppTextTheme.darkTextTheme(context)
+                  : AppTextTheme.lightTextTheme(context),
+            ),
+            child: ConnectivityOverlay(child: child!),
+          );
+        },
         title: 'In Your Hand',
         // initialRoute: "/main_screen",
         home:startWidget,

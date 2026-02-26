@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
 import 'package:meta/meta.dart';
 
+import '../../data/payment_model.dart';
+
 part 'orders_state.dart';
 
 class OrdersCubit extends Cubit<OrdersState> {
@@ -69,7 +71,7 @@ class OrdersCubit extends Cubit<OrdersState> {
           .collection('orders')
           .doc(order.id)
           .update({
-        'paidAmount': order.paidAmount,
+        // 'paidAmount': order.paidAmount,
       });
       await getOrders();
     } catch (e) {
@@ -92,7 +94,8 @@ class OrdersCubit extends Cubit<OrdersState> {
     }
   }
 
-  // Future<void> updateOrderStatus({
+
+// Future<void> updateOrderStatus({
   //   required String orderId,
   //   required OrderStatus newStatus,
   // }) async {

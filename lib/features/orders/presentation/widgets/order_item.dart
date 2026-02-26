@@ -40,6 +40,14 @@ class OrderItem extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 8.h(context)),
           child: ListTile(
+            leading: Container(
+              decoration: BoxDecoration(
+                color: order.status.color,
+                borderRadius: BorderRadius.circular(30.r(context)),
+              ),
+              width:7.w(context),
+
+            ),
             contentPadding: EdgeInsets.symmetric(horizontal: 16.w(context)),
             title: Text(clientName, style: theme.titleMedium),
             subtitle: Text(
@@ -50,22 +58,39 @@ class OrderItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${order.totalAmount}", style: theme.titleMedium),
+                RichText(text: TextSpan(
+                  style:theme.titleSmall!.copyWith(color: Colors.grey) ,
+                  text: "total: ",
+                  children: [
+                    TextSpan(text: "${order.totalAmount}",style:theme.titleMedium ),
+                  ]
+                )),
+                // Text("total: ${order.totalAmount}", style: theme.titleMedium),
                 SizedBox(height: 4.h(context)),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w(context), vertical: 4.h(context)),
-                  decoration: BoxDecoration(
-                    color: order.status.color,
-                    borderRadius: BorderRadius.circular(30.r(context)),
-                  ),
-                  child: Text(
-                    _statusLabel(context, order.status),
-                    style: theme.bodySmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
+                RichText(text: TextSpan(
+                    style:theme.titleSmall!.copyWith(color: Colors.grey) ,
+                    text: "paid: ",
+                    children: [
+                      TextSpan(text: "${order.totalPaid}",style:theme.titleMedium!.copyWith(color: order.status.color) ),
+                    ]
+                )),
+
+                // Text("paid: ${order.totalPaid}", style: theme.titleMedium),
+
+                // Container(
+                //   padding: EdgeInsets.symmetric(horizontal: 8.w(context), vertical: 4.h(context)),
+                //   decoration: BoxDecoration(
+                //     color: order.status.color,
+                //     borderRadius: BorderRadius.circular(30.r(context)),
+                //   ),
+                //   child: Text(
+                //     _statusLabel(context, order.status),
+                //     style: theme.bodySmall!.copyWith(
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 10,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

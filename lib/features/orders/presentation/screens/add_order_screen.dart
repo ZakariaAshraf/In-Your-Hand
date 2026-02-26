@@ -19,7 +19,7 @@ class AddOrderScreen extends StatefulWidget {
 
 class _AddOrderScreenState extends State<AddOrderScreen> {
   TextEditingController totalAmountController = TextEditingController();
-  TextEditingController paidAmountController = TextEditingController();
+  TextEditingController totalPaidAmountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   bool isDescriptionEmpty = true;
   bool isAmountEmpty = true;
@@ -40,7 +40,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       );
     });
 
-    paidAmountController.addListener(() {
+    totalPaidAmountController.addListener(() {
       setState(() {});
     });
   }
@@ -157,7 +157,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: CustomTextField(
-                  controller: paidAmountController,
+                  controller: totalPaidAmountController,
                   title: l10n.paidAmount,
                   keyboardType: TextInputType.number,
                   hintText: "0",
@@ -168,7 +168,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                 builder: (context, state) {
                   final isLoading = state is OrdersLoading;
                   final total = double.tryParse(totalAmountController.text) ?? 0;
-                  final paid = double.tryParse(paidAmountController.text) ?? 0;
+                  final paid = double.tryParse(totalPaidAmountController.text) ?? 0;
                   bool isButtonDisabled =
                       isDescriptionEmpty ||
                           _selectedClientId == null ||
@@ -186,11 +186,11 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                               final order = OrderModel(
                                 userId: uid ?? "",
                                 totalAmount: total,
-                                paidAmount: paid,
                                 description: descriptionController.text,
                                 createdAt: DateTime.now(),
                                 id: '',
                                 clientId: _selectedClientId ?? "",
+                                totalPaid: paid,
                               );
                         if (!order.isValidPayment) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -311,7 +311,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   void dispose() {
     descriptionController.dispose();
     totalAmountController.dispose();
-    paidAmountController.dispose();
+    totalPaidAmountController.dispose();
     super.dispose();
   }
 }

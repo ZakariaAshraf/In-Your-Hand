@@ -142,7 +142,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get home => 'الرئيسية';
 
   @override
-  String get profile => 'الملف الشخصي';
+  String get profile => 'الاعدادات';
 
   @override
   String get notAvailable => 'غير متاح';
@@ -327,4 +327,44 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get whatsappDefaultMessage => 'مرحباً، من تطبيق إن يور هاند';
+
+  @override
+  String get checkAllData => 'عرض كل البيانات';
+
+  @override
+  String get dashboardTitle => 'لوحة التحكم';
+
+  @override
+  String get totalClientsWithDebt => 'إجمالي العملاء المديونين';
+
+  @override
+  String get clientsWithDebtTitle => 'العملاء المديونون';
+
+  @override
+  String get checkThem => 'عرضهم';
+
+  @override
+  String get totalPaid => 'إجمالي المدفوع';
+
+  @override
+  String get sendReminder => 'إرسال تذكير';
+
+  @override
+  String get paymentHistory => 'سجل المدفوعات';
+
+  @override
+  String get amountLabel => 'المبلغ';
+
+  @override
+  String get dateLabel => 'التاريخ';
+
+  @override
+  String get totalPaidMustNotExceedTotalAmount =>
+      'يجب ألا يتجاوز إجمالي المدفوع المبلغ الإجمالي';
+
+  @override
+  String get showReport => 'عرض التقرير';
+
+  @override
+  String get pdfPreviewTitle => 'معاينة PDF';
 }

@@ -150,7 +150,7 @@ class UserCubit extends Cubit<UserState> {
         charUrl: charPath ?? user?.charUrl ?? '',
         createdAt: user?.createdAt ?? DateTime.now(),
       );
-
+      getCurrentUserData();
       emit(UserSuccess());
     } catch (e) {
       emit(UserError(e.toString()));

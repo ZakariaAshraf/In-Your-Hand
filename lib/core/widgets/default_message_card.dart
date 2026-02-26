@@ -5,12 +5,12 @@ import '../utils/app_colors.dart';
 class DefaultMessageCard extends StatelessWidget {
   final String sign;
   final String title;
-  final String subTitle;
+  final String? subTitle;
   const DefaultMessageCard(
       {super.key,
       required this.sign,
       required this.title,
-      required this.subTitle});
+       this.subTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +51,9 @@ class DefaultMessageCard extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
+                if(subTitle !=null )
                 Text(
-                  subTitle,
+                  subTitle!,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontSize:20,

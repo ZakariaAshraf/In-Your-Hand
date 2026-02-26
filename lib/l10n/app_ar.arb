@@ -49,7 +49,7 @@
   "helpAndSupport": "المساعدة والدعم",
   "cairoEgypt": "القاهرة، مصر",
   "home": "الرئيسية",
-  "profile": "الملف الشخصي",
+  "profile": "الاعدادات",
   "notAvailable": "غير متاح",
 
   "orders": "الطلبات",
@@ -111,5 +111,19 @@
   "orderStatusPartial": "جزئي",
   "orderStatusPaid": "مدفوع",
   "errorLoadingClients": "خطأ في تحميل العملاء",
-  "whatsappDefaultMessage": "مرحباً، من تطبيق إن يور هاند"
+  "whatsappDefaultMessage": "مرحباً، من تطبيق إن يور هاند",
+
+  "checkAllData": "عرض كل البيانات",
+  "dashboardTitle": "لوحة التحكم",
+  "totalClientsWithDebt": "إجمالي العملاء المديونين",
+  "clientsWithDebtTitle": "العملاء المديونون",
+  "checkThem": "عرضهم",
+  "totalPaid": "إجمالي المدفوع",
+  "sendReminder": "إرسال تذكير",
+  "paymentHistory": "سجل المدفوعات",
+  "amountLabel": "المبلغ",
+  "dateLabel": "التاريخ",
+  "totalPaidMustNotExceedTotalAmount": "يجب ألا يتجاوز إجمالي المدفوع المبلغ الإجمالي",
+  "showReport": "عرض التقرير",
+  "pdfPreviewTitle": "معاينة PDF"
 }

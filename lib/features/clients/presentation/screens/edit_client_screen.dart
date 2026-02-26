@@ -57,7 +57,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                     return BackdropFilter(
                       filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
                       child: AlertDialog(
-                        title: Text(dialogL10n.deleteClient),
+                        title: Text(dialogL10n.deleteClient,style: theme.titleLarge,),
                         content: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: Text(dialogL10n.deleteClientConfirm),

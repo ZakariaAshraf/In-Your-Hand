@@ -359,7 +359,7 @@ abstract class AppLocalizations {
   /// No description provided for @profile.
   ///
   /// In en, this message translates to:
-  /// **'Profile'**
+  /// **'Settings'**
   String get profile;
 
   /// No description provided for @notAvailable.
@@ -727,6 +727,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello, from In Your Hand app'**
   String get whatsappDefaultMessage;
+
+  /// No description provided for @checkAllData.
+  ///
+  /// In en, this message translates to:
+  /// **'Check all data'**
+  String get checkAllData;
+
+  /// No description provided for @dashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboardTitle;
+
+  /// No description provided for @totalClientsWithDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'Total clients with debt'**
+  String get totalClientsWithDebt;
+
+  /// No description provided for @clientsWithDebtTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clients with debt'**
+  String get clientsWithDebtTitle;
+
+  /// No description provided for @checkThem.
+  ///
+  /// In en, this message translates to:
+  /// **'Check them'**
+  String get checkThem;
+
+  /// No description provided for @totalPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Paid'**
+  String get totalPaid;
+
+  /// No description provided for @sendReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reminder'**
+  String get sendReminder;
+
+  /// No description provided for @paymentHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment History'**
+  String get paymentHistory;
+
+  /// No description provided for @amountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get amountLabel;
+
+  /// No description provided for @dateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get dateLabel;
+
+  /// No description provided for @totalPaidMustNotExceedTotalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total paid must not exceed total amount'**
+  String get totalPaidMustNotExceedTotalAmount;
+
+  /// No description provided for @showReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Report'**
+  String get showReport;
+
+  /// No description provided for @pdfPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Preview'**
+  String get pdfPreviewTitle;
 }
 
 class _AppLocalizationsDelegate

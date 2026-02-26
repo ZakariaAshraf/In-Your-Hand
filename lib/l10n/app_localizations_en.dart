@@ -141,7 +141,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get home => 'Home';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Settings';
 
   @override
   String get notAvailable => 'NOT AVAILABLE';
@@ -328,4 +328,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get whatsappDefaultMessage => 'Hello, from In Your Hand app';
+
+  @override
+  String get checkAllData => 'Check all data';
+
+  @override
+  String get dashboardTitle => 'Dashboard';
+
+  @override
+  String get totalClientsWithDebt => 'Total clients with debt';
+
+  @override
+  String get clientsWithDebtTitle => 'Clients with debt';
+
+  @override
+  String get checkThem => 'Check them';
+
+  @override
+  String get totalPaid => 'Total Paid';
+
+  @override
+  String get sendReminder => 'Send Reminder';
+
+  @override
+  String get paymentHistory => 'Payment History';
+
+  @override
+  String get amountLabel => 'Amount';
+
+  @override
+  String get dateLabel => 'Date';
+
+  @override
+  String get totalPaidMustNotExceedTotalAmount =>
+      'Total paid must not exceed total amount';
+
+  @override
+  String get showReport => 'Show Report';
+
+  @override
+  String get pdfPreviewTitle => 'PDF Preview';
 }

@@ -68,6 +68,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       body: BlocConsumer<UserCubit, UserState>(
         listener: (context, state) {
           if (state is UserSuccess) {
+            Navigator.pop(context);
           } else if (state is UserError) {
             ScaffoldMessenger.of(
               context,

@@ -21,7 +21,9 @@ class OrderModel {
   final String description;
   // final double amount;
   final double totalAmount;
-  final double paidAmount;
+  // final double paidAmount;
+  final double totalPaid;
+
   // final OrderStatus status;
   final DateTime createdAt;
 
@@ -31,7 +33,8 @@ class OrderModel {
     required this.clientId,
     required this.description,
     required this.totalAmount,
-    required this.paidAmount,
+    // required this.paidAmount,
+    required this.totalPaid,
     // required this.status,
     required this.createdAt,
   });
@@ -39,7 +42,8 @@ class OrderModel {
   factory OrderModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
     final total = (data['totalAmount'] ?? data['amount'] ?? 0) as num;
-    final paid = (data['paidAmount'] ?? 0) as num;
+    // final paid = (data['paidAmount'] ?? 0) as num;
+    final totalPaid = (data['totalPaid'] ?? 0) as num;
 
     return OrderModel(
       id: doc.id,
@@ -47,8 +51,9 @@ class OrderModel {
       clientId: data['clientId'],
       description: data['description'],
       totalAmount: total.toDouble(),
-      paidAmount: paid.toDouble(),
+      // paidAmount: paid.toDouble(),
       createdAt: (data['createdAt'] as Timestamp).toDate(),
+      totalPaid: totalPaid.toDouble(),
     );
   }
 
@@ -60,7 +65,8 @@ class OrderModel {
       'clientId': clientId,
       'description': description,
       'totalAmount': totalAmount,
-      'paidAmount': paidAmount,
+      'totalPaid': totalPaid,
+      // 'paidAmount': paidAmount,
       // 'status': status.name, // pending / done / paid
       'createdAt': Timestamp.fromDate(createdAt),
     };
@@ -80,20 +86,32 @@ class OrderModel {
       clientId: clientId ?? this.clientId,
       description: description ?? this.description,
       totalAmount: totalAmount ?? this.totalAmount,
-      paidAmount: paidAmount ?? this.paidAmount,
-      createdAt: createdAt ?? this.createdAt,
+      // paidAmount: paidAmount ?? this.paidAmount,
+      createdAt: createdAt ?? this.createdAt, totalPaid: totalPaid ?? this.totalPaid,
     );
   }
 
   bool get isValidPayment =>
-      paidAmount >= 0 && paidAmount <= totalAmount;
+      totalPaid >= 0 && totalPaid <= totalAmount;
 
-  double get remainingAmount => totalAmount - paidAmount;
+  double get remainingAmount => totalAmount - totalPaid;
+  // OrderStatus get status {
+  //   if (paidAmount == 0) return OrderStatus.pending;
+  //   if (paidAmount < totalAmount) return OrderStatus.partial;
+  //   return OrderStatus.paid;
+  // }
+  // OrderStatus get status {
+  //   if (totalPaid == 0) return OrderStatus.pending;
+  //   if (totalPaid < totalAmount) return OrderStatus.partial;
+  //   return OrderStatus.paid;
+  // }
+
   OrderStatus get status {
-    if (paidAmount == 0) return OrderStatus.pending;
-    if (paidAmount < totalAmount) return OrderStatus.partial;
+    if (totalPaid == 0) return OrderStatus.pending;
+    if (totalPaid < totalAmount) return OrderStatus.partial;
     return OrderStatus.paid;
   }
+
   static OrderStatus _statusFromString(String status) {
     return OrderStatus.values.firstWhere(
           (e) => e.name == status,

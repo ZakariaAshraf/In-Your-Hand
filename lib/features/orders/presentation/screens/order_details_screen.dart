@@ -5,9 +5,13 @@ import 'package:in_your_hand/core/generated/extentions.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
+import 'package:in_your_hand/features/orders/presentation/screens/generate_pdf_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/utils/pdf_manger.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../cubit/payments_cubit.dart';
 import '../cubit/orders_cubit.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
@@ -35,8 +39,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   @override
   void initState() {
     _selectedStatus = widget.order.status;
+    context.read<PaymentsCubit>().loadPayments(widget.order.id);
     super.initState();
   }
+
   static String _statusLabel(BuildContext context, OrderStatus status) {
     final l10n = AppLocalizations.of(context)!;
     switch (status) {
@@ -54,12 +60,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     paymentController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final currentStatus = _selectedStatus ?? widget.order.status;
     var theme = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context)!;
-    final totalUnpaid = widget.order.totalAmount - widget.order.paidAmount;
+    final totalUnpaid = widget.order.totalAmount - widget.order.totalPaid;
     return BlocListener<OrdersCubit, OrdersState>(
       listenWhen: (prev, curr) =>
           prev is OrdersLoading && curr is OrdersSuccess,
@@ -69,25 +76,15 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.orderDetails, style: theme.titleLarge),
-          // actions: [
-          //   if (hasStatusChanged)
-          //     TextButton(
-          //       onPressed: () {
-          //         // final newPaidAmount =
-          //         //     widget.order.paidAmount + enteredPayment;
-          //         //
-          //         // context.read<OrdersCubit>().updateOrderPayment(
-          //         //   widget.order.copyWith(
-          //         //     paidAmount: newPaidAmount,
-          //         //   ),
-          //         // );
-          //       },
-          //       child: const Text(
-          //         "Save",
-          //         style: TextStyle(color: AppColors.primary),
-          //       ),
-          //     ),
-          // ],
+          actions: [
+            IconButton(
+              onPressed: () {
+                // showPdfPreview(context);
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => GeneratePdfScreen(),));
+              },
+              icon: Icon(Icons.print),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -102,6 +99,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 child: Column(
                   children: [
                     ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                          color: widget.order.status.color,
+                          borderRadius: BorderRadius.circular(30.r(context)),
+                        ),
+                        width: 7.w(context),
+                      ),
                       title: Text(
                         widget.client.isDeleted == false
                             ? widget.client.name
@@ -116,30 +120,47 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           fontSize: 18.sp(context),
                         ),
                       ),
-                      trailing: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            height: 30.h(context),
-                            width: 80.w(context),
-                            decoration: BoxDecoration(
-                              color: currentStatus.color,
-                              borderRadius: BorderRadius.circular(
-                                30.r(context),
-                              ),
-                            ),
-                            // padding: EdgeInsets.all(12),
-                            child: Center(
-                              child: Text(
-                                _statusLabel(context, _selectedStatus ?? widget.order.status),
-                                style: theme.bodySmall!.copyWith(
-                                  fontWeight: FontWeight.bold,
+                      trailing: widget.client.phone != ""
+                          ? InkWell(
+                              onTap: () async {
+                                final phone = widget.client.phone
+                                    ?.replaceAll('+', '')
+                                    .replaceAll(':', '')
+                                    .trim();
+                                final encoded = Uri.encodeComponent(
+                                  "السلام عليكم حضرتك عليك $totalUnpaid من اصل مبلغ ${widget.order.totalAmount} لاوردر بتاريخ يوم ${formatDate(widget.order.createdAt)}",
+                                );
+                                final url = Uri.parse(
+                                  "https://wa.me/$phone?text=$encoded",
+                                );
+
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(
+                                    url,
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                }
+                              },
+                          child: Container(
+                                height: 60.h(context),
+                                width: 120.w(context),
+                                decoration: BoxDecoration(
+                                  color: currentStatus.color.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(
+                                    30.r(context),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    l10n.sendReminder,
+                                    style: theme.bodySmall!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
+                            )
+                          : null,
                     ),
                     Divider(),
                     ListTile(
@@ -151,7 +172,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ),
                       subtitle: Text(
                         "${widget.order.totalAmount}",
-                        style: theme.displayMedium,
+                        style: theme.titleLarge!.copyWith(
+                          fontSize: 34.sp(context),
+                        ),
                       ),
                     ),
                     Divider(),
@@ -161,12 +184,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           showDialog(
                             context: context,
                             builder: (dialogContext) {
-                              final dialogL10n = AppLocalizations.of(dialogContext)!;
+                              final dialogL10n = AppLocalizations.of(
+                                dialogContext,
+                              )!;
                               return AlertDialog(
-                                title: Text(dialogL10n.addPayment),
+                                title: Text(dialogL10n.addPayment,style: theme.titleLarge,),
                                 content: SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.8,
-                                  height: MediaQuery.of(context).size.height * 0.1,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.1,
                                   child: CustomTextField(
                                     hintText: "0",
                                     controller: paymentController,
@@ -174,25 +201,62 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 ),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.pop(dialogContext),
-                                    child: Text(dialogL10n.cancel, style: theme.titleMedium),
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext),
+                                    child: Text(
+                                      dialogL10n.cancel,
+                                      style: theme.titleMedium,
+                                    ),
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
-                                      final entered = double.tryParse(paymentController.text);
-                                      if (entered == null || entered <= 0) return;
-                                      final newPaidAmount =
-                                          widget.order.paidAmount + entered;
-                                      if (newPaidAmount > widget.order.totalAmount) return;
-                                      context.read<OrdersCubit>().updateOrderPayment(
-                                        widget.order.copyWith(
-                                          paidAmount: newPaidAmount,
-                                        ),
+                                      final entered = double.tryParse(
+                                        paymentController.text,
                                       );
+                                      if (entered == null || entered <= 0)
+                                        return;
+                                      final newPaidAmount =
+                                          widget.order.totalPaid + entered;
+                                      if (newPaidAmount >
+                                          widget.order.totalAmount) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              l10n
+                                                  .totalPaidMustNotExceedTotalAmount,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      // context.read<OrdersCubit>().updateOrderPayment(
+                                      //   widget.order.copyWith(
+                                      //     paidAmount: newPaidAmount,
+                                      //   ),
+                                      // );
+                                      context
+                                          .read<PaymentsCubit>()
+                                          .addPayment(
+                                            orderId: widget.order.id,
+                                            amount: entered,
+                                          )
+                                          .then((_) {
+                                            context
+                                                .read<OrdersCubit>()
+                                                .getOrders();
+                                          });
                                       Navigator.pop(dialogContext);
                                     },
-                                    style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.blue)),
-                                    child: Text(dialogL10n.save, style: theme.titleMedium),
+                                    style: ButtonStyle(
+                                      backgroundColor: WidgetStatePropertyAll(
+                                        Colors.blue,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      dialogL10n.save,
+                                      style: theme.titleMedium,
+                                    ),
                                   ),
                                 ],
                               );
@@ -210,13 +274,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           color: Colors.grey[700],
                         ),
                       ),
-                      subtitle: totalUnpaid == 0 as num ?Text(
-                        "- 0",
-                        style: theme.displaySmall,
-                      ):Text(
-                          "- $totalUnpaid",
-                        style: theme.displaySmall!.copyWith(color: Colors.red),
-                      ),
+                      subtitle: totalUnpaid == 0 as num
+                          ? Text("- 0", style: theme.displaySmall)
+                          : Text(
+                              "- $totalUnpaid",
+                              style: theme.displaySmall!.copyWith(
+                                color: Colors.red,
+                              ),
+                            ),
                     ),
                     Divider(),
                     ListTile(
@@ -231,6 +296,71 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         style: theme.bodyMedium,
                       ),
                     ),
+                    Divider(),
+                    ExpansionTile(
+                      title: Text(
+                        l10n.paymentHistory,
+                        style: theme.bodyLarge,
+                      ),
+                      children: [
+                        BlocBuilder<PaymentsCubit, PaymentsState>(
+                          builder: (context, state) {
+                            if (state is PaymentsLoaded) {
+                              if (state.payments.isEmpty) {
+                                return SizedBox();
+                              }
+
+                              return Table(
+                                border: TableBorder.all(
+                                  color: Colors.grey.shade300,
+                                ),
+                                columnWidths: const {
+                                  0: FlexColumnWidth(2),
+                                  1: FlexColumnWidth(2),
+                                },
+                                children: [
+                                  TableRow(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                    ),
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: Text(l10n.amountLabel),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: Text(l10n.dateLabel),
+                                      ),
+                                    ],
+                                  ),
+                                  ...state.payments.map((payment) {
+                                    return TableRow(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(
+                                            payment.amount.toString(),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(
+                                            formatDate(payment.createdAt),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ],
+                              );
+                            }
+
+                            return SizedBox();
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -238,54 +368,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 padding: const EdgeInsets.all(10.0),
                 child: Text(l10n.status, style: theme.titleMedium),
               ),
-              // SizedBox(
-              //   height: 60,
-              //   child: ListView(
-              //     scrollDirection: Axis.horizontal,
-              //     children: [
-              //       SizedBox(width: 8.w(context)),
-              //       ...OrderStatus.values.map((state) {
-              //         return Padding(
-              //           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              //           child: FilterChip(
-              //             selectedColor: state.color,
-              //             backgroundColor: state.backgroundColor,
-              //             side: BorderSide.none,
-              //             showCheckmark: false,
-              //             label: Text(
-              //               state.name,
-              //               style: TextStyle(
-              //                 color: _selectedStatus == state
-              //                     ? Colors.white
-              //                     : Colors.grey,
-              //               ),
-              //             ),
-              //             selected: _selectedStatus == state,
-              //             onSelected: (selected) {
-              //               setState(() {
-              //                 _selectedStatus = state;
-              //               });
-              //               if (selected) {}
-              //             },
-              //             labelStyle: TextStyle(
-              //               decoration: _selectedStatus == state
-              //                   ? TextDecoration.none
-              //                   : TextDecoration.none,
-              //               // fontSize: _selectedStatus == state
-              //               //     ? 18.sp(context)
-              //               //     : 13.sp(context),
-              //               fontSize: 28.sp(context),
-              //               color: _selectedStatus == state
-              //                   ? Colors.white
-              //                   : Colors.black,
-              //             ),
-              //           ),
-              //         );
-              //       }),
-              //       SizedBox(width: 8.w(context)),
-              //     ],
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: Chip(
@@ -302,6 +384,39 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ),
                 ),
               ),
+              // FutureBuilder<double>(
+              //   future: context.read<OrdersCubit>().getTotalPaid(widget.order.id),
+              //   builder: (context, snapshot) {
+              //     final paid = snapshot.data ?? 0;
+              //     final total = widget.order.totalAmount;
+              //
+              //     OrderStatus status;
+              //     if (paid == 0) {
+              //       status = OrderStatus.pending;
+              //     } else if (paid < total) {
+              //       status = OrderStatus.partial;
+              //     } else {
+              //       status = OrderStatus.paid;
+              //     }
+              //
+              //     return Padding(
+              //       padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              //       child: Chip(
+              //         backgroundColor: status.color,
+              //         side: BorderSide.none,
+              //         label: Text(
+              //           _statusLabel(context, status),
+              //           style: TextStyle(color: Colors.white),
+              //         ),
+              //         labelStyle: TextStyle(
+              //           decoration: TextDecoration.none,
+              //           fontSize: 28.sp(context),
+              //           color: Colors.white,
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // ),
               SizedBox(height: 40.h(context)),
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
@@ -312,7 +427,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       showDialog(
                         context: context,
                         builder: (dialogContext) {
-                          final dialogL10n = AppLocalizations.of(dialogContext)!;
+                          final dialogL10n = AppLocalizations.of(
+                            dialogContext,
+                          )!;
                           return BackdropFilter(
                             filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
                             child: AlertDialog(
@@ -324,17 +441,27 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(dialogContext),
-                                  child: Text(dialogL10n.cancel, style: theme.titleMedium),
+                                  child: Text(
+                                    dialogL10n.cancel,
+                                    style: theme.titleMedium,
+                                  ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () async {
-                                    await context.read<OrdersCubit>().deleteOrder(
-                                      widget.order,
-                                    );
+                                    await context
+                                        .read<OrdersCubit>()
+                                        .deleteOrder(widget.order);
                                     Navigator.pop(dialogContext);
                                   },
-                                  style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.red)),
-                                  child: Text(dialogL10n.delete, style: theme.titleMedium),
+                                  style: ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(
+                                      Colors.red,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    dialogL10n.delete,
+                                    style: theme.titleMedium,
+                                  ),
                                 ),
                               ],
                             ),

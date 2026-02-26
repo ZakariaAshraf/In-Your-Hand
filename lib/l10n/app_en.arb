@@ -49,7 +49,7 @@
   "helpAndSupport": "Help & Support",
   "cairoEgypt": "Cairo, Egypt",
   "home": "Home",
-  "profile": "Profile",
+  "profile": "Settings",
   "notAvailable": "NOT AVAILABLE",
 
   "orders": "Orders",
@@ -111,5 +111,19 @@
   "orderStatusPartial": "Partial",
   "orderStatusPaid": "Paid",
   "errorLoadingClients": "Error loading clients",
-  "whatsappDefaultMessage": "Hello, from In Your Hand app"
+  "whatsappDefaultMessage": "Hello, from In Your Hand app",
+
+  "checkAllData": "Check all data",
+  "dashboardTitle": "Dashboard",
+  "totalClientsWithDebt": "Total clients with debt",
+  "clientsWithDebtTitle": "Clients with debt",
+  "checkThem": "Check them",
+  "totalPaid": "Total Paid",
+  "sendReminder": "Send Reminder",
+  "paymentHistory": "Payment History",
+  "amountLabel": "Amount",
+  "dateLabel": "Date",
+  "totalPaidMustNotExceedTotalAmount": "Total paid must not exceed total amount",
+  "showReport": "Show Report",
+  "pdfPreviewTitle": "PDF Preview"
 }
