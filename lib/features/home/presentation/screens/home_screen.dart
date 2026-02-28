@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     CircleAvatar(
                                       backgroundColor: Colors.transparent,
                                       child: Text(
-                                        "EGP",
+                                        l10n.egp,
                                         style: TextStyle(color: Colors.red),
                                       ),
                                     ),

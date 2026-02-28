@@ -32,6 +32,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   OrderStatus? _selectedStatus;
 
   final TextEditingController paymentController = TextEditingController();
+  late TextEditingController noteController;
 
   bool get hasStatusChanged =>
       _selectedStatus != null && _selectedStatus != widget.order.status;
@@ -39,6 +40,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   @override
   void initState() {
     _selectedStatus = widget.order.status;
+    noteController=TextEditingController(text:widget.order.notes);
     context.read<PaymentsCubit>().loadPayments(widget.order.id);
     super.initState();
   }
@@ -76,15 +78,15 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.orderDetails, style: theme.titleLarge),
-          actions: [
-            IconButton(
-              onPressed: () {
-                // showPdfPreview(context);
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => GeneratePdfScreen(),));
-              },
-              icon: Icon(Icons.print),
-            ),
-          ],
+          // actions: [
+          //   IconButton(
+          //     onPressed: () {
+          //       // showPdfPreview(context);
+          //       // Navigator.push(context, MaterialPageRoute(builder: (context) => GeneratePdfScreen(),));
+          //     },
+          //     icon: Icon(Icons.print),
+          //   ),
+          // ],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -295,7 +297,93 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         formatDate(widget.order.createdAt),
                         style: theme.bodyMedium,
                       ),
+                      trailing: InkWell(
+                        onTap: () async {
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              final dialogL10n = AppLocalizations.of(
+                                dialogContext,
+                              )!;
+                              return AlertDialog(
+                                title: Text(dialogL10n.addNote,style: theme.titleLarge,),
+                                content: SizedBox(
+                                  width:
+                                  MediaQuery.of(context).size.width * 0.8,
+                                  height:
+                                  MediaQuery.of(context).size.height * 0.2,
+                                  child: CustomTextField(
+                                    maxLines: 3,
+                                    hintText: dialogL10n.addYourNote,
+                                    controller: noteController,
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext),
+                                    child: Text(
+                                      dialogL10n.cancel,
+                                      style: theme.titleMedium,
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      if (noteController.text.trim().isEmpty) return;
+                                      Navigator.pop(dialogContext);
+                                      context.read<OrdersCubit>().updateOrderNote(
+                                        widget.order.id,
+                                        noteController.text,
+                                      );
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor: WidgetStatePropertyAll(
+                                        Colors.blue,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      dialogL10n.save,
+                                      style: theme.titleMedium,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          height: 60.h(context),
+                          width: 120.w(context),
+                          decoration: BoxDecoration(
+                            // color: currentStatus.color.withOpacity(0.3),
+                            color: Colors.green.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(
+                              30.r(context),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Add note 📝",
+                              style: theme.titleSmall,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
+                    if (widget.order.notes!=null)
+                     Column(children: [ Divider(),
+                       ListTile(
+                         title: Text(
+                           l10n.notes,
+                           style: theme.bodySmall?.copyWith(
+                             color: Colors.grey[700],
+                           ),
+                         ),
+                         subtitle: Text(
+                           "${widget.order.notes}",
+                           style: theme.bodyMedium,
+                         ),
+                       ),],),
                     Divider(),
                     ExpansionTile(
                       title: Text(
@@ -433,7 +521,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           return BackdropFilter(
                             filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
                             child: AlertDialog(
-                              title: Text(dialogL10n.deleteOrder),
+                              title: Text(dialogL10n.deleteOrder,style: theme.titleLarge!.copyWith(color: Colors.red),),
                               content: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.8,
                                 child: Text(dialogL10n.deleteOrderConfirm),

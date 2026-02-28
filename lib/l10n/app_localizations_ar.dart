@@ -148,6 +148,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notAvailable => 'غير متاح';
 
   @override
+  String get addNote => 'اضافة ملاحظة';
+
+  @override
+  String get egp => 'جنيه';
+
+  @override
+  String get clientReport => 'تقرير العميل';
+
+  @override
+  String get addYourNote => 'قم باضافة ملاحظتك';
+
+  @override
   String get orders => 'الطلبات';
 
   @override
@@ -367,4 +379,42 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pdfPreviewTitle => 'معاينة PDF';
+
+  @override
+  String get addOrderByVoice => 'إضافة طلب بالصوت';
+
+  @override
+  String get tapToSpeak => 'اضغط على الميكروفون وقل طلبك';
+
+  @override
+  String get listening => 'جاري الاستماع...';
+
+  @override
+  String get voicePermissionDenied =>
+      'مطلوب السماح للميكروفون لإضافة الطلبات بالصوت';
+
+  @override
+  String get allowMicrophone => 'يرجى السماح للميكروفون من إعدادات التطبيق';
+
+  @override
+  String get transcript => 'ما قلته';
+
+  @override
+  String get addOrderFromVoice => 'إضافة هذا الطلب';
+
+  @override
+  String get orderAddedByVoice => 'تم إضافة الطلب من الصوت';
+
+  @override
+  String get geminiNotConfigured =>
+      'أضف مفتاح Gemini API في app_keys.dart لاستخدام الطلبات الصوتية';
+
+  @override
+  String get confirmOrder => 'تأكيد الطلب';
+
+  @override
+  String get confirmOrderMessage => 'راجع الطلب أدناه. هل تضيفه؟';
+
+  @override
+  String get confirm => 'تأكيد';
 }

@@ -95,6 +95,41 @@ class OrdersCubit extends Cubit<OrdersState> {
   }
 
 
+  getClientOrders(String clientId) async {
+    emit(OrdersLoading());
+    try {
+      final snapshot = await _firestore
+          .collection('orders')
+          .where('clientId', isEqualTo: clientId)
+      // .orderBy('createdAt', descending: true)
+          .get();
+
+      final orders = snapshot.docs
+          .map((doc) => OrderModel.fromFirestore(doc))
+          .toList();
+      emit(OrdersSuccess(orders: orders));
+    } catch (e) {
+      emit(OrdersError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> updateOrderNote(String orderId, String note) async {
+    emit(OrdersLoading());
+    try {
+      await _firestore
+          .collection('orders')
+          .doc(orderId)
+          .update({
+        'notes': note,
+      });
+
+      await getOrders();
+
+    } catch (e) {
+      emit(OrdersError(errorMessage: e.toString()));
+    }
+  }
+
 // Future<void> updateOrderStatus({
   //   required String orderId,
   //   required OrderStatus newStatus,

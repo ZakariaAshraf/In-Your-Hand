@@ -368,6 +368,30 @@ abstract class AppLocalizations {
   /// **'NOT AVAILABLE'**
   String get notAvailable;
 
+  /// No description provided for @addNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Note'**
+  String get addNote;
+
+  /// No description provided for @egp.
+  ///
+  /// In en, this message translates to:
+  /// **'EGP'**
+  String get egp;
+
+  /// No description provided for @clientReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Client Report'**
+  String get clientReport;
+
+  /// No description provided for @addYourNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your note'**
+  String get addYourNote;
+
   /// No description provided for @orders.
   ///
   /// In en, this message translates to:
@@ -805,6 +829,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PDF Preview'**
   String get pdfPreviewTitle;
+
+  /// No description provided for @addOrderByVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Add order by voice'**
+  String get addOrderByVoice;
+
+  /// No description provided for @tapToSpeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the mic and speak your order'**
+  String get tapToSpeak;
+
+  /// No description provided for @listening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening...'**
+  String get listening;
+
+  /// No description provided for @voicePermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone access is required for voice orders'**
+  String get voicePermissionDenied;
+
+  /// No description provided for @allowMicrophone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please allow microphone in app settings'**
+  String get allowMicrophone;
+
+  /// No description provided for @transcript.
+  ///
+  /// In en, this message translates to:
+  /// **'What you said'**
+  String get transcript;
+
+  /// No description provided for @addOrderFromVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Add this order'**
+  String get addOrderFromVoice;
+
+  /// No description provided for @orderAddedByVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Order added from voice'**
+  String get orderAddedByVoice;
+
+  /// No description provided for @geminiNotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your Gemini API key in app_keys.dart to use voice orders'**
+  String get geminiNotConfigured;
+
+  /// No description provided for @confirmOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm order'**
+  String get confirmOrder;
+
+  /// No description provided for @confirmOrderMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the order below. Add it?'**
+  String get confirmOrderMessage;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
 }
 
 class _AppLocalizationsDelegate

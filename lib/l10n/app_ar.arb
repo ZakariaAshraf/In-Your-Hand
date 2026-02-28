@@ -51,6 +51,10 @@
   "home": "الرئيسية",
   "profile": "الاعدادات",
   "notAvailable": "غير متاح",
+  "addNote": "اضافة ملاحظة",
+  "egp": "جنيه",
+  "clientReport": "تقرير العميل",
+  "addYourNote": "قم باضافة ملاحظتك",
 
   "orders": "الطلبات",
   "clients": "العملاء",
@@ -125,5 +129,19 @@
   "dateLabel": "التاريخ",
   "totalPaidMustNotExceedTotalAmount": "يجب ألا يتجاوز إجمالي المدفوع المبلغ الإجمالي",
   "showReport": "عرض التقرير",
-  "pdfPreviewTitle": "معاينة PDF"
+  "pdfPreviewTitle": "معاينة PDF",
+
+  "addOrderByVoice": "إضافة طلب بالصوت",
+  "tapToSpeak": "اضغط على الميكروفون وقل طلبك",
+  "listening": "جاري الاستماع...",
+  "voicePermissionDenied": "مطلوب السماح للميكروفون لإضافة الطلبات بالصوت",
+  "allowMicrophone": "يرجى السماح للميكروفون من إعدادات التطبيق",
+  "transcript": "ما قلته",
+  "addOrderFromVoice": "إضافة هذا الطلب",
+  "orderAddedByVoice": "تم إضافة الطلب من الصوت",
+  "geminiNotConfigured": "أضف مفتاح Gemini API في app_keys.dart لاستخدام الطلبات الصوتية",
+
+  "confirmOrder": "تأكيد الطلب",
+  "confirmOrderMessage": "راجع الطلب أدناه. هل تضيفه؟",
+  "confirm": "تأكيد"
 }

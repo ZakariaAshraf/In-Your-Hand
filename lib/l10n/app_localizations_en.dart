@@ -147,6 +147,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notAvailable => 'NOT AVAILABLE';
 
   @override
+  String get addNote => 'Add Note';
+
+  @override
+  String get egp => 'EGP';
+
+  @override
+  String get clientReport => 'Client Report';
+
+  @override
+  String get addYourNote => 'Add your note';
+
+  @override
   String get orders => 'Orders';
 
   @override
@@ -368,4 +380,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pdfPreviewTitle => 'PDF Preview';
+
+  @override
+  String get addOrderByVoice => 'Add order by voice';
+
+  @override
+  String get tapToSpeak => 'Tap the mic and speak your order';
+
+  @override
+  String get listening => 'Listening...';
+
+  @override
+  String get voicePermissionDenied =>
+      'Microphone access is required for voice orders';
+
+  @override
+  String get allowMicrophone => 'Please allow microphone in app settings';
+
+  @override
+  String get transcript => 'What you said';
+
+  @override
+  String get addOrderFromVoice => 'Add this order';
+
+  @override
+  String get orderAddedByVoice => 'Order added from voice';
+
+  @override
+  String get geminiNotConfigured =>
+      'Add your Gemini API key in app_keys.dart to use voice orders';
+
+  @override
+  String get confirmOrder => 'Confirm order';
+
+  @override
+  String get confirmOrderMessage => 'Review the order below. Add it?';
+
+  @override
+  String get confirm => 'Confirm';
 }

@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/utils/app_colors.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
+import 'package:in_your_hand/core/widgets/default_message_card.dart';
 import 'package:in_your_hand/features/clients/data/clients_model.dart';
+import 'package:in_your_hand/features/clients/presentation/screens/clients_details_screen.dart';
+import 'package:in_your_hand/features/orders/presentation/cubit/orders_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -116,6 +120,29 @@ class ClientsItem extends StatelessWidget {
                               ],
                             )
                           : null,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ClientDetailsScreen(client: client),
+                            ),
+                          ).then((_) {
+                            if (context.mounted) {
+                              context.read<OrdersCubit>().getOrders();
+                            }
+                          });
+                        },
+                        child: Container(
+                          height: 50.h(context),
+                          width: 60.w(context),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.r(context)),
+                            border: BoxBorder.all(color: Colors.grey),
+                          ),
+                          child: Icon(CupertinoIcons.info),
+                        ),
+                      ),
                       InkWell(
                         onTap: () {
                           Navigator.push(

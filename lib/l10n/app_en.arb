@@ -51,7 +51,10 @@
   "home": "Home",
   "profile": "Settings",
   "notAvailable": "NOT AVAILABLE",
-
+  "addNote": "Add Note",
+  "egp": "EGP",
+  "clientReport": "Client Report",
+  "addYourNote": "Add your note",
   "orders": "Orders",
   "clients": "Clients",
   "totalOrders": "Total Orders",
@@ -125,5 +128,19 @@
   "dateLabel": "Date",
   "totalPaidMustNotExceedTotalAmount": "Total paid must not exceed total amount",
   "showReport": "Show Report",
-  "pdfPreviewTitle": "PDF Preview"
+  "pdfPreviewTitle": "PDF Preview",
+
+  "addOrderByVoice": "Add order by voice",
+  "tapToSpeak": "Tap the mic and speak your order",
+  "listening": "Listening...",
+  "voicePermissionDenied": "Microphone access is required for voice orders",
+  "allowMicrophone": "Please allow microphone in app settings",
+  "transcript": "What you said",
+  "addOrderFromVoice": "Add this order",
+  "orderAddedByVoice": "Order added from voice",
+  "geminiNotConfigured": "Add your Gemini API key in app_keys.dart to use voice orders",
+
+  "confirmOrder": "Confirm order",
+  "confirmOrderMessage": "Review the order below. Add it?",
+  "confirm": "Confirm"
 }

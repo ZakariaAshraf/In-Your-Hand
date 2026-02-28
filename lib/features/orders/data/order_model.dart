@@ -21,6 +21,8 @@ class OrderModel {
   final String description;
   // final double amount;
   final double totalAmount;
+  final String? notes;
+
   // final double paidAmount;
   final double totalPaid;
 
@@ -33,6 +35,7 @@ class OrderModel {
     required this.clientId,
     required this.description,
     required this.totalAmount,
+    this.notes,
     // required this.paidAmount,
     required this.totalPaid,
     // required this.status,
@@ -50,6 +53,7 @@ class OrderModel {
       userId: data['userId'],
       clientId: data['clientId'],
       description: data['description'],
+      notes: data['notes'],
       totalAmount: total.toDouble(),
       // paidAmount: paid.toDouble(),
       createdAt: (data['createdAt'] as Timestamp).toDate(),
@@ -66,6 +70,7 @@ class OrderModel {
       'description': description,
       'totalAmount': totalAmount,
       'totalPaid': totalPaid,
+      'notes': notes,
       // 'paidAmount': paidAmount,
       // 'status': status.name, // pending / done / paid
       'createdAt': Timestamp.fromDate(createdAt),
