@@ -161,30 +161,30 @@ class _SignInState extends State<SignIn> {
                       // ),
                       SizedBox(height: 90.h(context)),
 
-                      // Divider(),
-                      // Row(
-                      //   children: [
-                      //     Text(
-                      //       l10n.dontHaveAccount,
-                      //       style: TextStyle(color: Colors.grey),
-                      //     ),
-                      //     TextButton(
-                      //       onPressed: () {
-                      //         Navigator.pushAndRemoveUntil(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //             builder: (context) => const SignUp(),
-                      //           ),
-                      //           (route) => true,
-                      //         );
-                      //       },
-                      //       child: Text(
-                      //         l10n.create,
-                      //         style: TextStyle(color: Color(0xff1F4C6B)),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      Divider(),
+                      Row(
+                        children: [
+                          Text(
+                            l10n.dontHaveAccount,
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SignUp(),
+                                ),
+                                (route) => true,
+                              );
+                            },
+                            child: Text(
+                              l10n.create,
+                              style: TextStyle(color: Color(0xff1F4C6B)),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
