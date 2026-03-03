@@ -284,6 +284,30 @@ abstract class AppLocalizations {
   /// **'Select the profile that best describes you to personalize your journey.'**
   String get chooseCharacterDescription;
 
+  /// No description provided for @inYourHand.
+  ///
+  /// In en, this message translates to:
+  /// **'In Your Hand.'**
+  String get inYourHand;
+
+  /// No description provided for @allInYourHand.
+  ///
+  /// In en, this message translates to:
+  /// **'All in your hand'**
+  String get allInYourHand;
+
+  /// No description provided for @signInMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to show what you miss with your business'**
+  String get signInMessage;
+
+  /// No description provided for @registerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Register now and track your business'**
+  String get registerMessage;
+
   /// No description provided for @pleaseSelectCharacter.
   ///
   /// In en, this message translates to:
@@ -301,6 +325,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Join Application'**
   String get joinApplication;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email (e.g. name@gmail.com or name@hotmail.com)'**
+  String get invalidEmail;
+
+  /// No description provided for @passwordRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must have:'**
+  String get passwordRequirements;
+
+  /// No description provided for @passwordRequirementLength.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 characters'**
+  String get passwordRequirementLength;
+
+  /// No description provided for @passwordRequirementUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'One uppercase letter (A-Z)'**
+  String get passwordRequirementUppercase;
+
+  /// No description provided for @passwordRequirementLowercase.
+  ///
+  /// In en, this message translates to:
+  /// **'One lowercase letter (a-z)'**
+  String get passwordRequirementLowercase;
+
+  /// No description provided for @passwordRequirementDigit.
+  ///
+  /// In en, this message translates to:
+  /// **'One number (0-9)'**
+  String get passwordRequirementDigit;
+
+  /// No description provided for @passwordTooWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Please make the password stronger (see requirements below)'**
+  String get passwordTooWeak;
 
   /// No description provided for @pleaseFillAllFields.
   ///

@@ -66,15 +66,6 @@ class _SignInState extends State<SignIn> {
                   padding: const EdgeInsets.all(8.0),
                   child: ListView(
                     children: [
-                      // SizedBox(
-                      //   height: 130,
-                      //   width: 138,
-                      //   child: Image.asset(
-                      //     "assets/icons/logo.png",
-                      //     width: 134,
-                      //     height: 134,
-                      //   ),
-                      // ),
                       // Text(
                       //   l10n.welcomeBack,
                       //   textAlign: TextAlign.center,
@@ -84,21 +75,32 @@ class _SignInState extends State<SignIn> {
                       //   ),
                       // ),
                       // SizedBox(height: 10.h(context)),
-                      // Text(
-                      //   l10n.signInDescription,
-                      //   textAlign: TextAlign.center,
-                      //   style: theme.bodySmall!.copyWith(
-                      //     fontSize: 18.0.sp(context),
-                      //     fontWeight: FontWeight.w600,
-                      //   ),
-                      // ),
                       Image(
                         height: 200.h(context),
                         width: 150.w(context),
                         image: AssetImage("assets/icons/icon_foreground.png"),
                         fit: BoxFit.contain,
                       ),
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 30),
+                      Text(
+                        l10n.welcome,
+                        textAlign: TextAlign.center,
+                        style: theme.titleLarge!.copyWith(
+                          fontSize: 30.0.sp(context),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+
+                      const SizedBox(height: 5),
+                      Text(
+                        l10n.signInMessage,
+                        textAlign: TextAlign.center,
+                        style: theme.bodySmall!.copyWith(
+                          fontSize: 18.0.sp(context),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
                       CustomTextField(
                         controller: emailController,
                         hintText: l10n.email,
@@ -159,7 +161,7 @@ class _SignInState extends State<SignIn> {
                       //     onTap: () {},
                       //   ),
                       // ),
-                      SizedBox(height: 90.h(context)),
+                      SizedBox(height: 60.h(context)),
 
                       Divider(),
                       Row(

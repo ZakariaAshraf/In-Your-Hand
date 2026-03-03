@@ -105,6 +105,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Select the profile that best describes you to personalize your journey.';
 
   @override
+  String get inYourHand => 'In Your Hand.';
+
+  @override
+  String get allInYourHand => 'All in your hand';
+
+  @override
+  String get signInMessage =>
+      'Sign in to show what you miss with your business';
+
+  @override
+  String get registerMessage => 'Register now and track your business';
+
+  @override
   String get pleaseSelectCharacter => 'Please select a character first';
 
   @override
@@ -112,6 +125,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get joinApplication => 'Join Application';
+
+  @override
+  String get invalidEmail =>
+      'Please enter a valid email (e.g. name@gmail.com or name@hotmail.com)';
+
+  @override
+  String get passwordRequirements => 'Password must have:';
+
+  @override
+  String get passwordRequirementLength => 'At least 8 characters';
+
+  @override
+  String get passwordRequirementUppercase => 'One uppercase letter (A-Z)';
+
+  @override
+  String get passwordRequirementLowercase => 'One lowercase letter (a-z)';
+
+  @override
+  String get passwordRequirementDigit => 'One number (0-9)';
+
+  @override
+  String get passwordTooWeak =>
+      'Please make the password stronger (see requirements below)';
 
   @override
   String get pleaseFillAllFields => 'Please fill all fields';

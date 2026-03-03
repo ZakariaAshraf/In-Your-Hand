@@ -47,13 +47,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
   void _onFocusChange() {
     if (_focusNode.hasFocus) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Future.delayed(const Duration(milliseconds: 350), () {
+        Future.delayed(const Duration(milliseconds: 300), () {
           if (!mounted) return;
           if (Scrollable.maybeOf(context) != null) {
             Scrollable.ensureVisible(
               context,
               alignment: 0.3,
-              duration: const Duration(milliseconds: 250),
+              duration: const Duration(milliseconds: 200),
             );
           }
         });

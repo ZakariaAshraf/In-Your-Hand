@@ -106,6 +106,18 @@ class AppLocalizationsAr extends AppLocalizations {
       'اختر الملف الشخصي الذي يصفك بشكل أفضل لتخصيص رحلتك.';
 
   @override
+  String get inYourHand => 'في ايديك';
+
+  @override
+  String get allInYourHand => 'كل حاجه في ايديك';
+
+  @override
+  String get signInMessage => 'سجل دخولك وشوف اللي فاتك فالبيزنس بتاعك';
+
+  @override
+  String get registerMessage => 'ادخل دلوقتي وتابع البيزنس بتاعك';
+
+  @override
   String get pleaseSelectCharacter => 'يرجى اختيار شخصية أولاً';
 
   @override
@@ -113,6 +125,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get joinApplication => 'انضم إلى التطبيق';
+
+  @override
+  String get invalidEmail =>
+      'يرجى إدخال بريد إلكتروني صحيح (مثال: name@gmail.com أو name@hotmail.com)';
+
+  @override
+  String get passwordRequirements => 'كلمة المرور يجب أن تحتوي على:';
+
+  @override
+  String get passwordRequirementLength => '8 أحرف على الأقل';
+
+  @override
+  String get passwordRequirementUppercase => 'حرف كبير واحد (A-Z)';
+
+  @override
+  String get passwordRequirementLowercase => 'حرف صغير واحد (a-z)';
+
+  @override
+  String get passwordRequirementDigit => 'رقم واحد (0-9)';
+
+  @override
+  String get passwordTooWeak => 'يرجى تقوية كلمة المرور (انظر المتطلبات أدناه)';
 
   @override
   String get pleaseFillAllFields => 'يرجى ملء جميع الحقول';
