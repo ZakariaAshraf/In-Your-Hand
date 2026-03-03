@@ -46,3 +46,5 @@ app.*.map.json
 
 android/app/google-services.json
 lib/firebase_options.dart
+/lib/core/config/app_keys.dart
+/lib/features/voice_order/VOICE_ORDER_FEATURE.md

@@ -5,7 +5,7 @@ import 'package:in_your_hand/core/generated/extentions.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
-import 'package:in_your_hand/features/orders/presentation/screens/generate_pdf_screen.dart';
+import 'package:in_your_hand/features/orders/data/payment_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/utils/pdf_manger.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -78,15 +78,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.orderDetails, style: theme.titleLarge),
-          // actions: [
-          //   IconButton(
-          //     onPressed: () {
-          //       // showPdfPreview(context);
-          //       // Navigator.push(context, MaterialPageRoute(builder: (context) => GeneratePdfScreen(),));
-          //     },
-          //     icon: Icon(Icons.print),
-          //   ),
-          // ],
+          actions: [
+            IconButton(
+              onPressed: () {
+                final paymentsState = context.read<PaymentsCubit>().state;
+                final payments = paymentsState is PaymentsLoaded
+                    ? paymentsState.payments
+                    : <PaymentModel>[];
+                showOrderPdfPreview(
+                  context,
+                  order: widget.order,
+                  client: widget.client,
+                  payments: payments,
+                );
+              },
+              icon: Icon(Icons.print),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -363,7 +371,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              "Add note 📝",
+                              "${l10n.addNote} 📝",
                               style: theme.titleSmall,
                             ),
                           ),

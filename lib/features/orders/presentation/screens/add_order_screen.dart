@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_your_hand/core/services/gemeni_service.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
+import 'package:in_your_hand/features/voice_order/presentation/cubit/voice_order_cubit.dart';
+import 'package:in_your_hand/features/voice_order/presentation/screens/add_order_by_voice_screen.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -21,6 +24,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   TextEditingController totalAmountController = TextEditingController();
   TextEditingController totalPaidAmountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController notesController = TextEditingController();
   bool isDescriptionEmpty = true;
   bool isAmountEmpty = true;
   String? _selectedClientName;
@@ -57,8 +61,32 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
           Navigator.pop(context);
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(l10n.addOrderTitle, style: theme.titleLarge)),
+        appBar: AppBar(
+          title: Text(l10n.addOrderTitle, style: theme.titleLarge),
+          // actions: [
+          //   if (GeminiService.isConfigured)
+          //     IconButton(
+          //       icon: const Icon(Icons.mic),
+          //       tooltip: l10n.addOrderByVoice,
+          //       onPressed: () async {
+          //         final added = await Navigator.of(context).push<bool>(
+          //           MaterialPageRoute(
+          //             builder: (ctx) => BlocProvider(
+          //               create: (ctx) => VoiceOrderCubit(
+          //                 geminiService: GeminiService(),
+          //                 ordersCubit: context.read<OrdersCubit>(),
+          //               ),
+          //               child: const AddOrderByVoiceScreen(),
+          //             ),
+          //           ),
+          //         );
+          //         if (added == true && context.mounted) Navigator.of(context).pop();
+          //       },
+          //     ),
+          // ],
+        ),
         body: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -79,26 +107,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                         child: Text(l10n.noClientsFound),
                       );
                     }
-                    // return DropdownButtonFormField<String>(
-                    //   value: _selectedClientId,
-                    //   borderRadius: BorderRadius.circular(12),
-                    //   decoration: const InputDecoration(
-                    //     hintText: "Select a client",
-                    //     border: InputBorder.none,
-                    //     contentPadding: EdgeInsets.all(10),
-                    //   ),
-                    //   items: clients.map((client) {
-                    //     return DropdownMenuItem(
-                    //       value: client.id,
-                    //       child: Text(client.name),
-                    //     );
-                    //   }).toList(),
-                    //   onChanged: (value) {
-                    //     setState(() {
-                    //       _selectedClientId = value;
-                    //     });
-                    //   },
-                    // );
                     return InkWell(
                       onTap: () {
                         _openClientSearchSheet(context,clients );
@@ -163,6 +171,16 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                   hintText: "0",
                 ),
               ),
+              // SizedBox(height: 15.h(context)),
+              // Padding(
+              //   padding: const EdgeInsets.all(10.0),
+              //   child: CustomTextField(
+              //     controller: notesController,
+              //     title: l10n.notes,
+              //     hintText: "Notes about this order",
+              //     maxLines: 3,
+              //   ),
+              // ),
               SizedBox(height: 15.h(context)),
               BlocBuilder<OrdersCubit, OrdersState>(
                 builder: (context, state) {
@@ -310,6 +328,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   @override
   void dispose() {
     descriptionController.dispose();
+    // notesController.dispose();
     totalAmountController.dispose();
     totalPaidAmountController.dispose();
     super.dispose();

@@ -51,8 +51,10 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
           centerTitle: false,
           title: Text(l10n.addClientTitle, style: theme.titleLarge),
         ),
-        body: Column(
-          children: [
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 24),
+          child: Column(
+            children: [
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: CustomTextField(
@@ -104,6 +106,7 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
               },
             ),
           ],
+          ),
         ),
       ),
     );

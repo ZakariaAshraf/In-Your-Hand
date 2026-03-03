@@ -35,11 +35,37 @@ class CustomTextField extends StatefulWidget {
 
 class _CustomTextFieldState extends State<CustomTextField> {
   bool _obscure = true;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _obscure = widget.isPassword;
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    if (_focusNode.hasFocus) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(const Duration(milliseconds: 350), () {
+          if (!mounted) return;
+          if (Scrollable.maybeOf(context) != null) {
+            Scrollable.ensureVisible(
+              context,
+              alignment: 0.3,
+              duration: const Duration(milliseconds: 250),
+            );
+          }
+        });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_onFocusChange);
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,11 +76,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ?widget.title != null
-              ? Text(widget.title!, style: theme.titleSmall)
-              : null,
+          if (widget.title != null) Text(widget.title!, style: theme.titleSmall),
           SizedBox(height: 4,),
           TextFormField(
+            focusNode: _focusNode,
             maxLines: widget.maxLines ?? null,
             style: theme.bodyLarge,
             onChanged: widget.onChanged,
