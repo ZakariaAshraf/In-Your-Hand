@@ -63,27 +63,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.addOrderTitle, style: theme.titleLarge),
-          // actions: [
-          //   if (GeminiService.isConfigured)
-          //     IconButton(
-          //       icon: const Icon(Icons.mic),
-          //       tooltip: l10n.addOrderByVoice,
-          //       onPressed: () async {
-          //         final added = await Navigator.of(context).push<bool>(
-          //           MaterialPageRoute(
-          //             builder: (ctx) => BlocProvider(
-          //               create: (ctx) => VoiceOrderCubit(
-          //                 geminiService: GeminiService(),
-          //                 ordersCubit: context.read<OrdersCubit>(),
-          //               ),
-          //               child: const AddOrderByVoiceScreen(),
-          //             ),
-          //           ),
-          //         );
-          //         if (added == true && context.mounted) Navigator.of(context).pop();
-          //       },
-          //     ),
-          // ],
+          actions: [],
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 24),
