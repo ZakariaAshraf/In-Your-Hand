@@ -5,6 +5,7 @@ import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/orders/presentation/widgets/order_item.dart';
 
 import '../../../../core/utils/pdf_manger.dart';
+import '../../../../core/widgets/custom_button.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../orders/presentation/cubit/orders_cubit.dart';
 import '../../data/clients_model.dart';
@@ -35,19 +36,21 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
       appBar: AppBar(
         title: Text(" ${l10n.clientReport}", style: theme.titleLarge),
         actions: [
-          IconButton(
-            onPressed: () {
-              final state = context.read<OrdersCubit>().state;
-              if (state is! OrdersSuccess || state.orders.isEmpty) {
-                return;
-              }
-              showClientPdfPreview(
-                context,
-                client: widget.client,
-                orders: state.orders,
-              );
-            },
-            icon: Icon(Icons.print),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: IconButton(
+              tooltip: 'PDF / Share',
+              onPressed: () {
+                final state = context.read<OrdersCubit>().state;
+                if (state is! OrdersSuccess || state.orders.isEmpty) return;
+                showClientPdfPreview(
+                  context,
+                  client: widget.client,
+                  orders: state.orders,
+                );
+              },
+              icon: Image.asset("assets/icons/pdf.png", width: 33, height: 33),
+            ),
           ),
         ],
       ),
@@ -213,6 +216,25 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                             itemCount: orders.length,
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Center(
+                            child: CustomButton(
+                              title: l10n.printReport,
+                              onTap:  () {
+                                final state = context.read<OrdersCubit>().state;
+                                if (state is! OrdersSuccess || state.orders.isEmpty) return;
+                                printClientPdf(
+                                  context,
+                                  client: widget.client,
+                                  orders: state.orders,
+                                );
+                              },
+                              height: 70.h(context),
+                              width: 330.w(context),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -224,6 +246,7 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                 return SizedBox.shrink();
               },
             ),
+            SizedBox(height: 20.h(context)),
           ],
         ),
       ),

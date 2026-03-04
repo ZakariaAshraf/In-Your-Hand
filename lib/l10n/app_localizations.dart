@@ -416,6 +416,12 @@ abstract class AppLocalizations {
   /// **'Cairo, Egypt'**
   String get cairoEgypt;
 
+  /// No description provided for @egypt.
+  ///
+  /// In en, this message translates to:
+  /// **'Egypt'**
+  String get egypt;
+
   /// No description provided for @home.
   ///
   /// In en, this message translates to:
@@ -703,6 +709,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'✓ Save Client'**
   String get saveClient;
+
+  /// No description provided for @printReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Print Report'**
+  String get printReport;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'total: '**
+  String get total;
+
+  /// No description provided for @paid.
+  ///
+  /// In en, this message translates to:
+  /// **'paid: '**
+  String get paid;
 
   /// No description provided for @noResults.
   ///

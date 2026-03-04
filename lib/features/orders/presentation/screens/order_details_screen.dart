@@ -13,6 +13,7 @@ import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/payments_cubit.dart';
 import '../cubit/orders_cubit.dart';
+import '../widgets/payment_history_table.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   final OrderModel order;
@@ -79,20 +80,24 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         appBar: AppBar(
           title: Text(l10n.orderDetails, style: theme.titleLarge),
           actions: [
-            IconButton(
-              onPressed: () {
-                final paymentsState = context.read<PaymentsCubit>().state;
-                final payments = paymentsState is PaymentsLoaded
-                    ? paymentsState.payments
-                    : <PaymentModel>[];
-                showOrderPdfPreview(
-                  context,
-                  order: widget.order,
-                  client: widget.client,
-                  payments: payments,
-                );
-              },
-              icon: Icon(Icons.print),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: IconButton(
+                tooltip: 'PDF / Share',
+                onPressed: () {
+                  final paymentsState = context.read<PaymentsCubit>().state;
+                  final payments = paymentsState is PaymentsLoaded
+                      ? paymentsState.payments
+                      : <PaymentModel>[];
+                  showOrderPdfPreview(
+                    context,
+                    order: widget.order,
+                    client: widget.client,
+                    payments: payments,
+                  );
+                },
+                icon: Image.asset("assets/icons/pdf.png", height: 33, width: 33),
+              ),
             ),
           ],
         ),
@@ -406,50 +411,52 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 return SizedBox();
                               }
 
-                              return Table(
-                                border: TableBorder.all(
-                                  color: Colors.grey.shade300,
-                                ),
-                                columnWidths: const {
-                                  0: FlexColumnWidth(2),
-                                  1: FlexColumnWidth(2),
-                                },
-                                children: [
-                                  TableRow(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                    ),
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.all(8),
-                                        child: Text(l10n.amountLabel),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(8),
-                                        child: Text(l10n.dateLabel),
-                                      ),
-                                    ],
-                                  ),
-                                  ...state.payments.map((payment) {
-                                    return TableRow(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.all(8),
-                                          child: Text(
-                                            payment.amount.toString(),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.all(8),
-                                          child: Text(
-                                            formatDate(payment.createdAt),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  }).toList(),
-                                ],
-                              );
+                              return PaymentHistoryTable(payments: state.payments);
+                              // return Table(
+                              //   border: TableBorder.all(
+                              //     color: Colors.grey.shade300,
+                              //   ),
+                              //   columnWidths: const {
+                              //     0: FlexColumnWidth(2),
+                              //     1: FlexColumnWidth(2),
+                              //   },
+                              //   children: [
+                              //     TableRow(
+                              //       decoration: BoxDecoration(
+                              //         color: Colors.green.shade400,
+                              //       ),
+                              //       children: [
+                              //         Padding(
+                              //           padding: EdgeInsets.all(8),
+                              //           child: Text(l10n.amountLabel),
+                              //         ),
+                              //         Padding(
+                              //           padding: EdgeInsets.all(8),
+                              //           child: Text(l10n.dateLabel),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     ...state.payments.map((payment) {
+                              //       return TableRow(
+                              //         children: [
+                              //           Padding(
+                              //             padding: EdgeInsets.all(8),
+                              //             child: Text(
+                              //               payment.amount.toString(),
+                              //             ),
+                              //           ),
+                              //           Padding(
+                              //             padding: EdgeInsets.all(8),
+                              //             child: Text(
+                              //               formatDate(payment.createdAt),
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       );
+                              //     }).toList(),
+                              //   ],
+                              // );
+
                             }
 
                             return SizedBox();
@@ -515,61 +522,86 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               // ),
               SizedBox(height: 40.h(context)),
               Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Center(
-                  child: CustomButton(
-                    title: l10n.deleteOrder,
-                    onTap: () async {
-                      showDialog(
-                        context: context,
-                        builder: (dialogContext) {
-                          final dialogL10n = AppLocalizations.of(
-                            dialogContext,
-                          )!;
-                          return BackdropFilter(
-                            filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
-                            child: AlertDialog(
-                              title: Text(dialogL10n.deleteOrder,style: theme.titleLarge!.copyWith(color: Colors.red),),
-                              content: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                child: Text(dialogL10n.deleteOrderConfirm),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(dialogContext),
-                                  child: Text(
-                                    dialogL10n.cancel,
-                                    style: theme.titleMedium,
-                                  ),
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CustomButton(
+                      color: Color(0xff5a0826),
+                      title: l10n.deleteOrder,
+                      onTap: () async {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) {
+                            final dialogL10n = AppLocalizations.of(
+                              dialogContext,
+                            )!;
+                            return BackdropFilter(
+                              filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
+                              child: AlertDialog(
+                                title: Text(dialogL10n.deleteOrder,style: theme.titleLarge!.copyWith(color: Colors.red),),
+                                content: SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.8,
+                                  child: Text(dialogL10n.deleteOrderConfirm),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    await context
-                                        .read<OrdersCubit>()
-                                        .deleteOrder(widget.order);
-                                    Navigator.pop(dialogContext);
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: WidgetStatePropertyAll(
-                                      Colors.red,
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(dialogContext),
+                                    child: Text(
+                                      dialogL10n.cancel,
+                                      style: theme.titleMedium,
                                     ),
                                   ),
-                                  child: Text(
-                                    dialogL10n.delete,
-                                    style: theme.titleMedium,
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      await context
+                                          .read<OrdersCubit>()
+                                          .deleteOrder(widget.order);
+                                      Navigator.pop(dialogContext);
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor: WidgetStatePropertyAll(
+                                        Colors.red,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      dialogL10n.delete,
+                                      style: theme.titleMedium,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      height: 70.h(context),
+                      width: 180.w(context),
+                    ),
+                    Center(
+                      child: CustomButton(
+                        title: l10n.printReport,
+                        onTap:() {
+                          final paymentsState = context.read<PaymentsCubit>().state;
+                          final payments = paymentsState is PaymentsLoaded
+                              ? paymentsState.payments
+                              : <PaymentModel>[];
+                          printOrderPdf(
+                            context,
+                            order: widget.order,
+                            client: widget.client,
+                            payments: payments,
                           );
                         },
-                      );
-                    },
-                    height: 70.h(context),
-                    width: 330.w(context),
-                  ),
+                        height: 70.h(context),
+                        width: 180.w(context),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              SizedBox(height: 20.h(context)),
+
             ],
           ),
         ),

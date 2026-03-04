@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:in_your_hand/core/generated/extentions.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../clients/data/clients_model.dart';
 import '../screens/order_details_screen.dart';
@@ -27,14 +28,12 @@ class OrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OrderDetailsScreen(order: order, client: client),
-            ),
+          PersistentNavBarNavigator.pushNewScreen(
+            context, screen: OrderDetailsScreen(order: order, client: client),withNavBar: false
           );
         },
         child: Padding(
@@ -60,7 +59,7 @@ class OrderItem extends StatelessWidget {
               children: [
                 RichText(text: TextSpan(
                   style:theme.titleSmall!.copyWith(color: Colors.grey) ,
-                  text: "total: ",
+                  text: l10n.total,
                   children: [
                     TextSpan(text: "${order.totalAmount}",style:theme.titleMedium ),
                   ]
@@ -69,7 +68,7 @@ class OrderItem extends StatelessWidget {
                 SizedBox(height: 4.h(context)),
                 RichText(text: TextSpan(
                     style:theme.titleSmall!.copyWith(color: Colors.grey) ,
-                    text: "paid: ",
+                    text: l10n.paid,
                     children: [
                       TextSpan(text: "${order.totalPaid}",style:theme.titleMedium!.copyWith(color: order.status.color) ),
                     ]

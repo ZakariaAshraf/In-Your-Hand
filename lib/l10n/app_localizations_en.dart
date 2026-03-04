@@ -174,6 +174,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cairoEgypt => 'Cairo, Egypt';
 
   @override
+  String get egypt => 'Egypt';
+
+  @override
   String get home => 'Home';
 
   @override
@@ -318,6 +321,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveClient => '✓ Save Client';
+
+  @override
+  String get printReport => 'Print Report';
+
+  @override
+  String get total => 'total: ';
+
+  @override
+  String get paid => 'paid: ';
 
   @override
   String get noResults => 'No results';

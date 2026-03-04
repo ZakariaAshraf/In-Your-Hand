@@ -7,6 +7,7 @@ import 'package:in_your_hand/core/widgets/default_message_card.dart';
 import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/clients/presentation/screens/clients_details_screen.dart';
 import 'package:in_your_hand/features/orders/presentation/cubit/orders_cubit.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -122,12 +123,7 @@ class ClientsItem extends StatelessWidget {
                           : null,
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ClientDetailsScreen(client: client),
-                            ),
-                          ).then((_) {
+                          PersistentNavBarNavigator.pushNewScreen(context, screen: ClientDetailsScreen(client: client),withNavBar: false ).then((_) {
                             if (context.mounted) {
                               context.read<OrdersCubit>().getOrders();
                             }
@@ -170,7 +166,9 @@ class ClientsItem extends StatelessWidget {
                 ],
               )
             : ClipRect(
-                child: ListTile(
+                child: ExpansionTile(
+                  shape: BoxBorder.all(color: Colors.transparent),
+                  childrenPadding: EdgeInsets.all(12),
                   subtitle: client.notes != ""
                       ? Text(
                           client.notes ?? "",
@@ -180,28 +178,64 @@ class ClientsItem extends StatelessWidget {
                         )
                       : null,
                   title: Text(client.name, style: theme.titleMedium),
-                  trailing: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              EditClientScreen(client: client),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      height: 50.h(context),
-                      width: 60.w(context),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.r(context)),
-                        border: BoxBorder.all(color: Colors.grey),
-                      ),
-                      child: Center(
-                        child: Text(l10n.edit, style: theme.titleSmall),
-                      ),
-                    ),
+                  trailing: Icon(
+                    Icons.arrow_drop_down_circle_outlined,
+                    color: AppColors.secondary,
                   ),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: ClientDetailsScreen(client: client),
+                              withNavBar: false,
+                            ).then((_) {
+                              if (context.mounted) {
+                                context.read<OrdersCubit>().getOrders();
+                              }
+                            });
+                          },
+                          child: Container(
+                            height: 50.h(context),
+                            width: 60.w(context),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.r(context)),
+                              border: BoxBorder.all(color: Colors.grey),
+                            ),
+                            child: Icon(CupertinoIcons.info),
+                          ),
+                        ),
+                        SizedBox(width: 20.w(context),),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    EditClientScreen(client: client),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 50.h(context),
+                            width: 60.w(context),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.r(context)),
+                              border: BoxBorder.all(color: Colors.grey),
+                            ),
+                            child: Center(
+                              child: Text(l10n.edit, style: theme.titleSmall),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16.w(context),),
+
+                      ],
+                    ),
+                  ],
                 ),
               ),
       ),

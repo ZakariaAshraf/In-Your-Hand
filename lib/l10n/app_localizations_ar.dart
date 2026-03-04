@@ -173,6 +173,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cairoEgypt => 'القاهرة، مصر';
 
   @override
+  String get egypt => 'مصر';
+
+  @override
   String get home => 'الرئيسية';
 
   @override
@@ -316,6 +319,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get saveClient => '✓ حفظ العميل';
+
+  @override
+  String get printReport => 'طباعة التقرير';
+
+  @override
+  String get total => 'الاجمالي: ';
+
+  @override
+  String get paid => 'المدفوع: ';
 
   @override
   String get noResults => 'لا توجد نتائج';

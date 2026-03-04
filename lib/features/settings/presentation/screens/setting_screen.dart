@@ -118,7 +118,8 @@ class _SettingScreenState extends State<SettingScreen> {
                             size: 20,
                           ),
                           Text(
-                            l10n.cairoEgypt,
+                            // l10n.cairoEgypt,
+                            l10n.egypt,
                             style: theme.bodyMedium!.copyWith(
                               color: Colors.grey,
                             ),

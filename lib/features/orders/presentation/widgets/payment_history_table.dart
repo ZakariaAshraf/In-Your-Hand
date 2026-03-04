@@ -190,7 +190,7 @@ class _AnimatedPaymentRowState
             Expanded(
               child: Text(
                 formatDate(widget.payment.createdAt),
-                style: theme.bodySmall,
+                style: theme.bodySmall!.copyWith(fontSize: 14.sp(context)),
               ),
             ),
           ],

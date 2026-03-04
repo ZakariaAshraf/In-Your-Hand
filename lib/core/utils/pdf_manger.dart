@@ -491,20 +491,25 @@ void showPdfPreview(BuildContext context) {
 }
 
 /// Show a PDF preview for a specific order (details + payments).
+/// The preview has a share button but no print button.
 void showOrderPdfPreview(
   BuildContext context, {
   required OrderModel order,
   required ClientModel client,
   required List<PaymentModel> payments,
 }) {
+  final l10n = AppLocalizations.of(context)!;
   Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) {
-        final l10n = AppLocalizations.of(context)!;
         return Scaffold(
           appBar: AppBar(title: Text(l10n.pdfPreviewTitle)),
           body: PdfPreview(
+            allowPrinting: false,
+            allowSharing: true,
+            canChangeOrientation: false,
+            canChangePageFormat: false,
             build: (format) async {
               final doc = await PdfManger.generateOrderReport(
                 order: order,
@@ -521,20 +526,47 @@ void showOrderPdfPreview(
   );
 }
 
+/// Directly open the native print dialog for an order (no preview screen).
+Future<void> printOrderPdf(
+  BuildContext context, {
+  required OrderModel order,
+  required ClientModel client,
+  required List<PaymentModel> payments,
+}) async {
+  final l10n = AppLocalizations.of(context)!;
+  await Printing.layoutPdf(
+    onLayout: (format) async {
+      final doc = await PdfManger.generateOrderReport(
+        order: order,
+        client: client,
+        payments: payments,
+        l10n: l10n,
+      );
+      return doc.save();
+    },
+    name: '${client.name}_order.pdf',
+  );
+}
+
 /// Show a PDF preview for a specific client with all their orders.
+/// The preview has a share button but no print button.
 void showClientPdfPreview(
   BuildContext context, {
   required ClientModel client,
   required List<OrderModel> orders,
 }) {
+  final l10n = AppLocalizations.of(context)!;
   Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) {
-        final l10n = AppLocalizations.of(context)!;
         return Scaffold(
           appBar: AppBar(title: Text(l10n.pdfPreviewTitle)),
           body: PdfPreview(
+            allowPrinting: false,
+            allowSharing: true,
+            canChangeOrientation: false,
+            canChangePageFormat: false,
             build: (format) async {
               final doc = await PdfManger.generateClientReport(
                 client: client,
@@ -547,6 +579,26 @@ void showClientPdfPreview(
         );
       },
     ),
+  );
+}
+
+/// Directly open the native print dialog for a client report (no preview screen).
+Future<void> printClientPdf(
+  BuildContext context, {
+  required ClientModel client,
+  required List<OrderModel> orders,
+}) async {
+  final l10n = AppLocalizations.of(context)!;
+  await Printing.layoutPdf(
+    onLayout: (format) async {
+      final doc = await PdfManger.generateClientReport(
+        client: client,
+        orders: orders,
+        l10n: l10n,
+      );
+      return doc.save();
+    },
+    name: '${client.name}_report.pdf',
   );
 }
 
