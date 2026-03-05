@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import '../../../../core/generated/assets_helper.dart';
+import '../../../../core/generated/extentions.dart';
 import '../../../../core/locale/widgets/language_toggle_button.dart';
 import '../../../../core/themes/widgets/theme_toggle_button.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -12,6 +13,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../main.dart';
 import '../../../authenticate/presentation/manager/auth_cubit.dart';
 import '../../../authenticate/presentation/pages/sign_in.dart';
+import '../../../help_support/help_support_screen.dart';
 import '../components/settings_button.dart';
 import 'change_password_screen.dart';
 import 'edit_profile_screen.dart';
@@ -172,10 +174,23 @@ class _SettingScreenState extends State<SettingScreen> {
                   child: Column(
                     children: [
                       SettingsButton(
+                        title: l10n.recommendFeature,
+                        function: () async {
+                          await launchUrls("https://forms.gle/G3V7PwjhPdm6MBtU6");
+                        },
+                        iconData: Icons.lightbulb_outlined,
+                        iconColor: Colors.yellow,
+                      ),
+                      SettingsButton(
                         title: l10n.helpAndSupport,
                         function: () {
-                          // Navigator.push(context, MaterialPageRoute(builder: (context) => HelpAndSupportScreen(),));
-                        },
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HelpSupportScreen(),
+                            ),
+                          );
+                          },
                         iconData: Icons.question_mark_rounded,
                       ),
                       SettingsButton(
