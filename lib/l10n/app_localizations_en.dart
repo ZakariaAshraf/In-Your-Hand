@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcome => 'Welcome';
 
   @override
+  String get welcomeMessage => 'Your financial management is now in your hands';
+
+  @override
   String get settings => 'Settings';
 
   @override

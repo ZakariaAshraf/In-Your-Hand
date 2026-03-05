@@ -107,7 +107,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     );
                   } else if (state is OrdersSuccess) {
                     final orders = state.orders;
-                    print("Orders fetched: ${orders.length}");
                     List filteredOrders = orders;
                     if (_selectedFilter != OrdersFilter.all) {
                       filteredOrders = orders.where((order) {

@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_your_hand/features/clients/presentation/cubit/clients_cubit.dart';
 import 'package:in_your_hand/features/dashboard/presentation/cubit/dashboard_cubit.dart';
+import 'package:in_your_hand/features/on_boarding/welcome_screen.dart';
 import 'package:in_your_hand/features/orders/presentation/cubit/payments_cubit.dart';
 import 'package:in_your_hand/features/home/presentation/screens/home_screen.dart';
 import 'package:in_your_hand/features/orders/presentation/cubit/orders_cubit.dart';
@@ -33,15 +34,15 @@ void main() async {
   bool? onBoarding = CacheHelper.getBool(key: CacheKeys.isOnBoardingSeen);
   String? uId = CacheHelper.getString(key: CacheKeys.uId);
   Widget startWidget;
-  // if (onBoarding != null) {
+  if (onBoarding != null) {
     if (uId != null) {
       startWidget = const MainScreen();
     } else {
       startWidget = const SignIn();
     }
-  // } else {
-  //   startWidget = SignIn();// will be the splash in the future
-  // }
+  } else {
+    startWidget = WelcomeScreen();
+  }
   runApp(ProviderScope(child: MyApp(startWidget:startWidget)));
 }
 

@@ -1,6 +1,7 @@
 {
   "@@locale": "ar",
   "welcome": "مرحباً",
+  "welcomeMessage": "ادارتك الماليه بقت في ايديك",
   "settings": "الاعدادات",
   "search": "بحث",
   "themeMode": "وضع الألوان",

@@ -12,6 +12,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get welcome => 'مرحباً';
 
   @override
+  String get welcomeMessage => 'ادارتك الماليه بقت في ايديك';
+
+  @override
   String get settings => 'الاعدادات';
 
   @override

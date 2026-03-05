@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
   "welcome": "Welcome",
+  "welcomeMessage": "Your financial management is now in your hands",
   "settings": "Settings",
   "search": "Search",
   "themeMode": "Theme Mode",

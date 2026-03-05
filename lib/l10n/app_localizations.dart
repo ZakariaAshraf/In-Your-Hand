@@ -104,6 +104,12 @@ abstract class AppLocalizations {
   /// **'Welcome'**
   String get welcome;
 
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your financial management is now in your hands'**
+  String get welcomeMessage;
+
   /// No description provided for @settings.
   ///
   /// In en, this message translates to:
