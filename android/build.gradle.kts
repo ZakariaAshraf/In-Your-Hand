@@ -1,6 +1,9 @@
 plugins {
+    // Keep Google Services at the same version Flutter already has on the classpath.
+    // Use a Crashlytics plugin version compatible with this Google Services version.
     id("com.google.gms.google-services") version "4.3.15" apply false
-    id("com.google.firebase.crashlytics") version "3.0.2" apply false
+    // Crashlytics Gradle plugin 2.9.9 works with Google Services 4.3.15
+    id("com.google.firebase.crashlytics") version "2.9.9" apply false
 }
 allprojects {
     repositories {
