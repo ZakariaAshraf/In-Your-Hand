@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import '../../../../core/generated/assets_helper.dart';
@@ -160,8 +161,8 @@ class _SettingScreenState extends State<SettingScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      ThemeToggleButton(),
-                      LanguageToggleButton(),
+                      ThemeToggleButton().animate().fade().slideX(duration: 200.ms),
+                      LanguageToggleButton().animate().fade().slideX(duration: 300.ms),
                     ],
                   ),
                 ),
@@ -180,7 +181,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         },
                         iconData: Icons.lightbulb_outlined,
                         iconColor: Colors.yellow,
-                      ),
+                      ).animate().fade().slideX(duration: 400.ms),
                       SettingsButton(
                         title: l10n.helpAndSupport,
                         function: () {
@@ -192,7 +193,8 @@ class _SettingScreenState extends State<SettingScreen> {
                           );
                           },
                         iconData: Icons.question_mark_rounded,
-                      ),
+                        iconColor: Colors.indigo,
+                      ).animate().fade().slideX(duration: 500.ms),
                       SettingsButton(
                         title: l10n.changePassword,
                         function: () {
@@ -205,7 +207,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           );
                         },
                         iconData: Icons.lock_open_outlined,
-                      ),
+                      ).animate().fade().slideX(duration: 600.ms),
                       SettingsButton(
                         title: l10n.logout,
                         function: () async {
@@ -225,7 +227,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         },
                         iconData: Icons.logout,
                         iconColor: Colors.red,
-                      ),
+                      ).animate().fade().slideX(duration: 700.ms),
                     ],
                   ),
                 ),

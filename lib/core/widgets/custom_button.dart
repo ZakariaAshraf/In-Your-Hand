@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:in_your_hand/core/utils/app_colors.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 
@@ -45,6 +46,7 @@ class CustomButton extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ).animate()
+        .animate().fade().slideX(duration: 300.ms,);
   }
 }

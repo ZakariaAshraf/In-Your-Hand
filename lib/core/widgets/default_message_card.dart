@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../utils/app_colors.dart';
 
@@ -30,7 +31,9 @@ class DefaultMessageCard extends StatelessWidget {
                 sign,
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: AppColors.primary, fontSize:  26),
-              ),
+              ).animate()
+                  .fade(duration: 500.ms)
+                  .scale(delay: 500.ms),
             ),
           ),
           const SizedBox(
@@ -47,7 +50,9 @@ class DefaultMessageCard extends StatelessWidget {
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                      ),
-                ),
+                ).animate()
+                .fade()
+                .scale(),
                 const SizedBox(
                   height: 10,
                 ),

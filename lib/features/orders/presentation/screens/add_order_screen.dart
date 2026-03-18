@@ -198,7 +198,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                           );
                           return;
                         }
-                        print("Debug: Total: $total, Paid: $paid");
                         context.read<OrdersCubit>().addOrder(order);
                             },
                       height: 70.h(context),

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/core/widgets/custom_button.dart';
@@ -156,7 +157,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ],
-                        ),
+                        ).animate()
+                            .fade(duration: 400.ms)
+                            .scale(delay: 400.ms),
                         SizedBox(height: 30.h(context),),
                         InkWell(
                           child: Row(
@@ -196,7 +199,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   DashboardScreen(userId: userId),
                             ),
                           ),
-                        ),
+                        ).animate()
+                            .fade(duration: 450.ms)
+                            .scale(delay: 450.ms),
                       ],
                     ),
                   ),
@@ -297,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }  return SizedBox.shrink();
             },),
-            SizedBox(height: 100.h(context)),
+            SizedBox(height: 90.h(context)),
             Align(
               alignment: Alignment.center,
               child: CustomButton(

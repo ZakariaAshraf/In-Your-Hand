@@ -37,7 +37,7 @@ class WelcomeScreen extends StatelessWidget {
           Text(
             l10n.welcomeMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black, fontSize: 14.0.sp(context)),
+            style: TextStyle( fontSize: 14.0.sp(context)),
           ),
           SizedBox(height: 40.h(context)),
           CustomButton(
