@@ -165,5 +165,11 @@
 
   "confirmOrder": "Confirm order",
   "confirmOrderMessage": "Review the order below. Add it?",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "deleteAccount": "Delete Account",
+  "deleteAccountWarningTitle": "Delete account?",
+  "deleteAccountWarningMessage": "This will permanently delete your account and all your data (profile, saved programs). You will not be able to recover it. This action cannot be undone.",
+  "deleteAccountConfirm": "Delete my account",
+  "deleteAccountSuccess": "Account deleted successfully",
+  "deleteAccountRequireRecentLogin": "For security, please sign out and sign in again, then try deleting your account."
 }

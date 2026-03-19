@@ -12,6 +12,7 @@ final AppUserModel user;
 UserLoaded(this.user);
 }
 class UserSuccess extends UserState {}
+final class UserAccountDeleted extends UserState {}
 
 
 class UserError extends UserState {

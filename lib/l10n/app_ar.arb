@@ -167,5 +167,12 @@
 
   "confirmOrder": "تأكيد الطلب",
   "confirmOrderMessage": "راجع الطلب أدناه. هل تضيفه؟",
-  "confirm": "تأكيد"
+  "confirm": "تأكيد",
+
+  "deleteAccount": "حذف الحساب",
+  "deleteAccountWarningTitle": "حذف الحساب؟",
+  "deleteAccountWarningMessage": "سيتم حذف حسابك وجميع بياناتك (الملف الشخصي، البرامج المحفوظة) نهائياً. لن تتمكن من استعادتها. لا يمكن التراجع عن هذا الإجراء.",
+  "deleteAccountConfirm": "حذف حسابي",
+  "deleteAccountSuccess": "تم حذف الحساب بنجاح",
+  "deleteAccountRequireRecentLogin": "لأسباب أمنية، يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى، ثم حاول حذف حسابك."
 }

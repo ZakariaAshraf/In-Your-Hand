@@ -493,4 +493,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirm => 'Confirm';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountWarningTitle => 'Delete account?';
+
+  @override
+  String get deleteAccountWarningMessage =>
+      'This will permanently delete your account and all your data (profile, saved programs). You will not be able to recover it. This action cannot be undone.';
+
+  @override
+  String get deleteAccountConfirm => 'Delete my account';
+
+  @override
+  String get deleteAccountSuccess => 'Account deleted successfully';
+
+  @override
+  String get deleteAccountRequireRecentLogin =>
+      'For security, please sign out and sign in again, then try deleting your account.';
 }

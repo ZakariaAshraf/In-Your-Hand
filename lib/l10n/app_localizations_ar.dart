@@ -490,4 +490,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get confirm => 'تأكيد';
+
+  @override
+  String get deleteAccount => 'حذف الحساب';
+
+  @override
+  String get deleteAccountWarningTitle => 'حذف الحساب؟';
+
+  @override
+  String get deleteAccountWarningMessage =>
+      'سيتم حذف حسابك وجميع بياناتك (الملف الشخصي، البرامج المحفوظة) نهائياً. لن تتمكن من استعادتها. لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get deleteAccountConfirm => 'حذف حسابي';
+
+  @override
+  String get deleteAccountSuccess => 'تم حذف الحساب بنجاح';
+
+  @override
+  String get deleteAccountRequireRecentLogin =>
+      'لأسباب أمنية، يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى، ثم حاول حذف حسابك.';
 }

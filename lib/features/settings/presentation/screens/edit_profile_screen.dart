@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
@@ -69,6 +68,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         listener: (context, state) {
           if (state is UserSuccess) {
             Navigator.pop(context);
+          } else if (state is UserAccountDeleted) {
+            if (!context.mounted) return;
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/signIn",
+              (route) => false,
+            );
           } else if (state is UserError) {
             ScaffoldMessenger.of(
               context,

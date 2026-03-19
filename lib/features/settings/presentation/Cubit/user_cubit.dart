@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -156,4 +155,41 @@ class UserCubit extends Cubit<UserState> {
       emit(UserError(e.toString()));
     }
   }
+
+  Future<void> deleteAccount() async {
+    emit(UserLoading());
+    final User? currentUser = _auth.currentUser;
+    if (currentUser == null) {
+      emit(UserError("User not logged in."));
+      return;
+    }
+
+    try {
+      // IMPORTANT:
+      // We only delete the Firebase Auth account here.
+      // Firestore cleanup (clients/orders/payments) should be handled by a
+      // Firebase Cloud Function triggered on Auth user deletion.
+      await currentUser.delete();
+
+      // Clear local cache after auth deletion succeeds.
+      await CacheHelper.remove(key: CacheKeys.uId);
+      await CacheHelper.remove(key: CacheKeys.userName);
+      await CacheHelper.remove(key: CacheKeys.userPhone);
+      await CacheHelper.remove(key: CacheKeys.userCharacter);
+
+      await _auth.signOut();
+
+      emit(UserAccountDeleted());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        emit(UserError(
+            "For security, please sign out and sign in again, then try deleting your account."));
+      } else {
+        emit(UserError(e.message ?? "Error deleting account: ${e.code}"));
+      }
+    } catch (e) {
+      emit(UserError("Error deleting account: $e"));
+    }
+  }
+
 }
