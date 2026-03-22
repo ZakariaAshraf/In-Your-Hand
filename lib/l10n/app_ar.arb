@@ -171,8 +171,10 @@
 
   "deleteAccount": "حذف الحساب",
   "deleteAccountWarningTitle": "حذف الحساب؟",
-  "deleteAccountWarningMessage": "سيتم حذف حسابك وجميع بياناتك (الملف الشخصي، البرامج المحفوظة) نهائياً. لن تتمكن من استعادتها. لا يمكن التراجع عن هذا الإجراء.",
+  "deleteAccountWarningMessage": "سيتم حذف حسابك وجميع بياناتك (الملف الشخصي، العملاءو معاملاتهم) نهائياً. لن تتمكن من استعادتها. لا يمكن التراجع عن هذا الإجراء.",
   "deleteAccountConfirm": "حذف حسابي",
   "deleteAccountSuccess": "تم حذف الحساب بنجاح",
-  "deleteAccountRequireRecentLogin": "لأسباب أمنية، يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى، ثم حاول حذف حسابك."
+  "deleteAccountRequireRecentLogin": "لأسباب أمنية، يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى، ثم حاول حذف حسابك.",
+  "deleteAccountEnterPassword": "أدخل كلمة المرور الحالية لتأكيد الحذف.",
+  "deleteAccountPasswordRequired": "يرجى إدخال كلمة المرور."
 }

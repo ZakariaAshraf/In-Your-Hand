@@ -156,7 +156,12 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> deleteAccount() async {
+
+  /// Deletes all user data and the Auth account.
+  /// [password] is required for email/password users so Firebase can
+  /// [reauthenticateWithCredential] before [User.delete] (avoids
+  /// `requires-recent-login`).
+  Future<void> deleteAccount(String password) async {
     emit(UserLoading());
     final User? currentUser = _auth.currentUser;
     if (currentUser == null) {
@@ -164,14 +169,61 @@ class UserCubit extends Cubit<UserState> {
       return;
     }
 
+    final email = currentUser.email;
+    if (email == null || email.isEmpty) {
+      emit(UserError(
+        "This sign-in method cannot delete the account from the app. "
+        "Please contact support.",
+      ));
+      return;
+    }
+
+    if (password.isEmpty) {
+      emit(UserError("Please enter your password."));
+      return;
+    }
+
+    final userId = currentUser.uid;
+
     try {
-      // IMPORTANT:
-      // We only delete the Firebase Auth account here.
-      // Firestore cleanup (clients/orders/payments) should be handled by a
-      // Firebase Cloud Function triggered on Auth user deletion.
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
+      await currentUser.reauthenticateWithCredential(credential);
+
+      final firestore = FirebaseFirestore.instance;
+
+      final ordersSnapshot = await firestore
+          .collection('orders')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      for (var orderDoc in ordersSnapshot.docs) {
+        final paymentsSnapshot = await orderDoc.reference
+            .collection('payments')
+            .get();
+
+        for (var paymentDoc in paymentsSnapshot.docs) {
+          await paymentDoc.reference.delete();
+        }
+
+        await orderDoc.reference.delete();
+      }
+
+      final clientsSnapshot = await firestore
+          .collection('clients')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      for (var clientDoc in clientsSnapshot.docs) {
+        await clientDoc.reference.delete();
+      }
+
+      await firestore.collection('users').doc(userId).delete();
+
       await currentUser.delete();
 
-      // Clear local cache after auth deletion succeeds.
       await CacheHelper.remove(key: CacheKeys.uId);
       await CacheHelper.remove(key: CacheKeys.userName);
       await CacheHelper.remove(key: CacheKeys.userPhone);
@@ -180,10 +232,16 @@ class UserCubit extends Cubit<UserState> {
       await _auth.signOut();
 
       emit(UserAccountDeleted());
+
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'requires-recent-login') {
+      if (e.code == 'wrong-password' || e.code == 'invalid-credential') {
         emit(UserError(
-            "For security, please sign out and sign in again, then try deleting your account."));
+          "Incorrect password. Please try again.",
+        ));
+      } else if (e.code == 'requires-recent-login') {
+        emit(UserError(
+          "For security, please sign out and sign in again, then try deleting your account.",
+        ));
       } else {
         emit(UserError(e.message ?? "Error deleting account: ${e.code}"));
       }
@@ -191,5 +249,4 @@ class UserCubit extends Cubit<UserState> {
       emit(UserError("Error deleting account: $e"));
     }
   }
-
 }

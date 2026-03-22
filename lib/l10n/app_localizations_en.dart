@@ -502,7 +502,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAccountWarningMessage =>
-      'This will permanently delete your account and all your data (profile, saved programs). You will not be able to recover it. This action cannot be undone.';
+      'This will permanently delete your account and all your data (profile, clients and orders). You will not be able to recover it. This action cannot be undone.';
 
   @override
   String get deleteAccountConfirm => 'Delete my account';
@@ -513,4 +513,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteAccountRequireRecentLogin =>
       'For security, please sign out and sign in again, then try deleting your account.';
+
+  @override
+  String get deleteAccountEnterPassword =>
+      'Enter your current password to confirm deletion.';
+
+  @override
+  String get deleteAccountPasswordRequired => 'Please enter your password.';
 }

@@ -168,8 +168,10 @@
   "confirm": "Confirm",
   "deleteAccount": "Delete Account",
   "deleteAccountWarningTitle": "Delete account?",
-  "deleteAccountWarningMessage": "This will permanently delete your account and all your data (profile, saved programs). You will not be able to recover it. This action cannot be undone.",
+  "deleteAccountWarningMessage": "This will permanently delete your account and all your data (profile, clients and orders). You will not be able to recover it. This action cannot be undone.",
   "deleteAccountConfirm": "Delete my account",
   "deleteAccountSuccess": "Account deleted successfully",
-  "deleteAccountRequireRecentLogin": "For security, please sign out and sign in again, then try deleting your account."
+  "deleteAccountRequireRecentLogin": "For security, please sign out and sign in again, then try deleting your account.",
+  "deleteAccountEnterPassword": "Enter your current password to confirm deletion.",
+  "deleteAccountPasswordRequired": "Please enter your password."
 }

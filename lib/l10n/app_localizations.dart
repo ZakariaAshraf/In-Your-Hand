@@ -1055,7 +1055,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteAccountWarningMessage.
   ///
   /// In en, this message translates to:
-  /// **'This will permanently delete your account and all your data (profile, saved programs). You will not be able to recover it. This action cannot be undone.'**
+  /// **'This will permanently delete your account and all your data (profile, clients and orders). You will not be able to recover it. This action cannot be undone.'**
   String get deleteAccountWarningMessage;
 
   /// No description provided for @deleteAccountConfirm.
@@ -1075,6 +1075,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For security, please sign out and sign in again, then try deleting your account.'**
   String get deleteAccountRequireRecentLogin;
+
+  /// No description provided for @deleteAccountEnterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password to confirm deletion.'**
+  String get deleteAccountEnterPassword;
+
+  /// No description provided for @deleteAccountPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password.'**
+  String get deleteAccountPasswordRequired;
 }
 
 class _AppLocalizationsDelegate

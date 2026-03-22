@@ -499,7 +499,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deleteAccountWarningMessage =>
-      'سيتم حذف حسابك وجميع بياناتك (الملف الشخصي، البرامج المحفوظة) نهائياً. لن تتمكن من استعادتها. لا يمكن التراجع عن هذا الإجراء.';
+      'سيتم حذف حسابك وجميع بياناتك (الملف الشخصي، العملاءو معاملاتهم) نهائياً. لن تتمكن من استعادتها. لا يمكن التراجع عن هذا الإجراء.';
 
   @override
   String get deleteAccountConfirm => 'حذف حسابي';
@@ -510,4 +510,11 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get deleteAccountRequireRecentLogin =>
       'لأسباب أمنية، يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى، ثم حاول حذف حسابك.';
+
+  @override
+  String get deleteAccountEnterPassword =>
+      'أدخل كلمة المرور الحالية لتأكيد الحذف.';
+
+  @override
+  String get deleteAccountPasswordRequired => 'يرجى إدخال كلمة المرور.';
 }
