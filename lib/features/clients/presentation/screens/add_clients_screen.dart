@@ -6,7 +6,9 @@ import 'package:in_your_hand/core/widgets/custom_button.dart';
 import 'package:in_your_hand/core/widgets/custom_text_field.dart';
 import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/clients/presentation/cubit/clients_cubit.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
+import '../../../../core/utils/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class AddClientsScreen extends StatefulWidget {
@@ -21,6 +23,7 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController notesController = TextEditingController();
   bool isNameEmpty = true;
+  String fullPhoneNumber = '';
 
   @override
   void initState() {
@@ -39,6 +42,7 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
     var theme = Theme
         .of(context)
         .textTheme;
+    final direction = Directionality.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocListener<ClientsCubit, ClientsState>(
       listenWhen: (prev, curr) =>
@@ -65,15 +69,39 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
             ),
             SizedBox(height: 20.h(context)),
             Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: CustomTextField(
-                controller: phoneController,
-                title: l10n.phone,
-                keyboardType: TextInputType.number,
-                hintText: l10n.phoneNumber,
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(text: TextSpan(text:l10n.phoneNumber,style: theme.titleSmall,children: [
+                      // TextSpan(text:"add number without first 0",style: theme.bodySmall,)
+                    ]),),
+                    Text("🚨${l10n.addNumberWithoutFirst0}🚨",style: theme.bodySmall),
+                    SizedBox(height: 4.h(context),),
+                    IntlPhoneField(
+                      textAlign: Directionality.of(context) == TextDirection.rtl ? TextAlign.right : TextAlign.left,
+                      controller: phoneController,
+                      decoration: InputDecoration(
+                        hintText: l10n.phoneNumber,
+                        hintStyle: theme.titleMedium!.copyWith(color: Colors.grey),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular( 12),
+                          borderSide: BorderSide(color: Colors.black.withOpacity(0.2)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular( 12),
+                          borderSide: BorderSide(color: AppColors.primary),
+                        ),
+                      ),
+                      initialCountryCode: 'EG',
+                      onChanged: (phone) {
+                        fullPhoneNumber = phone.completeNumber;
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 20.h(context)),
+            SizedBox(height: 10.h(context)),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: CustomTextField(
@@ -91,11 +119,14 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
                   title: isLoading ? l10n.processing : l10n.saveClient,
                   onTap: (isNameEmpty || isLoading) ? null : () {
                     final uid = FirebaseAuth.instance.currentUser?.uid;
+                    final finalPhone = fullPhoneNumber.isNotEmpty
+                        ? fullPhoneNumber
+                        : phoneController.text;
                     final client = ClientModel(
                       userId: uid ?? "",
                       name: nameController.text,
                       notes: notesController.text,
-                      phone: phoneController.text,
+                      phone: finalPhone,
                       createdAt: DateTime.now(),
                     );
                     context.read<ClientsCubit>().addClient(client);

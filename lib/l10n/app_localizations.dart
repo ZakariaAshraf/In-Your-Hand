@@ -992,6 +992,12 @@ abstract class AppLocalizations {
   /// **'About Us'**
   String get aboutUs;
 
+  /// No description provided for @addNumberWithoutFirst0.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Number Without First 0'**
+  String get addNumberWithoutFirst0;
+
   /// No description provided for @privacyPolicy.
   ///
   /// In en, this message translates to:

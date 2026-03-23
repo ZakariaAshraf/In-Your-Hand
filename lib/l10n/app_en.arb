@@ -157,6 +157,7 @@
   "orderAddedByVoice": "Order added from voice",
   "geminiNotConfigured": "Add your Gemini API key in app_keys.dart to use voice orders",
   "aboutUs": "About Us",
+  "addNumberWithoutFirst0": "Add Number Without First 0",
   "privacyPolicy": "Privacy Policy",
   "termsAndConditions": "Terms and Conditions",
   "aboutUsContent": "In Your Hand is a business management app built for small business owners in Egypt who sell on credit and need a simple way to track what clients owe them.\n\nInstead of writing debts in a notebook or trying to remember who paid and who didn't, In Your Hand keeps everything in one place — clients, orders, payments, and reports — accessible from your phone at any time.\n\nKey features:\n• Add and manage clients with their contact details\n• Create orders and track how much has been paid and how much is still owed\n• Record partial payments over time\n• Send WhatsApp payment reminders directly from the app\n• Add orders by voice using AI — speak in Arabic or English\n• Generate and print professional PDF reports per order or per client\n• Full Arabic and English support with RTL layout\n• Dark mode and light mode\n\nIn Your Hand was designed to be simple, fast, and focused. No unnecessary features — just the tools a business owner actually needs every day.\n\nThank you for using In Your Hand.",

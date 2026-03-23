@@ -465,6 +465,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutUs => 'من نحن';
 
   @override
+  String get addNumberWithoutFirst0 => 'ضيف الرقم من غير اول 0';
+
+  @override
   String get privacyPolicy => 'سياسة الخصوصية';
 
   @override

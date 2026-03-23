@@ -468,6 +468,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutUs => 'About Us';
 
   @override
+  String get addNumberWithoutFirst0 => 'Add Number Without First 0';
+
+  @override
   String get privacyPolicy => 'Privacy Policy';
 
   @override
