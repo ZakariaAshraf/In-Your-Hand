@@ -87,7 +87,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get seeAll => 'See All';
 
   @override
-  String get recommendFeature => 'Recommend feature';
+  String get recommendFeature => 'Recommend a Feature';
 
   @override
   String error(Object error) {
@@ -175,6 +175,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpAndSupport => 'Help & Support';
+
+  @override
+  String get helpAddClient =>
+      'Add a client from the Clients tab or the + button on Home';
+
+  @override
+  String get helpAddOrder =>
+      'Add an order manually or by voice from the Orders tab';
+
+  @override
+  String get helpAddPayment =>
+      'Open any order to record a partial or full payment';
+
+  @override
+  String get helpGeneratePdf =>
+      'Open a client or order to generate and share a PDF report';
+
+  @override
+  String get helpVoiceOrder =>
+      'Tap the mic on Add Order and speak in Arabic or English';
+
+  @override
+  String get helpContactMessage =>
+      'Have a question or found a bug? We would love to hear from you.';
+
+  @override
+  String get helpSendFeedback => 'Send Feedback';
 
   @override
   String get cairoEgypt => 'Cairo, Egypt';
@@ -461,6 +488,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orderAddedByVoice => 'Order added from voice';
 
   @override
+  String get geminiQuotaExceeded =>
+      'Service is temporarily busy. Please try again in a few minutes.';
+
+  @override
+  String get voiceLimitReachedTitle => 'Beta limit reached';
+
+  @override
+  String get voiceLimitReachedBody =>
+      'You\'ve used your 1 free voice order. Unlimited voice orders are coming soon for premium users.';
+
+  @override
+  String get recommendFeatureHint =>
+      'Tell us what you\'d like to see in the app...';
+
+  @override
+  String get feedbackSent => 'Thanks for your feedback!';
+
+  @override
+  String get feedbackFailed => 'Failed to send. Please try again.';
+
+  @override
+  String get howToUseTheApp => 'How to use the app';
+
+  @override
   String get geminiNotConfigured =>
       'Add your Gemini API key in app_keys.dart to use voice orders';
 
@@ -482,11 +533,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyContent =>
-      'Privacy Policy — In Your Hand\n\nLast updated: 2025\n\n1. Information We Collect\nIn Your Hand collects only the information you provide directly:\n• Your name and email address when you register\n• Client names, phone numbers, and notes you add\n• Order details and payment records you create\n• Optional profile photo\n\nWe do not collect location data, device identifiers, or any information beyond what you enter into the app.\n\n2. How We Use Your Information\nYour data is used solely to provide the app\'s functionality:\n• Displaying your clients and orders\n• Calculating payment summaries and reports\n• Sending WhatsApp reminders (only when you tap the button)\n• Generating PDF reports\n\nWe do not sell, share, or rent your personal information to any third party.\n\n3. Data Storage\nAll data is stored securely in Google Firebase (Firestore and Firebase Auth). Firebase is a Google service that complies with international data protection standards. Your data is associated with your account and is not accessible to other users.\n\n4. Voice Feature\nIf you use the voice order feature, your spoken audio is processed by Google\'s speech recognition service and then analyzed by Google Gemini AI to extract order details. Audio is not stored by the app.\n\n5. Data Deletion\nYou may delete your account and all associated data at any time by contacting us. Deleted clients are soft-deleted (hidden from view) and can be fully removed on request.\n\n6. Security\nWe take reasonable steps to protect your data. Access to your account is protected by Firebase Authentication. We recommend using a strong password.\n\n7. Changes to This Policy\nWe may update this policy from time to time. Continued use of the app after changes means you accept the updated policy.\n\n8. Contact\nFor any privacy-related questions, please contact us through the app\'s feedback form.';
+      'Privacy Policy — In Your Hand\n\nLast updated: 2026\n\n1. Information We Collect\nIn Your Hand collects only the information you provide directly:\n• Your name and email address when you register\n• Client names, phone numbers, and notes you add\n• Order details and payment records you create\n• Optional profile photo\n\nWe do not collect location data, device identifiers, or any information beyond what you enter into the app.\n\n2. How We Use Your Information\nYour data is used solely to provide the app\'s functionality:\n• Displaying your clients and orders\n• Calculating payment summaries and reports\n• Sending WhatsApp reminders (only when you tap the button)\n• Generating PDF reports\n\nWe do not sell, share, or rent your personal information to any third party.\n\n3. Data Storage\nAll data is stored securely in Google Firebase (Firestore and Firebase Auth). Firebase is a Google service that complies with international data protection standards. Your data is associated with your account and is not accessible to other users.\n\n4. Voice Feature\nIf you use the voice order feature, your spoken audio is processed by Google\'s speech recognition service and then analyzed by Google Gemini AI to extract order details. Audio is not stored by the app.\n\n5. Data Deletion\nYou can delete your account and all associated data directly from Settings → Edit Profile → Delete Account.\n\n6. Security\nWe take reasonable steps to protect your data. Access to your account is protected by Firebase Authentication. We recommend using a strong password.\n\n7. Changes to This Policy\nWe may update this policy from time to time. Continued use of the app after changes means you accept the updated policy.\n\n8. Contact\nFor any privacy-related questions, please contact us through the app\'s feedback form.';
 
   @override
   String get termsAndConditionsContent =>
-      'Terms and Conditions — In Your Hand\n\nLast updated: 2025\n\nBy using In Your Hand, you agree to the following terms. Please read them carefully.\n\n1. Use of the App\nIn Your Hand is provided for personal and small business use. You agree to use the app only for lawful purposes and in a way that does not infringe the rights of others.\n\n2. Your Account\nYou are responsible for maintaining the confidentiality of your account credentials. You are responsible for all activity that occurs under your account. Notify us immediately if you suspect unauthorized access.\n\n3. Your Data\nYou own the data you enter into the app (clients, orders, payments). By using the app, you grant us permission to store and process this data solely to provide the app\'s services.\n\n4. Accuracy of Information\nIn Your Hand is a tool to help you track your business data. The accuracy of reports, totals, and summaries depends entirely on the data you enter. We are not responsible for financial decisions made based on information in the app.\n\n5. WhatsApp Integration\nThe WhatsApp reminder feature opens WhatsApp with a pre-filled message. Sending the message is your action. We are not responsible for the content of messages you send or any consequences thereof.\n\n6. Voice and AI Features\nThe voice order feature uses speech recognition and AI to suggest order details. You are responsible for reviewing and confirming the suggested data before saving. We are not responsible for errors in AI-generated suggestions.\n\n7. Service Availability\nWe aim to keep the app available at all times but do not guarantee uninterrupted service. We may update, modify, or discontinue features at any time.\n\n8. Limitation of Liability\nIn Your Hand is provided as-is. We are not liable for any loss of data, financial loss, or other damages arising from the use or inability to use the app.\n\n9. Changes to Terms\nWe may update these terms from time to time. Continued use of the app after changes constitutes acceptance of the new terms.\n\n10. Contact\nFor questions about these terms, please contact us through the app\'s feedback form.';
+      'Terms and Conditions — In Your Hand\n\nLast updated: 2026\n\nBy using In Your Hand, you agree to the following terms. Please read them carefully.\n\n1. Use of the App\nIn Your Hand is provided for personal and small business use. You agree to use the app only for lawful purposes and in a way that does not infringe the rights of others.\n\n2. Your Account\nYou are responsible for maintaining the confidentiality of your account credentials. You are responsible for all activity that occurs under your account. Notify us immediately if you suspect unauthorized access.\n\n3. Your Data\nYou own the data you enter into the app (clients, orders, payments). By using the app, you grant us permission to store and process this data solely to provide the app\'s services.\n\n4. Accuracy of Information\nIn Your Hand is a tool to help you track your business data. The accuracy of reports, totals, and summaries depends entirely on the data you enter. We are not responsible for financial decisions made based on information in the app.\n\n5. WhatsApp Integration\nThe WhatsApp reminder feature opens WhatsApp with a pre-filled message. Sending the message is your action. We are not responsible for the content of messages you send or any consequences thereof.\n\n6. Voice and AI Features\nThe voice order feature uses speech recognition and AI to suggest order details. You are responsible for reviewing and confirming the suggested data before saving. We are not responsible for errors in AI-generated suggestions.\n\n7. Service Availability\nWe aim to keep the app available at all times but do not guarantee uninterrupted service. We may update, modify, or discontinue features at any time.\n\n8. Limitation of Liability\nIn Your Hand is provided as-is. We are not liable for any loss of data, financial loss, or other damages arising from the use or inability to use the app.\n\n9. Changes to Terms\nWe may update these terms from time to time. Continued use of the app after changes constitutes acceptance of the new terms.\n\n10. Contact\nFor questions about these terms, please contact us through the app\'s feedback form.';
 
   @override
   String get confirmOrder => 'Confirm order';

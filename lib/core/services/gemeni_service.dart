@@ -1,10 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 import '../config/app_keys.dart';
+
+class GeminiQuotaException implements Exception {
+  final String message;
+  const GeminiQuotaException(this.message);
+}
 
 class GeminiService {
   late final GenerativeModel _model;
@@ -53,6 +57,12 @@ Example output: {"clientName":"Ahmed","description":"5 boxes","totalAmount":500,
     } catch (e) {
       if (kDebugMode) {
         print('Gemini speechToOrder error: $e');
+      }
+      final errorText = e.toString().toLowerCase();
+      if (errorText.contains('quota') ||
+          errorText.contains('429') ||
+          errorText.contains('rate')) {
+        throw GeminiQuotaException(e.toString());
       }
       return null;
     }

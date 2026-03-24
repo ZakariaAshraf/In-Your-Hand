@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../settings/presentation/components/settings_button.dart';
+import 'screens/help_quick_guide_screen.dart';
 import 'screens/text_content_screen.dart';
 
-/// Help & Support screen with links to About Us, Privacy Policy, and Terms and Conditions.
 class HelpSupportScreen extends StatelessWidget {
   const HelpSupportScreen({super.key});
 
@@ -24,6 +24,19 @@ class HelpSupportScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SettingsButton(
+              title: l10n.howToUseTheApp,
+              iconColor: Colors.teal,
+              iconData: Icons.menu_book_outlined,
+              function: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HelpQuickGuideScreen(),
+                  ),
+                );
+              },
+            ),
             SettingsButton(
               title: l10n.aboutUs,
               iconColor: Colors.grey,
@@ -57,7 +70,7 @@ class HelpSupportScreen extends StatelessWidget {
               },
             ),
             SettingsButton(
-              title:l10n.termsAndConditions,
+              title: l10n.termsAndConditions,
               iconColor: Colors.red,
               iconData: Icons.description_outlined,
               function: () {

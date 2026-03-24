@@ -257,7 +257,7 @@ abstract class AppLocalizations {
   /// No description provided for @recommendFeature.
   ///
   /// In en, this message translates to:
-  /// **'Recommend feature'**
+  /// **'Recommend a Feature'**
   String get recommendFeature;
 
   /// Error message with error details
@@ -421,6 +421,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Help & Support'**
   String get helpAndSupport;
+
+  /// No description provided for @helpAddClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a client from the Clients tab or the + button on Home'**
+  String get helpAddClient;
+
+  /// No description provided for @helpAddOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an order manually or by voice from the Orders tab'**
+  String get helpAddOrder;
+
+  /// No description provided for @helpAddPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Open any order to record a partial or full payment'**
+  String get helpAddPayment;
+
+  /// No description provided for @helpGeneratePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a client or order to generate and share a PDF report'**
+  String get helpGeneratePdf;
+
+  /// No description provided for @helpVoiceOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the mic on Add Order and speak in Arabic or English'**
+  String get helpVoiceOrder;
+
+  /// No description provided for @helpContactMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Have a question or found a bug? We would love to hear from you.'**
+  String get helpContactMessage;
+
+  /// No description provided for @helpSendFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Feedback'**
+  String get helpSendFeedback;
 
   /// No description provided for @cairoEgypt.
   ///
@@ -980,6 +1022,48 @@ abstract class AppLocalizations {
   /// **'Order added from voice'**
   String get orderAddedByVoice;
 
+  /// No description provided for @geminiQuotaExceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Service is temporarily busy. Please try again in a few minutes.'**
+  String get geminiQuotaExceeded;
+
+  /// No description provided for @voiceLimitReachedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Beta limit reached'**
+  String get voiceLimitReachedTitle;
+
+  /// No description provided for @voiceLimitReachedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used your 1 free voice order. Unlimited voice orders are coming soon for premium users.'**
+  String get voiceLimitReachedBody;
+
+  /// No description provided for @recommendFeatureHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what you\'d like to see in the app...'**
+  String get recommendFeatureHint;
+
+  /// No description provided for @feedbackSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for your feedback!'**
+  String get feedbackSent;
+
+  /// No description provided for @feedbackFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send. Please try again.'**
+  String get feedbackFailed;
+
+  /// No description provided for @howToUseTheApp.
+  ///
+  /// In en, this message translates to:
+  /// **'How to use the app'**
+  String get howToUseTheApp;
+
   /// No description provided for @geminiNotConfigured.
   ///
   /// In en, this message translates to:
@@ -1019,13 +1103,13 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyContent.
   ///
   /// In en, this message translates to:
-  /// **'Privacy Policy — In Your Hand\n\nLast updated: 2025\n\n1. Information We Collect\nIn Your Hand collects only the information you provide directly:\n• Your name and email address when you register\n• Client names, phone numbers, and notes you add\n• Order details and payment records you create\n• Optional profile photo\n\nWe do not collect location data, device identifiers, or any information beyond what you enter into the app.\n\n2. How We Use Your Information\nYour data is used solely to provide the app\'s functionality:\n• Displaying your clients and orders\n• Calculating payment summaries and reports\n• Sending WhatsApp reminders (only when you tap the button)\n• Generating PDF reports\n\nWe do not sell, share, or rent your personal information to any third party.\n\n3. Data Storage\nAll data is stored securely in Google Firebase (Firestore and Firebase Auth). Firebase is a Google service that complies with international data protection standards. Your data is associated with your account and is not accessible to other users.\n\n4. Voice Feature\nIf you use the voice order feature, your spoken audio is processed by Google\'s speech recognition service and then analyzed by Google Gemini AI to extract order details. Audio is not stored by the app.\n\n5. Data Deletion\nYou may delete your account and all associated data at any time by contacting us. Deleted clients are soft-deleted (hidden from view) and can be fully removed on request.\n\n6. Security\nWe take reasonable steps to protect your data. Access to your account is protected by Firebase Authentication. We recommend using a strong password.\n\n7. Changes to This Policy\nWe may update this policy from time to time. Continued use of the app after changes means you accept the updated policy.\n\n8. Contact\nFor any privacy-related questions, please contact us through the app\'s feedback form.'**
+  /// **'Privacy Policy — In Your Hand\n\nLast updated: 2026\n\n1. Information We Collect\nIn Your Hand collects only the information you provide directly:\n• Your name and email address when you register\n• Client names, phone numbers, and notes you add\n• Order details and payment records you create\n• Optional profile photo\n\nWe do not collect location data, device identifiers, or any information beyond what you enter into the app.\n\n2. How We Use Your Information\nYour data is used solely to provide the app\'s functionality:\n• Displaying your clients and orders\n• Calculating payment summaries and reports\n• Sending WhatsApp reminders (only when you tap the button)\n• Generating PDF reports\n\nWe do not sell, share, or rent your personal information to any third party.\n\n3. Data Storage\nAll data is stored securely in Google Firebase (Firestore and Firebase Auth). Firebase is a Google service that complies with international data protection standards. Your data is associated with your account and is not accessible to other users.\n\n4. Voice Feature\nIf you use the voice order feature, your spoken audio is processed by Google\'s speech recognition service and then analyzed by Google Gemini AI to extract order details. Audio is not stored by the app.\n\n5. Data Deletion\nYou can delete your account and all associated data directly from Settings → Edit Profile → Delete Account.\n\n6. Security\nWe take reasonable steps to protect your data. Access to your account is protected by Firebase Authentication. We recommend using a strong password.\n\n7. Changes to This Policy\nWe may update this policy from time to time. Continued use of the app after changes means you accept the updated policy.\n\n8. Contact\nFor any privacy-related questions, please contact us through the app\'s feedback form.'**
   String get privacyPolicyContent;
 
   /// No description provided for @termsAndConditionsContent.
   ///
   /// In en, this message translates to:
-  /// **'Terms and Conditions — In Your Hand\n\nLast updated: 2025\n\nBy using In Your Hand, you agree to the following terms. Please read them carefully.\n\n1. Use of the App\nIn Your Hand is provided for personal and small business use. You agree to use the app only for lawful purposes and in a way that does not infringe the rights of others.\n\n2. Your Account\nYou are responsible for maintaining the confidentiality of your account credentials. You are responsible for all activity that occurs under your account. Notify us immediately if you suspect unauthorized access.\n\n3. Your Data\nYou own the data you enter into the app (clients, orders, payments). By using the app, you grant us permission to store and process this data solely to provide the app\'s services.\n\n4. Accuracy of Information\nIn Your Hand is a tool to help you track your business data. The accuracy of reports, totals, and summaries depends entirely on the data you enter. We are not responsible for financial decisions made based on information in the app.\n\n5. WhatsApp Integration\nThe WhatsApp reminder feature opens WhatsApp with a pre-filled message. Sending the message is your action. We are not responsible for the content of messages you send or any consequences thereof.\n\n6. Voice and AI Features\nThe voice order feature uses speech recognition and AI to suggest order details. You are responsible for reviewing and confirming the suggested data before saving. We are not responsible for errors in AI-generated suggestions.\n\n7. Service Availability\nWe aim to keep the app available at all times but do not guarantee uninterrupted service. We may update, modify, or discontinue features at any time.\n\n8. Limitation of Liability\nIn Your Hand is provided as-is. We are not liable for any loss of data, financial loss, or other damages arising from the use or inability to use the app.\n\n9. Changes to Terms\nWe may update these terms from time to time. Continued use of the app after changes constitutes acceptance of the new terms.\n\n10. Contact\nFor questions about these terms, please contact us through the app\'s feedback form.'**
+  /// **'Terms and Conditions — In Your Hand\n\nLast updated: 2026\n\nBy using In Your Hand, you agree to the following terms. Please read them carefully.\n\n1. Use of the App\nIn Your Hand is provided for personal and small business use. You agree to use the app only for lawful purposes and in a way that does not infringe the rights of others.\n\n2. Your Account\nYou are responsible for maintaining the confidentiality of your account credentials. You are responsible for all activity that occurs under your account. Notify us immediately if you suspect unauthorized access.\n\n3. Your Data\nYou own the data you enter into the app (clients, orders, payments). By using the app, you grant us permission to store and process this data solely to provide the app\'s services.\n\n4. Accuracy of Information\nIn Your Hand is a tool to help you track your business data. The accuracy of reports, totals, and summaries depends entirely on the data you enter. We are not responsible for financial decisions made based on information in the app.\n\n5. WhatsApp Integration\nThe WhatsApp reminder feature opens WhatsApp with a pre-filled message. Sending the message is your action. We are not responsible for the content of messages you send or any consequences thereof.\n\n6. Voice and AI Features\nThe voice order feature uses speech recognition and AI to suggest order details. You are responsible for reviewing and confirming the suggested data before saving. We are not responsible for errors in AI-generated suggestions.\n\n7. Service Availability\nWe aim to keep the app available at all times but do not guarantee uninterrupted service. We may update, modify, or discontinue features at any time.\n\n8. Limitation of Liability\nIn Your Hand is provided as-is. We are not liable for any loss of data, financial loss, or other damages arising from the use or inability to use the app.\n\n9. Changes to Terms\nWe may update these terms from time to time. Continued use of the app after changes constitutes acceptance of the new terms.\n\n10. Contact\nFor questions about these terms, please contact us through the app\'s feedback form.'**
   String get termsAndConditionsContent;
 
   /// No description provided for @confirmOrder.

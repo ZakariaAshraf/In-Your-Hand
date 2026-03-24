@@ -94,6 +94,56 @@ class _AddOrderByVoiceScreenState extends State<AddOrderByVoiceScreen> {
           }
 
           if (state.status == VoiceOrderStatus.error && state.errorMessage != null) {
+            if (state.errorMessage == 'voiceLimitReached') {
+              return Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.workspace_premium,
+                      size: 64,
+                      color: Colors.amber,
+                    ),
+                    SizedBox(height: 16.h(context)),
+                    Text(
+                      l10n.voiceLimitReachedTitle,
+                      textAlign: TextAlign.center,
+                      style: theme.titleLarge,
+                    ),
+                    SizedBox(height: 12.h(context)),
+                    Text(
+                      l10n.voiceLimitReachedBody,
+                      textAlign: TextAlign.center,
+                      style: theme.bodyMedium?.copyWith(color: Colors.grey[700]),
+                    ),
+                  ],
+                ),
+              );
+            }
+            if (state.errorMessage == 'geminiQuotaExceeded') {
+              return Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.cloud_off, size: 64, color: Colors.orange),
+                    SizedBox(height: 16.h(context)),
+                    Text(
+                      l10n.geminiQuotaExceeded,
+                      textAlign: TextAlign.center,
+                      style: theme.bodyLarge,
+                    ),
+                    SizedBox(height: 24.h(context)),
+                    CustomButton(
+                      title: l10n.tryAgain,
+                      onTap: () => context.read<VoiceOrderCubit>().clearError(),
+                      width: 200.w(context),
+                    ),
+                  ],
+                ),
+              );
+            }
             return Padding(
               padding: const EdgeInsets.all(24),
               child: Column(

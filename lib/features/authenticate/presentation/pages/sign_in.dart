@@ -38,8 +38,6 @@ class _SignInState extends State<SignIn> {
           if (state is AuthSuccess) {
             final userId = state.user.id;
             context.read<UserCubit>().listenToFirebaseStream(userId);
-            // Start listening to favourites for the newly signed‑in user
-            // context.read<FavouriteCubit>().listenToFavorites();
             Navigator.pushNamedAndRemoveUntil(
               context,
               "/main_screen",

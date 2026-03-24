@@ -102,7 +102,6 @@ class MyApp extends ConsumerWidget {
           );
         },
         title: 'In Your Hand',
-        // initialRoute: "/main_screen",
         home:startWidget,
         routes: {
         // "/": (context) => OnboardingScreen(),

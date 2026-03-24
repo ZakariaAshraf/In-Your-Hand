@@ -17,9 +17,14 @@ class DashboardCubit extends Cubit<DashboardState> {
     emit(DashboardLoading());
 
     try {
+      final uid = _auth.currentUser?.uid ?? userId;
+      if (uid.isEmpty) {
+        emit(DashboardError(errorMessage: "User not logged in"));
+        return;
+      }
       final snapshot = await _firestore
           .collection('orders')
-          .where('userId', isEqualTo: userId)
+          .where('userId', isEqualTo: uid)
           .get();
 
       double totalAmount = 0;

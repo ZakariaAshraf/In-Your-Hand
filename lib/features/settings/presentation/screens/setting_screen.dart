@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
@@ -11,7 +10,6 @@ import '../../../../core/locale/widgets/language_toggle_button.dart';
 import '../../../../core/themes/widgets/theme_toggle_button.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../main.dart';
 import '../../../authenticate/presentation/manager/auth_cubit.dart';
 import '../../../authenticate/presentation/pages/sign_in.dart';
 import '../../../help_support/help_support_screen.dart';

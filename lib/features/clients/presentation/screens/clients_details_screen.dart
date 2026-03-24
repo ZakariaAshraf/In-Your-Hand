@@ -6,6 +6,7 @@ import 'package:in_your_hand/features/orders/presentation/widgets/order_item.dar
 
 import '../../../../core/utils/pdf_manger.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_toast_widget.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../orders/presentation/cubit/orders_cubit.dart';
 import '../../data/clients_model.dart';
@@ -42,7 +43,9 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
               tooltip: 'PDF / Share',
               onPressed: () {
                 final state = context.read<OrdersCubit>().state;
-                if (state is! OrdersSuccess || state.orders.isEmpty) return;
+                if (state is! OrdersSuccess || state.orders.isEmpty){
+                  return CustomToastWidget.show(context: context, title: l10n.noOrders, iconPath: "assets/icons/icon.png",);
+                }
                 showClientPdfPreview(
                   context,
                   client: widget.client,
@@ -76,22 +79,24 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                   ),
                 ),
                 SizedBox(width: 12.w(context)),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(widget.client.name, style: theme.titleLarge),
-                    SizedBox(height: 8.h(context)),
-                    if ((widget.client.phone ?? "").isNotEmpty)
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.client.name, style: theme.titleLarge),
+                      SizedBox(height: 8.h(context)),
+                      if ((widget.client.phone ?? "").isNotEmpty)
+                        Text(
+                          widget.client.phone ?? "",
+                          style: theme.titleLarge,
+                        ),
+                      SizedBox(height: 8.h(context)),
                       Text(
-                        widget.client.phone ?? "",
+                        widget.client.notes ?? "",
                         style: theme.titleLarge,
                       ),
-                    SizedBox(height: 8.h(context)),
-                    Text(
-                      widget.client.notes ?? "",
-                      style: theme.titleLarge,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -108,13 +113,12 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                     0,
                     (sum, o) => sum + o.remainingAmount,
                   );
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
+                  return Column(
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
@@ -198,45 +202,41 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                          ],
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return OrderItem(
-                                order: orders[index],
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return OrderItem(
+                            order: orders[index],
+                            client: widget.client,
+                            clientName: widget.client.name,
+                          );
+                        },
+                        itemCount: orders.length,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Center(
+                          child: CustomButton(
+                            title: l10n.printReport,
+                            onTap:  () {
+                              final state = context.read<OrdersCubit>().state;
+                              if (state is! OrdersSuccess || state.orders.isEmpty) return;
+                              printClientPdf(
+                                context,
                                 client: widget.client,
-                                clientName: widget.client.name,
+                                orders: state.orders,
                               );
                             },
-                            itemCount: orders.length,
+                            height: 70.h(context),
+                            width: 330.w(context),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Center(
-                            child: CustomButton(
-                              title: l10n.printReport,
-                              onTap:  () {
-                                final state = context.read<OrdersCubit>().state;
-                                if (state is! OrdersSuccess || state.orders.isEmpty) return;
-                                printClientPdf(
-                                  context,
-                                  client: widget.client,
-                                  orders: state.orders,
-                                );
-                              },
-                              height: 70.h(context),
-                              width: 330.w(context),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
                 } else if (state is OrdersLoading) {
                   return Center(

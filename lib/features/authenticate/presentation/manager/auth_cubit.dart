@@ -38,6 +38,9 @@ class AuthCubit extends Cubit<AuthState> {
         'phone': phone,
         'createdAt': FieldValue.serverTimestamp(),
         'character': character,
+        'isPremium': false,
+        'voiceOrdersUsed': 0,
+        'voiceOrdersResetDate': FieldValue.serverTimestamp(),
       });
     } catch (e) {
       emit(AuthFailure("Error saving user data: $e"));

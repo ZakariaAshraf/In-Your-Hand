@@ -98,8 +98,14 @@ class OrdersCubit extends Cubit<OrdersState> {
   getClientOrders(String clientId) async {
     emit(OrdersLoading());
     try {
+      final uid = _auth.currentUser?.uid;
+      if (uid == null) {
+        emit(OrdersError(errorMessage: "User not logged in"));
+        return;
+      }
       final snapshot = await _firestore
           .collection('orders')
+          .where('userId', isEqualTo: uid)
           .where('clientId', isEqualTo: clientId)
       // .orderBy('createdAt', descending: true)
           .get();

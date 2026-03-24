@@ -87,8 +87,11 @@ class UserCubit extends Cubit<UserState> {
       final cachedUser = AppUserModel(
         name: cachedName,
         phone: cachedPhone ?? "",
-        charUrl: cachedImage ??"",
+        charUrl: cachedImage ?? "",
         createdAt: DateTime.now(),
+        isPremium: false,
+        voiceOrdersUsed: 0,
+        voiceOrdersResetDate: null,
       );
       emit(UserLoaded(cachedUser));
     } else {
@@ -97,8 +100,7 @@ class UserCubit extends Cubit<UserState> {
   }
 
   void listenToFirebaseStream(String userId) {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId == null) return;
+    if (userId.isEmpty) return;
 
     _userSubscription?.cancel();
     _userSubscription = FirebaseFirestore.instance
@@ -148,6 +150,9 @@ class UserCubit extends Cubit<UserState> {
         phone: phoneNumber ?? user?.phone ?? '',
         charUrl: charPath ?? user?.charUrl ?? '',
         createdAt: user?.createdAt ?? DateTime.now(),
+        isPremium: user?.isPremium ?? false,
+        voiceOrdersUsed: user?.voiceOrdersUsed ?? 0,
+        voiceOrdersResetDate: user?.voiceOrdersResetDate,
       );
       getCurrentUserData();
       emit(UserSuccess());
@@ -156,6 +161,27 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
+  Future<void> incrementVoiceOrderUsage() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+
+    final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+    final snap = await docRef.get();
+    if (!snap.exists) return;
+
+    final data = snap.data()!;
+    final now = DateTime.now();
+    final resetDate = (data['voiceOrdersResetDate'] as Timestamp?)?.toDate();
+
+    // If resetDate is more than 30 days ago, reset the counter
+    final shouldReset =
+        resetDate == null || now.difference(resetDate).inDays >= 30;
+
+    await docRef.update({
+      'voiceOrdersUsed': shouldReset ? 1 : FieldValue.increment(1),
+      if (shouldReset) 'voiceOrdersResetDate': FieldValue.serverTimestamp(),
+    });
+  }
 
   /// Deletes all user data and the Auth account.
   /// [password] is required for email/password users so Firebase can

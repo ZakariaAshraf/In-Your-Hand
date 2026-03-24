@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:in_your_hand/core/services/gemeni_service.dart';
@@ -81,6 +82,30 @@ class VoiceOrderCubit extends Cubit<VoiceOrderState> {
     required List<ClientModel> clients,
     String? transcriptOverride,
   }) async {
+    // Read limit from Firestore directly — never trust stale constructor state
+    final gateUid = FirebaseAuth.instance.currentUser?.uid;
+    if (gateUid != null) {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(gateUid)
+          .get();
+      if (doc.exists) {
+        final data = doc.data()!;
+        final isPremium = data['isPremium'] ?? false;
+        final voiceOrdersUsed = data['voiceOrdersUsed'] ?? 0;
+        // BETA LIMIT: 1 free voice order per user
+        // BETA: change to 10 for full launch
+        const int freeLimit = 1;
+        if (!isPremium && voiceOrdersUsed >= freeLimit) {
+          emit(state.copyWith(
+            status: VoiceOrderStatus.error,
+            errorMessage: 'voiceLimitReached',
+          ));
+          return;
+        }
+      }
+    }
+
     final text = (transcriptOverride ?? state.transcript ?? '').trim();
     if (text.isEmpty) {
       emit(state.copyWith(
@@ -100,7 +125,16 @@ class VoiceOrderCubit extends Cubit<VoiceOrderState> {
 
     emit(state.copyWith(status: VoiceOrderStatus.processing, errorMessage: null));
 
-    final json = await geminiService.speechTextToOrderJson(text);
+    Map<String, dynamic>? json;
+    try {
+      json = await geminiService.speechTextToOrderJson(text);
+    } on GeminiQuotaException {
+      emit(state.copyWith(
+        status: VoiceOrderStatus.error,
+        errorMessage: 'geminiQuotaExceeded',
+      ));
+      return;
+    }
     if (json == null) {
       emit(state.copyWith(
         status: VoiceOrderStatus.error,
@@ -173,6 +207,7 @@ class VoiceOrderCubit extends Cubit<VoiceOrderState> {
     final orderToAdd = order ?? state.pendingOrder;
     if (orderToAdd == null) return;
     await ordersCubit.addOrder(orderToAdd);
+    await _incrementUsage();
     emit(VoiceOrderState(
       status: VoiceOrderStatus.success,
       isSpeechAvailable: state.isSpeechAvailable,
@@ -212,5 +247,21 @@ class VoiceOrderCubit extends Cubit<VoiceOrderState> {
       pendingOrder: null,
       orderPreview: null,
     ));
+  }
+
+  Future<void> _incrementUsage() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+    final docRef = FirebaseFirestore.instance.collection('users').doc(uid);
+    final snap = await docRef.get();
+    if (!snap.exists) return;
+    final data = snap.data()!;
+    final now = DateTime.now();
+    final resetDate = (data['voiceOrdersResetDate'] as Timestamp?)?.toDate();
+    final shouldReset = resetDate == null || now.difference(resetDate).inDays >= 30;
+    await docRef.update({
+      'voiceOrdersUsed': shouldReset ? 1 : FieldValue.increment(1),
+      if (shouldReset) 'voiceOrdersResetDate': FieldValue.serverTimestamp(),
+    });
   }
 }
