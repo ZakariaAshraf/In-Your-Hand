@@ -60,43 +60,57 @@ class ClientsItem extends StatelessWidget {
                                       );
                                     }
                                   },
-                                  child: Container(
-                                    height: 50.h(context),
-                                    width: 60.w(context),
-                                    decoration: BoxDecoration(
-                                      color: Colors.blue,
-                                      borderRadius: BorderRadius.circular(
-                                        30.r(context),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 50.h(context),
+                                        width: 60.w(context),
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius: BorderRadius.circular(
+                                            30.r(context),
+                                          ),
+                                          // border: BoxBorder.all(color: Colors.grey),
+                                        ),
+                                        child: Icon(
+                                          CupertinoIcons.phone,
+                                          size: 30.r(context),
+                                        ),
                                       ),
-                                      border: BoxBorder.all(color: Colors.grey),
-                                    ),
-                                    child: Icon(
-                                      CupertinoIcons.phone,
-                                      size: 30.r(context),
-                                    ),
+                                      Text(l10n.call, style: theme.bodySmall!.copyWith(
+                                        color: Colors.grey,
+                                      ),),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(width: 40.w(context)),
+                                SizedBox(width: 20.w(context)),
                                 InkWell(
-                                  child: Container(
-                                    height: 50.h(context),
-                                    width: 60.w(context),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 5,
-                                      vertical: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(
-                                        30.r(context),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 50.h(context),
+                                        width: 60.w(context),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 5,
+                                          vertical: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          borderRadius: BorderRadius.circular(
+                                            30.r(context),
+                                          ),
+                                          // border: BoxBorder.all(color: Colors.grey),
+                                        ),
+                                        child: Image.asset(
+                                          "assets/icons/ic_whatsapp.png",
+                                          height: 30,
+                                          width: 30,
+                                        ),
                                       ),
-                                      border: BoxBorder.all(color: Colors.grey),
-                                    ),
-                                    child: Image.asset(
-                                      "assets/icons/ic_whatsapp.png",
-                                      height: 30,
-                                      width: 30,
-                                    ),
+                                      Text(l10n.whatsApp, style: theme.bodySmall!.copyWith(
+                                        color: Colors.grey,
+                                      ),),
+                                    ],
                                   ),
                                   onTap: () async {
                                     final phone = client.phone
@@ -129,14 +143,25 @@ class ClientsItem extends StatelessWidget {
                             }
                           });
                         },
-                        child: Container(
-                          height: 50.h(context),
-                          width: 60.w(context),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30.r(context)),
-                            border: BoxBorder.all(color: Colors.grey),
-                          ),
-                          child: Icon(CupertinoIcons.info),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 50.h(context),
+                              width: 60.w(context),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30.r(context)),
+                                // border: BoxBorder.all(color: Colors.grey),
+                              ),
+                              child:Image.asset("assets/icons/report.png",height: 20.h(context),width: 20.w(context),),
+                            ),
+                            Text(l10n.report, style: theme.bodySmall!.copyWith(
+                              color: Colors.grey,
+                            ),),
+                          ],
                         ),
                       ),
                       InkWell(
@@ -198,14 +223,25 @@ class ClientsItem extends StatelessWidget {
                               }
                             });
                           },
-                          child: Container(
-                            height: 50.h(context),
-                            width: 60.w(context),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30.r(context)),
-                              border: BoxBorder.all(color: Colors.grey),
-                            ),
-                            child: Icon(CupertinoIcons.info),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 50.h(context),
+                                width: 60.w(context),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                  vertical: 5,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30.r(context)),
+                                  // border: BoxBorder.all(color: Colors.grey),
+                                ),
+                                child:Image.asset("assets/icons/report.png",height: 20.h(context),width: 20.w(context),),
+                              ),
+                              Text(l10n.report, style: theme.bodySmall!.copyWith(
+                                color: Colors.grey,
+                              ),),
+                            ],
                           ),
                         ),
                         SizedBox(width: 20.w(context),),

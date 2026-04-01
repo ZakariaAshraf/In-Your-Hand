@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:in_your_hand/core/config/voice_order_limits.dart';
 import 'package:in_your_hand/core/services/gemeni_service.dart';
 import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
@@ -93,10 +94,8 @@ class VoiceOrderCubit extends Cubit<VoiceOrderState> {
         final data = doc.data()!;
         final isPremium = data['isPremium'] ?? false;
         final voiceOrdersUsed = data['voiceOrdersUsed'] ?? 0;
-        // BETA LIMIT: 1 free voice order per user
-        // BETA: change to 10 for full launch
-        const int freeLimit = 1;
-        if (!isPremium && voiceOrdersUsed >= freeLimit) {
+        if (!isPremium &&
+            voiceOrdersUsed >= VoiceOrderLimits.freeVoiceOrdersPerPeriod) {
           emit(state.copyWith(
             status: VoiceOrderStatus.error,
             errorMessage: 'voiceLimitReached',

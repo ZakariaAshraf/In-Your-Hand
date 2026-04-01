@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:in_your_hand/core/config/voice_order_limits.dart';
 
 class AppUserModel {
   final String name;
@@ -19,7 +20,8 @@ class AppUserModel {
     this.voiceOrdersResetDate,
   });
 
-  bool get canUseVoiceOrder => isPremium || voiceOrdersUsed < 10;
+  bool get canUseVoiceOrder =>
+      isPremium || voiceOrdersUsed < VoiceOrderLimits.freeVoiceOrdersPerPeriod;
 
   factory AppUserModel.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;

@@ -111,6 +111,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Select the profile that best describes you to personalize your journey.';
 
   @override
+  String get businessMan => 'Business Man';
+
+  @override
+  String get businessWoman => 'Business Woman';
+
+  @override
   String get inYourHand => 'In Your Hand.';
 
   @override
@@ -383,6 +389,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get edit => 'Edit';
 
   @override
+  String get call => 'Call';
+
+  @override
+  String get whatsApp => 'WhatsApp';
+
+  @override
+  String get report => 'Report';
+
+  @override
   String get deleteClient => 'Delete Client';
 
   @override
@@ -492,11 +507,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Service is temporarily busy. Please try again in a few minutes.';
 
   @override
-  String get voiceLimitReachedTitle => 'Beta limit reached';
+  String get voiceLimitReachedTitle => 'Monthly voice limit reached';
 
   @override
   String get voiceLimitReachedBody =>
-      'You\'ve used your 1 free voice order. Unlimited voice orders are coming soon for premium users.';
+      'You have 1 free voice order per month. You\'ve already used yours for this month. Unlimited voice orders are coming soon for premium users.';
 
   @override
   String get recommendFeatureHint =>

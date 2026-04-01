@@ -112,6 +112,12 @@ class AppLocalizationsAr extends AppLocalizations {
       'اختر الملف الشخصي الذي يصفك بشكل أفضل لتخصيص رحلتك.';
 
   @override
+  String get businessMan => 'رجل أعمال';
+
+  @override
+  String get businessWoman => 'سيدة أعمال';
+
+  @override
   String get inYourHand => 'في ايديك';
 
   @override
@@ -377,6 +383,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get edit => 'تعديل';
 
   @override
+  String get call => 'اتصال';
+
+  @override
+  String get whatsApp => 'واتساب';
+
+  @override
+  String get report => 'تقرير';
+
+  @override
   String get deleteClient => 'حذف العميل';
 
   @override
@@ -485,11 +500,11 @@ class AppLocalizationsAr extends AppLocalizations {
       'الخدمة مشغولة مؤقتاً. حاول مجدداً بعد دقائق.';
 
   @override
-  String get voiceLimitReachedTitle => 'وصلت للحد التجريبي';
+  String get voiceLimitReachedTitle => 'وصلت للحد الشهري';
 
   @override
   String get voiceLimitReachedBody =>
-      'استخدمت طلبك الصوتي المجاني. الطلبات الصوتية غير المحدودة قادمة قريباً للمشتركين المميزين.';
+      'عفواً، ليك طلب صوتي واحد مجاني كل شهر. ميزة الطلبات الصوتية المفتوحة هتنزل قريب!';
 
   @override
   String get recommendFeatureHint => 'أخبرنا بما تريد إضافته للتطبيق...';

@@ -26,35 +26,26 @@ class ChooseYourCharacterScreen extends StatefulWidget {
       _ChooseYourCharacterScreenState();
 }
 
-int selectedIndex = -1;
-final List<CharacterModel> characters = [
-  // CharacterModel(
-  //   id: "male_student",
-  //   imagePath: "assets/icons/mstudent.png",
-  //   imageName: "Male Student",
-  // ),
-  // CharacterModel(
-  //   id: "female_student",
-  //   imagePath: "assets/icons/fstudent.png",
-  //   imageName: "Female Student",
-  // ),
-  CharacterModel(
-    id: 'male_busi',
-    imagePath: "assets/icons/mbusi.png",
-    imageName: "Business Man",
-  ),
-  CharacterModel(
-    id: 'female_busi',
-    imagePath: "assets/icons/fbusi.png",
-    imageName: "Business Woman",
-  ),
-];
 
 class _ChooseYourCharacterScreenState extends State<ChooseYourCharacterScreen> {
+  int selectedIndex = -1;
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context)!;
+
+    final List<CharacterModel> characters = [
+      CharacterModel(
+        id: 'male_busi',
+        imagePath: "assets/icons/mbusi.png",
+        imageName: l10n.businessMan,
+      ),
+      CharacterModel(
+        id: 'female_busi',
+        imagePath: "assets/icons/fbusi.png",
+        imageName: l10n.businessWoman,
+      ),
+    ];
     bool isButtonEnabled = selectedIndex != -1;
     return Scaffold(
       appBar: AppBar(),

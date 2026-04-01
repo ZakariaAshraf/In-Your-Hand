@@ -296,6 +296,18 @@ abstract class AppLocalizations {
   /// **'Select the profile that best describes you to personalize your journey.'**
   String get chooseCharacterDescription;
 
+  /// No description provided for @businessMan.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Man'**
+  String get businessMan;
+
+  /// No description provided for @businessWoman.
+  ///
+  /// In en, this message translates to:
+  /// **'Business Woman'**
+  String get businessWoman;
+
   /// No description provided for @inYourHand.
   ///
   /// In en, this message translates to:
@@ -818,6 +830,24 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get edit;
 
+  /// No description provided for @call.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get call;
+
+  /// No description provided for @whatsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get whatsApp;
+
+  /// No description provided for @report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get report;
+
   /// No description provided for @deleteClient.
   ///
   /// In en, this message translates to:
@@ -1031,13 +1061,13 @@ abstract class AppLocalizations {
   /// No description provided for @voiceLimitReachedTitle.
   ///
   /// In en, this message translates to:
-  /// **'Beta limit reached'**
+  /// **'Monthly voice limit reached'**
   String get voiceLimitReachedTitle;
 
   /// No description provided for @voiceLimitReachedBody.
   ///
   /// In en, this message translates to:
-  /// **'You\'ve used your 1 free voice order. Unlimited voice orders are coming soon for premium users.'**
+  /// **'You have 1 free voice order per month. You\'ve already used yours for this month. Unlimited voice orders are coming soon for premium users.'**
   String get voiceLimitReachedBody;
 
   /// No description provided for @recommendFeatureHint.
