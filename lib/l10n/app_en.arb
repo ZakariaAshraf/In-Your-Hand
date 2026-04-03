@@ -186,6 +186,9 @@
   "confirmOrder": "Confirm order",
   "confirmOrderMessage": "Review the order below. Add it?",
   "confirm": "Confirm",
+
+  "unpaidOrderMessage": "Hello, you have {totalUnpaid} remaining out of {totalAmount} for the order dated {orderDate}",
+
   "deleteAccount": "Delete Account",
   "deleteAccountWarningTitle": "Delete account?",
   "deleteAccountWarningMessage": "This will permanently delete your account and all your data (profile, clients and orders). You will not be able to recover it. This action cannot be undone.",

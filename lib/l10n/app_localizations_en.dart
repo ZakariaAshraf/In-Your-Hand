@@ -564,6 +564,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirm => 'Confirm';
 
   @override
+  String unpaidOrderMessage(
+    Object orderDate,
+    Object totalAmount,
+    Object totalUnpaid,
+  ) {
+    return 'Hello, you have $totalUnpaid remaining out of $totalAmount for the order dated $orderDate';
+  }
+
+  @override
   String get deleteAccount => 'Delete Account';
 
   @override

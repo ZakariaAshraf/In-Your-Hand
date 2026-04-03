@@ -196,5 +196,13 @@
   "deleteAccountSuccess": "تم حذف الحساب بنجاح",
   "deleteAccountRequireRecentLogin": "لأسباب أمنية، يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى، ثم حاول حذف حسابك.",
   "deleteAccountEnterPassword": "أدخل كلمة المرور الحالية لتأكيد الحذف.",
-  "deleteAccountPasswordRequired": "يرجى إدخال كلمة المرور."
+  "deleteAccountPasswordRequired": "يرجى إدخال كلمة المرور.",
+  "unpaidOrderMessage": "السلام عليكم حضرتك عليك {totalUnpaid} من اصل مبلغ {totalAmount} لاوردر بتاريخ يوم {orderDate}",
+    "@unpaidOrderMessage": {
+      "placeholders": {
+        "totalUnpaid": {},
+        "totalAmount": {},
+        "orderDate": {}
+      }
+    }
 }

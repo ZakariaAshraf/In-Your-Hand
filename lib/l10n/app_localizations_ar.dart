@@ -556,6 +556,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get confirm => 'تأكيد';
 
   @override
+  String unpaidOrderMessage(
+    Object orderDate,
+    Object totalAmount,
+    Object totalUnpaid,
+  ) {
+    return 'السلام عليكم حضرتك عليك $totalUnpaid من اصل مبلغ $totalAmount لاوردر بتاريخ يوم $orderDate';
+  }
+
+  @override
   String get deleteAccount => 'حذف الحساب';
 
   @override

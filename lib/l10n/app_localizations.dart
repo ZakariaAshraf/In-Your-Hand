@@ -1160,6 +1160,16 @@ abstract class AppLocalizations {
   /// **'Confirm'**
   String get confirm;
 
+  /// No description provided for @unpaidOrderMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, you have {totalUnpaid} remaining out of {totalAmount} for the order dated {orderDate}'**
+  String unpaidOrderMessage(
+    Object orderDate,
+    Object totalAmount,
+    Object totalUnpaid,
+  );
+
   /// No description provided for @deleteAccount.
   ///
   /// In en, this message translates to:

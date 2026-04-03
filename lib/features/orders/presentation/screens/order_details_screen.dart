@@ -142,9 +142,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                     ?.replaceAll('+', '')
                                     .replaceAll(':', '')
                                     .trim();
-                                final encoded = Uri.encodeComponent(
-                                  "السلام عليكم حضرتك عليك $totalUnpaid من اصل مبلغ ${widget.order.totalAmount} لاوردر بتاريخ يوم ${formatDate(widget.order.createdAt)}",
-                                );
+                                final rawMessage = l10n.unpaidOrderMessage(formatDate(widget.order.createdAt),widget.order.totalAmount,totalUnpaid,);
+                                final encoded = Uri.encodeComponent(rawMessage);
                                 final url = Uri.parse(
                                   "https://wa.me/$phone?text=$encoded",
                                 );
