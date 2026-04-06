@@ -186,6 +186,7 @@
   "confirmOrder": "Confirm order",
   "confirmOrderMessage": "Review the order below. Add it?",
   "confirm": "Confirm",
+  "connectionError": "You are not connected (offline)",
 
   "unpaidOrderMessage": "Hello, you have {totalUnpaid} remaining out of {totalAmount} for the order dated {orderDate}",
 

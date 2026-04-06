@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
 import 'package:meta/meta.dart';
@@ -16,7 +17,10 @@ class OrdersCubit extends Cubit<OrdersState> {
 
   String get userId => _auth.currentUser!.uid;
 
-  Future<void> addOrder(OrderModel order) async {
+  Future<void> addOrder(
+    OrderModel order, {
+    String creationMethod = 'manual',
+  }) async {
     if (!order.isValidPayment) {
       emit(OrdersError(errorMessage: "Invalid payment values"));
       return;
@@ -25,6 +29,12 @@ class OrdersCubit extends Cubit<OrdersState> {
     try {
       await _firestore.collection('orders').add(
         order.toFirestore(),
+      );
+      await FirebaseAnalytics.instance.logEvent(
+        name: 'order_created',
+        parameters: <String, Object>{
+          'creation_method': creationMethod,
+        },
       );
       await getOrders();
       // emit(AddingOrdersSuccess(

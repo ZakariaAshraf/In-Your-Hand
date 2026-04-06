@@ -40,8 +40,8 @@ class _ConnectivityOverlayState extends State<ConnectivityOverlay> {
                 color: Colors.redAccent,
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: const Text(
-                    'أنت في وضع عدم الاتصال (Offline)',
+                  child: Text(
+                    l10n.connectionError,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white, fontSize: 14),
                   ),

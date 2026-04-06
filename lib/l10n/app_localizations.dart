@@ -1160,6 +1160,12 @@ abstract class AppLocalizations {
   /// **'Confirm'**
   String get confirm;
 
+  /// No description provided for @connectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not connected (offline)'**
+  String get connectionError;
+
   /// No description provided for @unpaidOrderMessage.
   ///
   /// In en, this message translates to:

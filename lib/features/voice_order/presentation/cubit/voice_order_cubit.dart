@@ -205,7 +205,7 @@ class VoiceOrderCubit extends Cubit<VoiceOrderState> {
   Future<void> confirmAndAddOrder({OrderModel? order}) async {
     final orderToAdd = order ?? state.pendingOrder;
     if (orderToAdd == null) return;
-    await ordersCubit.addOrder(orderToAdd);
+    await ordersCubit.addOrder(orderToAdd, creationMethod: 'voice');
     await _incrementUsage();
     emit(VoiceOrderState(
       status: VoiceOrderStatus.success,

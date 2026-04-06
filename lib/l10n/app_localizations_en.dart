@@ -564,6 +564,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirm => 'Confirm';
 
   @override
+  String get connectionError => 'You are not connected (offline)';
+
+  @override
   String unpaidOrderMessage(
     Object orderDate,
     Object totalAmount,

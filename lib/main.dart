@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,9 @@ import 'features/settings/presentation/Cubit/user_cubit.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 import 'main_screen.dart';
+
+/// Shared for [FirebaseAnalyticsObserver] in [MaterialApp.navigatorObservers].
+final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -123,6 +127,9 @@ class MyApp extends ConsumerWidget {
         themeMode: theme,
         darkTheme: ThemeData.dark(),
         theme: ThemeData.light(),
+        navigatorObservers: <NavigatorObserver>[
+          FirebaseAnalyticsObserver(analytics: firebaseAnalytics),
+        ],
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -125,10 +126,16 @@ class ClientsItem extends StatelessWidget {
                                     );
 
                                     if (await canLaunchUrl(url)) {
-                                      await launchUrl(
+                                      final launched = await launchUrl(
                                         url,
                                         mode: LaunchMode.externalApplication,
                                       );
+                                      if (launched) {
+                                        await FirebaseAnalytics.instance
+                                            .logEvent(
+                                          name: 'whatsapp_client_chat_opened',
+                                        );
+                                      }
                                     }
                                   },
                                 ),

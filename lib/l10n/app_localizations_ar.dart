@@ -556,6 +556,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get confirm => 'تأكيد';
 
   @override
+  String get connectionError => 'أنت في وضع عدم الاتصال (Offline)';
+
+  @override
   String unpaidOrderMessage(
     Object orderDate,
     Object totalAmount,

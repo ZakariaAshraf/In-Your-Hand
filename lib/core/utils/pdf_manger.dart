@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
@@ -8,6 +11,19 @@ import '../../features/clients/data/clients_model.dart';
 import '../../features/orders/data/order_model.dart';
 import '../../features/orders/data/payment_model.dart';
 import '../../l10n/app_localizations.dart';
+
+Future<void> _logPdfReport({
+  required String reportType,
+  required String action,
+}) async {
+  await FirebaseAnalytics.instance.logEvent(
+    name: 'pdf_report',
+    parameters: <String, Object>{
+      'report_type': reportType,
+      'action': action,
+    },
+  );
+}
 
 class PdfManger {
   /// Load the Cairo font from assets so Arabic text renders correctly.
@@ -498,6 +514,7 @@ void showOrderPdfPreview(
   required ClientModel client,
   required List<PaymentModel> payments,
 }) {
+  unawaited(_logPdfReport(reportType: 'order', action: 'preview'));
   final l10n = AppLocalizations.of(context)!;
   Navigator.push(
     context,
@@ -534,6 +551,7 @@ Future<void> printOrderPdf(
   required List<PaymentModel> payments,
 }) async {
   final l10n = AppLocalizations.of(context)!;
+  await _logPdfReport(reportType: 'order', action: 'print');
   await Printing.layoutPdf(
     onLayout: (format) async {
       final doc = await PdfManger.generateOrderReport(
@@ -555,6 +573,7 @@ void showClientPdfPreview(
   required ClientModel client,
   required List<OrderModel> orders,
 }) {
+  unawaited(_logPdfReport(reportType: 'client', action: 'preview'));
   final l10n = AppLocalizations.of(context)!;
   Navigator.push(
     context,
@@ -589,6 +608,7 @@ Future<void> printClientPdf(
   required List<OrderModel> orders,
 }) async {
   final l10n = AppLocalizations.of(context)!;
+  await _logPdfReport(reportType: 'client', action: 'print');
   await Printing.layoutPdf(
     onLayout: (format) async {
       final doc = await PdfManger.generateClientReport(

@@ -1,4 +1,6 @@
 import 'dart:ui';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/generated/extentions.dart';
@@ -149,10 +151,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 );
 
                                 if (await canLaunchUrl(url)) {
-                                  await launchUrl(
+                                  final launched = await launchUrl(
                                     url,
                                     mode: LaunchMode.externalApplication,
                                   );
+                                  if (launched) {
+                                    await FirebaseAnalytics.instance.logEvent(
+                                      name: 'whatsapp_reminder_sent',
+                                      parameters: const <String, Object>{
+                                        'context': 'order_unpaid',
+                                      },
+                                    );
+                                  }
                                 }
                               },
                           child: Container(

@@ -188,6 +188,8 @@
   "confirmOrder": "تأكيد الطلب",
   "confirmOrderMessage": "راجع الطلب أدناه. هل تضيفه؟",
   "confirm": "تأكيد",
+  "connectionError":"أنت في وضع عدم الاتصال (Offline)",
+
 
   "deleteAccount": "حذف الحساب",
   "deleteAccountWarningTitle": "حذف الحساب؟",
