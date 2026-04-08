@@ -197,5 +197,6 @@
   "deleteAccountSuccess": "Account deleted successfully",
   "deleteAccountRequireRecentLogin": "For security, please sign out and sign in again, then try deleting your account.",
   "deleteAccountEnterPassword": "Enter your current password to confirm deletion.",
-  "deleteAccountPasswordRequired": "Please enter your password."
+  "deleteAccountPasswordRequired": "Please enter your password.",
+  "adCouldNotLoad": "Ad could not load. Try again in a moment."
 }

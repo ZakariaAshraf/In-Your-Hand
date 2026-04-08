@@ -199,6 +199,7 @@
   "deleteAccountRequireRecentLogin": "لأسباب أمنية، يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى، ثم حاول حذف حسابك.",
   "deleteAccountEnterPassword": "أدخل كلمة المرور الحالية لتأكيد الحذف.",
   "deleteAccountPasswordRequired": "يرجى إدخال كلمة المرور.",
+  "adCouldNotLoad": "تعذّر تحميل الإعلان. حاول مرة أخرى بعد قليل.",
   "unpaidOrderMessage": "السلام عليكم حضرتك عليك {totalUnpaid} من اصل مبلغ {totalAmount} لاوردر بتاريخ يوم {orderDate}",
     "@unpaidOrderMessage": {
       "placeholders": {

@@ -9,7 +9,10 @@ import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
 import 'package:in_your_hand/features/orders/data/payment_model.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/services/ad_manger.dart';
+import '../../../../core/services/pdf_rewarded_gate.dart';
 import '../../../../core/utils/pdf_manger.dart';
+import '../../../../core/widgets/screen_banner_ad.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -42,10 +45,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   void initState() {
-    _selectedStatus = widget.order.status;
-    noteController=TextEditingController(text:widget.order.notes);
-    context.read<PaymentsCubit>().loadPayments(widget.order.id);
     super.initState();
+    _selectedStatus = widget.order.status;
+    noteController = TextEditingController(text: widget.order.notes);
+    context.read<PaymentsCubit>().loadPayments(widget.order.id);
   }
 
   static String _statusLabel(BuildContext context, OrderStatus status) {
@@ -63,6 +66,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   @override
   void dispose() {
     paymentController.dispose();
+    noteController.dispose();
     super.dispose();
   }
 
@@ -91,12 +95,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   final payments = paymentsState is PaymentsLoaded
                       ? paymentsState.payments
                       : <PaymentModel>[];
-                  showOrderPdfPreview(
-                    context,
-                    order: widget.order,
-                    client: widget.client,
-                    payments: payments,
-                  );
+                  PdfRewardedGate.run(context, () {
+                    showOrderPdfPreview(
+                      context,
+                      order: widget.order,
+                      client: widget.client,
+                      payments: payments,
+                    );
+                  });
                 },
                 icon: Image.asset("assets/icons/pdf.png", height: 33, width: 33),
               ),
@@ -590,17 +596,20 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     Center(
                       child: CustomButton(
                         title: l10n.printReport,
-                        onTap:() {
-                          final paymentsState = context.read<PaymentsCubit>().state;
+                        onTap: () {
+                          final paymentsState =
+                              context.read<PaymentsCubit>().state;
                           final payments = paymentsState is PaymentsLoaded
                               ? paymentsState.payments
                               : <PaymentModel>[];
-                          printOrderPdf(
-                            context,
-                            order: widget.order,
-                            client: widget.client,
-                            payments: payments,
-                          );
+                          PdfRewardedGate.run(context, () async {
+                            await printOrderPdf(
+                              context,
+                              order: widget.order,
+                              client: widget.client,
+                              payments: payments,
+                            );
+                          });
                         },
                         height: 70.h(context),
                         width: 180.w(context),
@@ -609,8 +618,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 20.h(context)),
-
+              SizedBox(height: 10.h(context)),
+              ScreenBannerAd(
+                adUnitId: AdManger.orderDetailsBanner,
+              ),
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:in_your_hand/core/services/pdf_rewarded_gate.dart';
 import 'package:in_your_hand/core/utils/pdf_manger.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -12,8 +13,10 @@ class GeneratePdfScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: () async {
-            // final pdf = await PdfManger.generatePdfReport();
+          onPressed: () {
+            PdfRewardedGate.run(context, () {
+              showPdfPreview(context);
+            });
           },
           child: Text(l10n.showReport),
         ),
