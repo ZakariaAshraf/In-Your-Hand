@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/orders/presentation/widgets/order_item.dart';
 
+import '../../../../core/services/ad_manger.dart';
+import '../../../../core/services/pdf_rewarded_gate.dart';
 import '../../../../core/utils/pdf_manger.dart';
+import '../../../../core/widgets/screen_banner_ad.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_toast_widget.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -46,11 +49,13 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                 if (state is! OrdersSuccess || state.orders.isEmpty){
                   return CustomToastWidget.show(context: context, title: l10n.noOrders, iconPath: "assets/icons/icon.png",);
                 }
-                showClientPdfPreview(
-                  context,
-                  client: widget.client,
-                  orders: state.orders,
-                );
+                PdfRewardedGate.run(context, () {
+                  showClientPdfPreview(
+                    context,
+                    client: widget.client,
+                    orders: state.orders,
+                  );
+                });
               },
               icon: Image.asset("assets/icons/pdf.png", width: 33, height: 33),
             ),
@@ -222,14 +227,19 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                         child: Center(
                           child: CustomButton(
                             title: l10n.printReport,
-                            onTap:  () {
+                            onTap: () {
                               final state = context.read<OrdersCubit>().state;
-                              if (state is! OrdersSuccess || state.orders.isEmpty) return;
-                              printClientPdf(
-                                context,
-                                client: widget.client,
-                                orders: state.orders,
-                              );
+                              if (state is! OrdersSuccess ||
+                                  state.orders.isEmpty) {
+                                return;
+                              }
+                              PdfRewardedGate.run(context, () async {
+                                await printClientPdf(
+                                  context,
+                                  client: widget.client,
+                                  orders: state.orders,
+                                );
+                              });
                             },
                             height: 70.h(context),
                             width: 330.w(context),
@@ -246,7 +256,10 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                 return SizedBox.shrink();
               },
             ),
-            SizedBox(height: 20.h(context)),
+            SizedBox(height: 10.h(context)),
+            ScreenBannerAd(
+              adUnitId: AdManger.clientDetailsBanner,
+            ),
           ],
         ),
       ),

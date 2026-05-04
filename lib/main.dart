@@ -15,6 +15,7 @@ import 'package:in_your_hand/features/home/presentation/screens/home_screen.dart
 import 'package:in_your_hand/features/orders/presentation/cubit/orders_cubit.dart';
 
 import 'core/cache/cache_helper.dart';
+import 'core/services/mobile_ads_initializer.dart';
 import 'core/locale/providers/locale_provider.dart';
 import 'core/themes/providers/theme_provider.dart';
 import 'core/themes/text_theme.dart';
@@ -34,7 +35,7 @@ final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await initializeMobileAds();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);

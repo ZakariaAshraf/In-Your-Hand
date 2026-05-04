@@ -601,4 +601,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAccountPasswordRequired => 'Please enter your password.';
+
+  @override
+  String get adCouldNotLoad => 'Ad could not load. Try again in a moment.';
 }

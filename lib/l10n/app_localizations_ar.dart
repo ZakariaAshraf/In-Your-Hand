@@ -593,4 +593,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deleteAccountPasswordRequired => 'يرجى إدخال كلمة المرور.';
+
+  @override
+  String get adCouldNotLoad => 'تعذّر تحميل الإعلان. حاول مرة أخرى بعد قليل.';
 }

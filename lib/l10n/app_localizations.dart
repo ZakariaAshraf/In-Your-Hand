@@ -1223,6 +1223,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter your password.'**
   String get deleteAccountPasswordRequired;
+
+  /// No description provided for @adCouldNotLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad could not load. Try again in a moment.'**
+  String get adCouldNotLoad;
 }
 
 class _AppLocalizationsDelegate
