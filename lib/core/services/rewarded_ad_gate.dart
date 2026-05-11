@@ -6,12 +6,13 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../l10n/app_localizations.dart';
 import 'ad_manger.dart';
 
-/// Rewarded ads for PDF preview and print. One completed reward unlocks the
-/// current action and grants one extra PDF action before another ad is required.
-class PdfRewardedGate {
-  PdfRewardedGate._();
+/// Rewarded ad gate for premium-style actions (PDF preview/print, spreadsheet
+/// import, voice orders, etc.). One completed reward runs the action once and
+/// grants one spare use before another ad is required.
+class RewardedAdGate {
+  RewardedAdGate._();
 
-  static int _sparePdfUses = 0;
+  static int _spareUses = 0;
   static RewardedAd? _preloaded;
   static bool _loadInFlight = false;
 
@@ -28,7 +29,7 @@ class PdfRewardedGate {
         },
         onAdFailedToLoad: (error) {
           _loadInFlight = false;
-          debugPrint('PdfRewardedGate preload failed: $error');
+          debugPrint('RewardedAdGate preload failed: $error');
         },
       ),
     );
@@ -39,8 +40,8 @@ class PdfRewardedGate {
     BuildContext context,
     FutureOr<void> Function() action,
   ) async {
-    if (_sparePdfUses > 0) {
-      _sparePdfUses--;
+    if (_spareUses > 0) {
+      _spareUses--;
       await action();
       preload();
       return;
@@ -68,7 +69,7 @@ class PdfRewardedGate {
           preload();
         },
         onAdFailedToShowFullScreenContent: (a, err) {
-          debugPrint('PdfRewardedGate show failed: $err');
+          debugPrint('RewardedAdGate show failed: $err');
           a.dispose();
           preload();
           showLoadError();
@@ -77,7 +78,7 @@ class PdfRewardedGate {
 
       await ad.show(
         onUserEarnedReward: (ad, reward) {
-          _sparePdfUses = 1;
+          _spareUses = 1;
           unawaited(executeAction());
         },
       );
@@ -98,7 +99,7 @@ class PdfRewardedGate {
           await present(loaded);
         },
         onAdFailedToLoad: (error) {
-          debugPrint('PdfRewardedGate load failed: $error');
+          debugPrint('RewardedAdGate load failed: $error');
           showLoadError();
           preload();
         },

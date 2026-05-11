@@ -10,12 +10,16 @@ import 'package:in_your_hand/features/orders/data/order_model.dart';
 import 'package:in_your_hand/features/orders/data/payment_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/services/ad_manger.dart';
-import '../../../../core/services/pdf_rewarded_gate.dart';
+import '../../../../core/services/rewarded_ad_gate.dart';
+import '../../../../core/services/printer/thermal_printer_service.dart';
 import '../../../../core/utils/pdf_manger.dart';
+import '../../../../core/widgets/print_method_dialog.dart';
 import '../../../../core/widgets/screen_banner_ad.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../business_profile/domain/entities/business_profile.dart';
+import '../../../settings/presentation/Cubit/user_cubit.dart';
 import '../cubit/payments_cubit.dart';
 import '../cubit/orders_cubit.dart';
 import '../widgets/payment_history_table.dart';
@@ -95,12 +99,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   final payments = paymentsState is PaymentsLoaded
                       ? paymentsState.payments
                       : <PaymentModel>[];
-                  PdfRewardedGate.run(context, () {
+                  BusinessProfile? businessProfile;
+                  final userState = context.read<UserCubit>().state;
+                  if (userState is UserLoaded) {
+                    businessProfile = userState.profile;
+                  }
+                  RewardedAdGate.run(context, () {
                     showOrderPdfPreview(
                       context,
                       order: widget.order,
                       client: widget.client,
                       payments: payments,
+                      businessProfile: businessProfile,
                     );
                   });
                 },
@@ -602,14 +612,177 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           final payments = paymentsState is PaymentsLoaded
                               ? paymentsState.payments
                               : <PaymentModel>[];
-                          PdfRewardedGate.run(context, () async {
-                            await printOrderPdf(
-                              context,
-                              order: widget.order,
-                              client: widget.client,
-                              payments: payments,
-                            );
-                          });
+                          PrintMethodDialog.show(
+                            context,
+                            onThermalPrinter: () {
+                              RewardedAdGate.run(context, () async {
+                                final messenger =
+                                    ScaffoldMessenger.of(context);
+                                messenger.hideCurrentSnackBar();
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text(l10n.thermalPrintingPreparing),
+                                    duration:
+                                        const Duration(seconds: 8),
+                                  ),
+                                );
+
+                                try {
+                                  BusinessProfile? businessProfile;
+                                  final userState =
+                                      context.read<UserCubit>().state;
+                                  if (userState is UserLoaded) {
+                                    businessProfile = userState.profile;
+                                  }
+
+                                  final pdfBytes =
+                                      await generateOrderReceiptPdf(
+                                    order: widget.order,
+                                    client: widget.client,
+                                    payments: payments,
+                                    l10n: l10n,
+                                    businessProfile: businessProfile,
+                                  );
+                                  final pages =
+                                      await rasterizePdfToPngPages(
+                                    pdfBytes,
+                                    dpi: 200,
+                                  );
+                                  if (pages.isEmpty) {
+                                    throw StateError(
+                                        'Failed to rasterize receipt');
+                                  }
+                                  messenger.hideCurrentSnackBar();
+
+                                  final imageBytes = pages.first;
+                                  await showDialog<void>(
+                                    context: context,
+                                    builder: (dialogContext) {
+                                      return AlertDialog(
+                                        title: Text(l10n.printThermalPrinter,style: theme.titleMedium,),
+                                        content: SizedBox(
+                                          width: double.maxFinite,
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Image.memory(imageBytes),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(dialogContext)
+                                                    .pop(),
+                                            child: Text(
+                                              l10n.thermalReceiptPreviewCancel,
+                                            ),
+                                          ),
+                                          FilledButton(
+                                            onPressed: () async {
+                                              Navigator.of(dialogContext).pop();
+                                              messenger.hideCurrentSnackBar();
+                                              messenger.showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    l10n.thermalPrintingSending,
+                                                  ),
+                                                  duration: const Duration(
+                                                    seconds: 8,
+                                                  ),
+                                                ),
+                                              );
+                                              try {
+                                                await ThermalPrinterService()
+                                                    .printReceiptAsImage(
+                                                  imageBytes,
+                                                );
+                                                messenger.hideCurrentSnackBar();
+                                                messenger.showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      l10n
+                                                          .thermalPrintingSuccess,
+                                                    ),
+                                                  ),
+                                                );
+                                              } catch (e) {
+                                                messenger.hideCurrentSnackBar();
+                                                final msg = e
+                                                        .toString()
+                                                        .contains(
+                                                            'No saved printer MAC address')
+                                                    ? l10n
+                                                        .thermalPrinterNotSelected
+                                                    : e
+                                                            .toString()
+                                                            .contains(
+                                                                'Bluetooth permissions are required')
+                                                        ? l10n
+                                                            .bluetoothPermissionsRequired
+                                                    : l10n.printerConnectFailed(
+                                                        e.toString(),
+                                                      );
+                                                messenger.showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(msg),
+                                                    backgroundColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .error,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Text(
+                                              l10n.thermalReceiptPreviewPrint,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } catch (e) {
+                                  messenger.hideCurrentSnackBar();
+                                  final msg = e.toString().contains(
+                                          'No saved printer MAC address')
+                                      ? l10n.thermalPrinterNotSelected
+                                      : l10n.printerConnectFailed(
+                                          e.toString(),
+                                        );
+                                  messenger.showSnackBar(
+                                    SnackBar(
+                                      content: Text(msg),
+                                      backgroundColor:
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                    ),
+                                  );
+                                }
+                              });
+                            },
+                            onStandardPrinter: () {
+                              RewardedAdGate.run(context, () async {
+                                BusinessProfile? businessProfile;
+                                final userState =
+                                    context.read<UserCubit>().state;
+                                if (userState is UserLoaded) {
+                                  businessProfile = userState.profile;
+                                }
+                                await printOrderPdf(
+                                  context,
+                                  order: widget.order,
+                                  client: widget.client,
+                                  payments: payments,
+                                  businessProfile: businessProfile,
+                                );
+                              });
+                            },
+                          );
                         },
                         height: 70.h(context),
                         width: 180.w(context),

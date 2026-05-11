@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/features/settings/presentation/screens/setting_screen.dart';
 import '../Cubit/user_cubit.dart';
+import '../../../../core/session/session_cubit.dart';
+import '../../../../core/session/session_context.dart';
 class SettingView extends StatelessWidget {
   const SettingView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final sessionState = context.watch<SessionCubit>().state;
+    final sessionContext =
+        sessionState is SessionLoaded ? sessionState.context : null;
+    final isGuest = sessionContext is GuestSession;
     return Scaffold(
       body: BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
@@ -14,9 +20,8 @@ class SettingView extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is UserLoaded) {
             return SettingScreen(
-              name: state.user.name,
-              phone: state.user.phone,
-              photoUrl: state.user.charUrl,
+              profile: state.profile,
+              isGuest: isGuest,
             );
             // return Scaffold(
             //   appBar: AppBar(),

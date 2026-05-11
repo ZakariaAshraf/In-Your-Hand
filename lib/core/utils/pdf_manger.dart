@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,13 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
+import 'package:in_your_hand/core/storage/invoice_logo_bytes.dart';
+import 'package:in_your_hand/features/business_profile/domain/entities/business_profile.dart';
 import '../../features/clients/data/clients_model.dart';
 import '../../features/orders/data/order_model.dart';
 import '../../features/orders/data/payment_model.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/print_method_dialog.dart';
 
 Future<void> _logPdfReport({
   required String reportType,
@@ -81,6 +85,7 @@ class PdfManger {
     required ClientModel client,
     required List<PaymentModel> payments,
     required AppLocalizations l10n,
+    BusinessProfile? businessProfile,
   }) async {
     final font = await _loadArabicFont();
     final pdf = pw.Document(
@@ -93,6 +98,16 @@ class PdfManger {
     );
 
     final totalUnpaid = order.totalAmount - order.totalPaid;
+
+    pw.ImageProvider? merchantLogoProvider;
+    final logoBytes = await readLogoBytesForPdf(businessProfile?.logoLocalPath);
+    if (logoBytes != null && logoBytes.isNotEmpty) {
+      try {
+        merchantLogoProvider = pw.MemoryImage(logoBytes);
+      } catch (_) {
+        merchantLogoProvider = null;
+      }
+    }
 
     pdf.addPage(
       pw.MultiPage(
@@ -107,6 +122,11 @@ class PdfManger {
               child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
+                _businessInvoiceHeader(
+                  font: font,
+                  profile: businessProfile,
+                  logoProvider: merchantLogoProvider,
+                ),
                 // Header
                 pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -250,6 +270,7 @@ class PdfManger {
     required ClientModel client,
     required List<OrderModel> orders,
     required AppLocalizations l10n,
+    BusinessProfile? businessProfile,
   }) async {
     final font = await _loadArabicFont();
     final pdf = pw.Document(
@@ -260,6 +281,16 @@ class PdfManger {
         boldItalic: font,
       ),
     );
+
+    pw.ImageProvider? merchantLogoProvider;
+    final logoBytes = await readLogoBytesForPdf(businessProfile?.logoLocalPath);
+    if (logoBytes != null && logoBytes.isNotEmpty) {
+      try {
+        merchantLogoProvider = pw.MemoryImage(logoBytes);
+      } catch (_) {
+        merchantLogoProvider = null;
+      }
+    }
 
     final totalOrders = orders.length;
     final totalAmount = orders.fold<double>(
@@ -285,6 +316,11 @@ class PdfManger {
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
+                  _businessInvoiceHeader(
+                    font: font,
+                    profile: businessProfile,
+                    logoProvider: merchantLogoProvider,
+                  ),
                   // Header
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -452,6 +488,76 @@ class PdfManger {
     );
   }
 
+  /// Optional merchant block for invoices; omitted when no data and no logo.
+  static pw.Widget _businessInvoiceHeader({
+    required pw.Font font,
+    BusinessProfile? profile,
+    pw.ImageProvider? logoProvider,
+  }) {
+    final name = profile?.businessName.trim() ?? '';
+    final phone = profile?.phone?.trim() ?? '';
+    final address = profile?.address?.trim() ?? '';
+    final hasText =
+        name.isNotEmpty || phone.isNotEmpty || address.isNotEmpty;
+    if (logoProvider == null && !hasText) {
+      return pw.SizedBox.shrink();
+    }
+
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+      children: [
+        pw.Row(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            if (logoProvider != null) ...[
+              pw.SizedBox(
+                width: 56,
+                height: 56,
+                child:
+                    pw.Image(logoProvider, fit: pw.BoxFit.contain),
+              ),
+              pw.SizedBox(width: 12),
+            ],
+            pw.Expanded(
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  if (name.isNotEmpty)
+                    pw.Text(
+                      name,
+                      style: pw.TextStyle(
+                        font: font,
+                        fontSize: 14,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                  if (phone.isNotEmpty) ...[
+                    if (name.isNotEmpty) pw.SizedBox(height: 4),
+                    pw.Text(
+                      phone,
+                      style: pw.TextStyle(font: font, fontSize: 10),
+                    ),
+                  ],
+                  if (address.isNotEmpty) ...[
+                    if (name.isNotEmpty || phone.isNotEmpty)
+                      pw.SizedBox(height: 4),
+                    pw.Text(
+                      address,
+                      style: pw.TextStyle(font: font, fontSize: 10),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+        pw.SizedBox(height: 12),
+        pw.Container(height: 1, color: PdfColors.grey400),
+        pw.SizedBox(height: 16),
+      ],
+    );
+  }
+
   static pw.Widget _summaryTile({
     required String title,
     required String value,
@@ -493,8 +599,38 @@ void showPdfPreview(BuildContext context) {
       builder: (context) {
         final l10n = AppLocalizations.of(context)!;
         return Scaffold(
-          appBar: AppBar(title: Text(l10n.pdfPreviewTitle)),
+          appBar: AppBar(
+            title: Text(l10n.pdfPreviewTitle),
+            actions: [
+              IconButton(
+                tooltip: l10n.printMethodTitle,
+                icon: const Icon(Icons.print_outlined),
+                onPressed: () {
+                  PrintMethodDialog.show(
+                    context,
+                    onThermalPrinter: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(l10n.thermalPrintingComingSoon),
+                        ),
+                      );
+                    },
+                    onStandardPrinter: () async {
+                      await Printing.layoutPdf(
+                        onLayout: (format) async {
+                          final doc = await PdfManger.generatePdfReport();
+                          return doc.save();
+                        },
+                        name: 'report.pdf',
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
           body: PdfPreview(
+            allowPrinting: false,
             build: (format) async {
               final doc = await PdfManger.generatePdfReport();
               return doc.save();
@@ -513,6 +649,7 @@ void showOrderPdfPreview(
   required OrderModel order,
   required ClientModel client,
   required List<PaymentModel> payments,
+  BusinessProfile? businessProfile,
 }) {
   unawaited(_logPdfReport(reportType: 'order', action: 'preview'));
   final l10n = AppLocalizations.of(context)!;
@@ -533,6 +670,7 @@ void showOrderPdfPreview(
                 client: client,
                 payments: payments,
                 l10n: l10n,
+                businessProfile: businessProfile,
               );
               return doc.save();
             },
@@ -549,6 +687,7 @@ Future<void> printOrderPdf(
   required OrderModel order,
   required ClientModel client,
   required List<PaymentModel> payments,
+  BusinessProfile? businessProfile,
 }) async {
   final l10n = AppLocalizations.of(context)!;
   await _logPdfReport(reportType: 'order', action: 'print');
@@ -559,11 +698,185 @@ Future<void> printOrderPdf(
         client: client,
         payments: payments,
         l10n: l10n,
+        businessProfile: businessProfile,
       );
       return doc.save();
     },
     name: '${client.name}_order.pdf',
   );
+}
+
+/// Generate a receipt-sized PDF (thermal roll) for a single order.
+///
+/// This is designed for Arabic-safe raster printing (PDF → image → ESC/POS).
+Future<Uint8List> generateOrderReceiptPdf({
+  required OrderModel order,
+  required ClientModel client,
+  required List<PaymentModel> payments,
+  required AppLocalizations l10n,
+  BusinessProfile? businessProfile,
+  PdfPageFormat pageFormat = PdfPageFormat.roll80,
+}) async {
+  final font = await PdfManger._loadArabicFont();
+  final pdf = pw.Document(
+    theme: pw.ThemeData.withFont(
+      base: font,
+      bold: font,
+      italic: font,
+      boldItalic: font,
+    ),
+  );
+
+  pw.ImageProvider? merchantLogoProvider;
+  final logoBytes = await readLogoBytesForPdf(businessProfile?.logoLocalPath);
+  if (logoBytes != null && logoBytes.isNotEmpty) {
+    try {
+      merchantLogoProvider = pw.MemoryImage(logoBytes);
+    } catch (_) {
+      merchantLogoProvider = null;
+    }
+  }
+
+  final totalUnpaid = order.totalAmount - order.totalPaid;
+  final isArabic = l10n.localeName.startsWith('ar');
+
+  pdf.addPage(
+    pw.Page(
+      pageFormat: pageFormat,
+      margin: const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      build: (_) {
+        return pw.Directionality(
+          textDirection: isArabic ? pw.TextDirection.rtl : pw.TextDirection.ltr,
+          child: pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+            children: [
+              pw.Center(
+                child: pw.Column(
+                  children: [
+                    if (merchantLogoProvider != null)
+                      pw.Container(
+                        width: 72,
+                        height: 72,
+                        margin: const pw.EdgeInsets.only(bottom: 6),
+                        child: pw.Image(merchantLogoProvider),
+                      ),
+                    pw.Text(
+                      (businessProfile?.businessName ?? '').trim().isNotEmpty
+                          ? businessProfile!.businessName.trim()
+                          : l10n.settingsBusinessFallbackTitle,
+                      textAlign: pw.TextAlign.center,
+                      style: pw.TextStyle(
+                        fontSize: 16,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                    if ((businessProfile?.phone ?? '').trim().isNotEmpty)
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.only(top: 2),
+                        child: pw.Text(
+                          businessProfile!.phone!.trim(),
+                          textAlign: pw.TextAlign.center,
+                          style: const pw.TextStyle(fontSize: 10),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Divider(thickness: 0.8),
+              pw.SizedBox(height: 6),
+
+              pw.Text(
+                client.name,
+                style: pw.TextStyle(
+                  fontSize: 14,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              if ((client.phone ?? '').trim().isNotEmpty)
+                pw.Padding(
+                  padding: const pw.EdgeInsets.only(top: 2),
+                  child: pw.Text(
+                    client.phone!.trim(),
+                    style: const pw.TextStyle(fontSize: 10),
+                  ),
+                ),
+              pw.SizedBox(height: 8),
+              pw.Text(
+                order.description,
+                style: const pw.TextStyle(fontSize: 11),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Divider(thickness: 0.8),
+              pw.SizedBox(height: 6),
+
+              _receiptLine(
+                title: l10n.totalAmount,
+                value: order.totalAmount.toString(),
+              ),
+              _receiptLine(
+                title: l10n.totalPaid,
+                value: order.totalPaid.toString(),
+              ),
+              _receiptLine(
+                title: l10n.totalUnpaid,
+                value: totalUnpaid.toString(),
+                emphasize: totalUnpaid > 0,
+              ),
+
+              pw.SizedBox(height: 10),
+              pw.Divider(thickness: 0.8),
+              pw.SizedBox(height: 8),
+              pw.Center(
+                child: pw.Text(
+                  l10n.receiptThankYou,
+                  style: const pw.TextStyle(fontSize: 10),
+                ),
+              ),
+              pw.SizedBox(height: 6),
+            ],
+          ),
+        );
+      },
+    ),
+  );
+
+  return pdf.save();
+}
+
+pw.Widget _receiptLine({
+  required String title,
+  required String value,
+  bool emphasize = false,
+}) {
+  final style = pw.TextStyle(
+    fontSize: 11,
+    fontWeight: emphasize ? pw.FontWeight.bold : pw.FontWeight.normal,
+  );
+  return pw.Padding(
+    padding: const pw.EdgeInsets.symmetric(vertical: 2),
+    child: pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+      children: [
+        pw.Expanded(child: pw.Text(title, style: style)),
+        pw.SizedBox(width: 8),
+        pw.Text(value, style: style),
+      ],
+    ),
+  );
+}
+
+/// Rasterize a PDF into PNG page images (first page usually enough for receipts).
+Future<List<Uint8List>> rasterizePdfToPngPages(
+  Uint8List pdfBytes, {
+  double dpi = 200,
+}) async {
+  final out = <Uint8List>[];
+  await for (final page in Printing.raster(pdfBytes, dpi: dpi)) {
+    final png = await page.toPng();
+    out.add(png);
+  }
+  return out;
 }
 
 /// Show a PDF preview for a specific client with all their orders.
@@ -572,6 +885,7 @@ void showClientPdfPreview(
   BuildContext context, {
   required ClientModel client,
   required List<OrderModel> orders,
+  BusinessProfile? businessProfile,
 }) {
   unawaited(_logPdfReport(reportType: 'client', action: 'preview'));
   final l10n = AppLocalizations.of(context)!;
@@ -591,6 +905,7 @@ void showClientPdfPreview(
                 client: client,
                 orders: orders,
                 l10n: l10n,
+                businessProfile: businessProfile,
               );
               return doc.save();
             },
@@ -606,6 +921,7 @@ Future<void> printClientPdf(
   BuildContext context, {
   required ClientModel client,
   required List<OrderModel> orders,
+  BusinessProfile? businessProfile,
 }) async {
   final l10n = AppLocalizations.of(context)!;
   await _logPdfReport(reportType: 'client', action: 'print');
@@ -615,6 +931,7 @@ Future<void> printClientPdf(
         client: client,
         orders: orders,
         l10n: l10n,
+        businessProfile: businessProfile,
       );
       return doc.save();
     },

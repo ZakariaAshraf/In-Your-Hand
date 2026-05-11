@@ -30,6 +30,13 @@ class CacheHelper {
   static List<String>?getStringList({required String key}) => prefs.getStringList(key);
   static Future<bool>?remove({required String key})async => await prefs.remove(key);
   static Future<bool>?clearAllData()async => await prefs.clear();
+
+  /// Persists onboarding completion (`false` = show onboarding; default when unset).
+  static Future<void> setOnboardingSeen(bool value) =>
+      set(key: CacheKeys.isOnBoardingSeen, value: value);
+
+  static bool get isOnboardingSeen =>
+      prefs.getBool(CacheKeys.isOnBoardingSeen) ?? false;
 }
 class CacheKeys {
   static const String theme = 'is_dark_mode';
@@ -40,4 +47,5 @@ class CacheKeys {
   static const String userPhone = 'user_phone';
   static const String userCharacter = 'user_character';
   static const String isOnBoardingSeen = 'is_on_boarding_seen';
+  static const String selectedPrinterMacAddress = 'selected_printer_mac_address';
 }

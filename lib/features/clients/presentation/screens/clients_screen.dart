@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_your_hand/core/services/rewarded_ad_gate.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
+import 'package:in_your_hand/features/clients/presentation/models/client_import_outcome.dart';
 import 'package:in_your_hand/core/widgets/default_message_card.dart';
-import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/clients/presentation/cubit/clients_cubit.dart';
 import 'package:in_your_hand/features/clients/presentation/screens/add_clients_screen.dart';
 import 'package:in_your_hand/features/clients/presentation/widgets/clients_item.dart';
@@ -36,10 +37,48 @@ class _ClientsScreenState extends State<ClientsScreen> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         actions: [
+          IconButton(
+            tooltip: l10n.clientsImportFromExcelTooltip,
+            color: AppColors.primary,
+            icon: const Icon(Icons.upload_file_rounded),
+            onPressed: () {
+              RewardedAdGate.run(context, () async {
+                if (!context.mounted) return;
+                final messenger = ScaffoldMessenger.of(context);
+                final cubit = context.read<ClientsCubit>();
+                final outcome = await cubit.pickAndImportClients();
+                if (!mounted) return;
+                switch (outcome.result) {
+                  case ClientImportResult.success:
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          l10n.clientsImportedSuccess(outcome.importedCount),
+                        ),
+                      ),
+                    );
+                  case ClientImportResult.cancelled:
+                    break;
+                  case ClientImportResult.failure:
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          l10n.clientsImportFailed(
+                            outcome.errorMessage ?? '',
+                          ),
+                        ),
+                        backgroundColor: colorScheme.error,
+                      ),
+                    );
+                }
+              });
+            },
+          ),
           IconButton(
             color: AppColors.primary,
             icon: Center(child: Icon(Icons.person_add_rounded, size: 33)),

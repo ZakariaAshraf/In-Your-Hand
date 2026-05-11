@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:in_your_hand/core/utils/screen_util.dart';
-import '../../../../core/generated/assets_helper.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/widgets/character_item.dart';
+
+import '../../../../core/widgets/business_logo_display.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../authenticate/presentation/manager/auth_cubit.dart';
 import '../Cubit/user_cubit.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -17,217 +14,89 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController businessNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-
-  bool _showCharacterList = false;
-  String? _displayCharPath;
-  int selectedIndex = -1;
-
-  final List<CharacterModel> characters = [
-    // CharacterModel(
-    //   id: "male_student",
-    //   imagePath: "assets/icons/mstudent.png",
-    //   imageName: "Male Student",
-    // ),
-    // CharacterModel(
-    //   id: "female_student",
-    //   imagePath: "assets/icons/fstudent.png",
-    //   imageName: "Female Student",
-    // ),
-    CharacterModel(
-      id: 'male_busi',
-      imagePath: "assets/icons/mbusi.png",
-      imageName: "Business Man",
-    ),
-    CharacterModel(
-      id: 'female_busi',
-      imagePath: "assets/icons/fbusi.png",
-      imageName: "Business Woman",
-    ),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<UserCubit>().getCurrentUserData();
-  }
+  final TextEditingController addressController = TextEditingController();
 
   @override
   void dispose() {
-    fullNameController.dispose();
+    businessNameController.dispose();
     phoneController.dispose();
+    addressController.dispose();
     super.dispose();
-  }
-  void _showDeleteAccountDialog(BuildContext context, AppLocalizations l10n) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => _DeleteAccountDialog(
-        l10n: l10n,
-        onCancel: () => Navigator.of(ctx).pop(),
-        onConfirm: (password) {
-          Navigator.of(ctx).pop();
-          context.read<UserCubit>().deleteAccount(password);
-        },
-        scaffoldMessenger: ScaffoldMessenger.of(context),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final theme=Theme.of(context).textTheme;
+
     return Scaffold(
-      appBar: AppBar(title: Text(l10n!.editProfile)),
+      appBar: AppBar(title: Text(l10n.editProfile)),
       body: BlocConsumer<UserCubit, UserState>(
         listener: (context, state) {
-          if (state is UserSuccess) {
-            Navigator.pop(context);
-          } else if (state is UserAccountDeleted) {
-            context.read<AuthCubit>().signOut();
-            if (context.mounted) {
-              Navigator.of(context, rootNavigator: true)
-                  .pushNamedAndRemoveUntil(
-                "/signIn",
-                (route) => false,
-              );
-            }
-          } else if (state is UserError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+          if (state is UserError) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
           if (state is UserLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-
-          if (state is UserError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.message),
-                  TextButton(
-                    onPressed: () =>
-                        context.read<UserCubit>().getCurrentUserData(),
-                    child: Text(l10n.tryAgain),
-                  ),
-                ],
-              ),
-            );
+          if (state is! UserLoaded) {
+            return Center(child: Text(l10n.tryAgain));
           }
-          final user = context.read<UserCubit>().user;
 
-          if (user != null) {
-            if (fullNameController.text.isEmpty) {
-              fullNameController.text = user.name;
-            }
-            if (phoneController.text.isEmpty) {
-              phoneController.text = user.phone;
-            }
-            _displayCharPath ??= getCharacterAssetPath(user.charUrl);
+          final profile = state.profile;
+
+          if (businessNameController.text.isEmpty) {
+            businessNameController.text = profile.businessName;
+          }
+          if (phoneController.text.isEmpty) {
+            phoneController.text = profile.phone ?? '';
+          }
+          if (addressController.text.isEmpty) {
+            addressController.text = profile.address ?? '';
           }
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                /// --- Image Section ---
                 Center(
-                  child: Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: const Color(0xffe8d4d4),
-                        radius: 60,
-                        child: ClipOval(
-                          child: Image.asset(
-                            _displayCharPath ?? "assets/icons/logo.png",
-                            fit: BoxFit.cover,
-                            width: 120,
-                            height: 120,
-                            errorBuilder: (c, e, s) =>
-                                const Icon(Icons.person, size: 60),
-                          ),
+                  child: CircleAvatar(
+                    backgroundColor: const Color(0xffe8d4d4),
+                    radius: 56,
+                    child: ClipOval(
+                      child: buildBusinessLogoDisplay(
+                        logoLocalPath: profile.logoLocalPath,
+                        size: 112,
+                        fallback: Icon(
+                          Icons.business_center_outlined,
+                          size: 48,
+                          color: Colors.grey.shade700,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _showCharacterList = !_showCharacterList;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.blackSecondary,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: const Icon(
-                            Icons.edit,
-                            size: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-
-                const SizedBox(height: 16),
-                AnimatedCrossFade(
-                  firstChild: const SizedBox(width: double.infinity),
-                  secondChild: Column(
-                    children: [
-                      Text(
-                        l10n.selectAvatar,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        height: 200.h(context),
-                        child: ListView.builder(
-                          itemCount: characters.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return CharacterItem(
-                              showCharName: false,
-                              height: 90,
-                              width: 90,
-                              character: characters[index],
-                              isSelected: selectedIndex == index,
-                              onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                  _displayCharPath =
-                                      characters[index].imagePath;
-                                });
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  crossFadeState: _showCharacterList
-                      ? CrossFadeState.showSecond
-                      : CrossFadeState.showFirst,
-                  duration: const Duration(milliseconds: 300),
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  onPressed: () =>
+                      context.read<UserCubit>().pickAndSaveBusinessLogo(),
+                  icon: const Icon(Icons.photo_library_outlined,color: Colors.green,),
+                  label: Text(l10n.editProfileChooseLogo,style: theme.titleSmall,),
                 ),
-
                 const SizedBox(height: 24),
                 TextFormField(
-                  controller: fullNameController,
+                  controller: businessNameController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    labelText: l10n.fullName,
-                    prefixIcon: const Icon(Icons.person),
+                    labelText: l10n.editProfileBusinessNameLabel,
+                    prefixIcon: const Icon(Icons.storefront_outlined),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -241,33 +110,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     prefixIcon: const Icon(Icons.phone),
                   ),
                 ),
-
-                const SizedBox(height: 24),
-
-                /// --- Save Button ---
-                CustomButton(
-                  color: AppColors.blackSecondary,
-                  title:l10n.saveChanges,
-                  onTap: () {
-                    String charToSend;
-                    if (selectedIndex != -1) {
-                      charToSend = characters[selectedIndex].id;
-                    } else {
-                      charToSend = user?.charUrl ?? "";
-                    }
-                    context.read<UserCubit>().updateProfile(
-                      fullName: fullNameController.text,
-                      phoneNumber: phoneController.text,
-                      charPath: charToSend,
-                    );
-                  },
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: addressController,
+                  maxLines: 2,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    labelText: l10n.editProfileAddressLabel,
+                    prefixIcon: const Icon(Icons.location_on_outlined),
+                  ),
                 ),
                 const SizedBox(height: 24),
-
                 CustomButton(
-                  color: Colors.redAccent,
-                  title: l10n.deleteAccount,
-                  onTap: () => _showDeleteAccountDialog(context, l10n),
+                  title: l10n.saveChanges,
+                  onTap: () async {
+                    final cubit = context.read<UserCubit>();
+                    await cubit.updateBusinessProfile(
+                      businessName: businessNameController.text,
+                      phone: phoneController.text,
+                      address: addressController.text,
+                    );
+                    if (!context.mounted) return;
+                    if (cubit.state is UserLoaded) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                 ),
               ],
             ),
@@ -278,90 +147,3 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 }
 
-class _DeleteAccountDialog extends StatefulWidget {
-  const _DeleteAccountDialog({
-    required this.l10n,
-    required this.onCancel,
-    required this.onConfirm,
-    required this.scaffoldMessenger,
-  });
-
-  final AppLocalizations l10n;
-  final VoidCallback onCancel;
-  final void Function(String password) onConfirm;
-  final ScaffoldMessengerState scaffoldMessenger;
-
-  @override
-  State<_DeleteAccountDialog> createState() => _DeleteAccountDialogState();
-}
-
-class _DeleteAccountDialogState extends State<_DeleteAccountDialog> {
-  final TextEditingController _passwordController = TextEditingController();
-  bool _obscure = true;
-
-  @override
-  void dispose() {
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final p = _passwordController.text.trim();
-    if (p.isEmpty) {
-      widget.scaffoldMessenger.showSnackBar(
-        SnackBar(content: Text(widget.l10n.deleteAccountPasswordRequired)),
-      );
-      return;
-    }
-    widget.onConfirm(p);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = widget.l10n;
-    return AlertDialog(
-      title: Text(
-        l10n.deleteAccountWarningTitle,
-        style: const TextStyle(color: Colors.red),
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(l10n.deleteAccountWarningMessage),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _passwordController,
-              obscureText: _obscure,
-              decoration: InputDecoration(
-                labelText: l10n.password,
-                hintText: l10n.deleteAccountEnterPassword,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscure ? Icons.visibility : Icons.visibility_off,
-                  ),
-                  onPressed: () => setState(() => _obscure = !_obscure),
-                ),
-              ),
-              onSubmitted: (_) => _submit(),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: widget.onCancel,
-          child: Text(l10n.cancel),
-        ),
-        FilledButton(
-          onPressed: _submit,
-          style: FilledButton.styleFrom(
-            backgroundColor: Colors.red,
-          ),
-          child: Text(l10n.deleteAccountConfirm),
-        ),
-      ],
-    );
-  }
-}

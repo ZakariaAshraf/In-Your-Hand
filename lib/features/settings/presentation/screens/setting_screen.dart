@@ -1,32 +1,37 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:in_your_hand/core/utils/screen_util.dart';
-import '../../../../core/generated/assets_helper.dart';
 import '../../../../core/generated/extentions.dart';
 import '../../../../core/locale/widgets/language_toggle_button.dart';
 import '../../../../core/themes/widgets/theme_toggle_button.dart';
 import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/business_logo_display.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/services/printer/thermal_printer_service.dart';
+import '../../../../core/services/printer/repos/printer_repository_prefs.dart';
 import '../../../authenticate/presentation/manager/auth_cubit.dart';
 import '../../../authenticate/presentation/pages/sign_in.dart';
+import '../../../premium/presentation/screens/premium_paywall_screen.dart';
 import '../../../help_support/help_support_screen.dart';
+import '../../../business_profile/domain/entities/business_profile.dart';
+import '../Cubit/user_cubit.dart';
 import '../components/settings_button.dart';
 import 'change_password_screen.dart';
 import 'edit_profile_screen.dart';
 
 class SettingScreen extends StatefulWidget {
-  final String name;
-  final String phone;
-  final String? photoUrl;
+  final BusinessProfile profile;
+  final bool isGuest;
 
   const SettingScreen({
     super.key,
-    required this.name,
-    required this.phone,
-    this.photoUrl,
+    required this.profile,
+    required this.isGuest,
   });
 
   @override
@@ -34,10 +39,12 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  final ThermalPrinterService _printerService = ThermalPrinterService();
+  final PrinterRepositoryPrefs _printerPrefs = const PrinterRepositoryPrefs();
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
-    String imagePath = getCharacterAssetPath(widget.photoUrl ?? "");
     final l10n = AppLocalizations.of(context);
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -70,11 +77,21 @@ class _SettingScreenState extends State<SettingScreen> {
                             backgroundColor: Color(0xffe8d4d4),
                             radius: 60,
                             child: ClipOval(
-                              child: Image.asset(
-                                imagePath,
-                                fit: BoxFit.cover,
-                                width: 120,
-                                height: 120,
+                              child: buildBusinessLogoDisplay(
+                                logoLocalPath: widget.profile.logoLocalPath,
+                                size: 120,
+                                fallback: Center(
+                                  child: Text(
+                                    (widget.profile.businessName.isNotEmpty
+                                            ? widget.profile.businessName
+                                            : '—')
+                                        .trim()
+                                        .characters
+                                        .take(1)
+                                        .toString(),
+                                    style: theme.titleLarge!.copyWith(color: Colors.green),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -108,7 +125,38 @@ class _SettingScreenState extends State<SettingScreen> {
                         ],
                       ),
                       const SizedBox(height: 12),
-                      Text(widget.name, style: theme.titleLarge),
+                      Text(
+                        widget.profile.businessName.trim().isNotEmpty
+                            ? widget.profile.businessName.trim()
+                            : l10n.settingsBusinessFallbackTitle,
+                        textAlign: TextAlign.center,
+                        style: theme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      if (widget.profile.businessName.trim().isEmpty &&
+                          widget.isGuest) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          l10n.guestModeHint,
+                          textAlign: TextAlign.center,
+                          style: theme.bodySmall?.copyWith(
+                            color: Colors.grey.shade700,
+                          ),
+                        ),
+                      ],
+                      if ((widget.profile.phone ?? '')
+                          .trim()
+                          .isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        SelectableText(
+                          widget.profile.phone!.trim(),
+                          textAlign: TextAlign.center,
+                          style: theme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,7 +167,6 @@ class _SettingScreenState extends State<SettingScreen> {
                             size: 20,
                           ),
                           Text(
-                            // l10n.cairoEgypt,
                             l10n.egypt,
                             style: theme.bodyMedium!.copyWith(
                               color: Colors.grey,
@@ -195,7 +242,9 @@ class _SettingScreenState extends State<SettingScreen> {
                       ).animate().fade().slideX(duration: 500.ms),
                       SettingsButton(
                         title: l10n.changePassword,
-                        function: () {
+                        function: widget.isGuest
+                            ? null
+                            : () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -207,15 +256,169 @@ class _SettingScreenState extends State<SettingScreen> {
                         iconData: Icons.lock_open_outlined,
                       ).animate().fade().slideX(duration: 600.ms),
                       SettingsButton(
-                        title: l10n.logout,
+                        title: l10n.printerSettings,
+                        function: () async {
+                          final messenger = ScaffoldMessenger.of(context);
+                          try {
+                            final devices =
+                                await _printerService.getPairedDevices();
+                            if (!context.mounted) return;
+                            if (devices.isEmpty) {
+                              messenger.showSnackBar(
+                                SnackBar(
+                                  content: Text(l10n.printerNoPairedDevices),
+                                ),
+                              );
+                              return;
+                            }
+
+                            await showModalBottomSheet<void>(
+                              context: context,
+                              showDragHandle: true,
+                              builder: (sheetContext) {
+                                return SafeArea(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 10,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              l10n.printerSelectPairedDevice,
+                                              style: theme.titleMedium
+                                                  ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Text(
+                                              l10n.printerSettingsSubtitle,
+                                              style: theme.bodySmall?.copyWith(
+                                                color: Colors.grey.shade700,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Flexible(
+                                        child: ListView.separated(
+                                          shrinkWrap: true,
+                                          itemCount: devices.length,
+                                          separatorBuilder: (_, __) =>
+                                              const Divider(height: 1),
+                                          itemBuilder: (_, index) {
+                                            final d = devices[index];
+                                            final name = d.name.trim();
+                                            final addr = d.macAddress.trim();
+                                            return ListTile(
+                                              leading: const Icon(
+                                                Icons.print_outlined,
+                                              ),
+                                              title: Text(name),
+                                              subtitle: addr.isEmpty
+                                                  ? null
+                                                  : Text(addr),
+                                              onTap: () async {
+                                                Navigator.of(sheetContext)
+                                                    .pop();
+                                                try {
+                                                  await _printerService
+                                                      .connect(addr);
+                                                  await _printerPrefs
+                                                      .saveSelectedMacAddress(
+                                                          addr);
+                                                  if (!context.mounted) return;
+                                                  messenger.showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        l10n.printerConnected(
+                                                          name,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                } catch (e) {
+                                                  if (!context.mounted) return;
+                                                  final msg = e
+                                                          .toString()
+                                                          .contains(
+                                                              'Bluetooth permissions are required')
+                                                      ? l10n
+                                                          .bluetoothPermissionsRequired
+                                                      : l10n
+                                                          .printerConnectFailed(
+                                                        e.toString(),
+                                                      );
+                                                  messenger.showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(msg),
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .error,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          } catch (e) {
+                            final msg = e
+                                    .toString()
+                                    .contains('Bluetooth permissions are required')
+                                ? l10n.bluetoothPermissionsRequired
+                                : l10n.printerConnectFailed('$e');
+                            messenger.showSnackBar(
+                              SnackBar(
+                                content: Text(msg),
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.error,
+                              ),
+                            );
+                          }
+                        },
+                        iconData: Icons.print_outlined,
+                        iconColor: Colors.deepPurple,
+                      ).animate().fade().slideX(duration: 650.ms),
+                      SettingsButton(
+                        title: widget.isGuest
+                            ? l10n.settingsPremiumBackupSubtitle
+                            : l10n.logout,
                         function: () async {
                           try {
-                            context.read<AuthCubit>().signOut();
-                            if (context.mounted) {
-                              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                                MaterialPageRoute(builder: (context) => const SignIn()),
-                                    (route) => false,
+                            if (widget.isGuest) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PremiumPaywallScreen(),
+                                ),
                               );
+                            } else {
+                              context.read<AuthCubit>().signOut();
+                              if (context.mounted) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const SignIn()),
+                                  (route) => false,
+                                );
+                              }
                             }
                           } catch (e) {
                             if (kDebugMode) {
@@ -226,6 +429,54 @@ class _SettingScreenState extends State<SettingScreen> {
                         iconData: Icons.logout,
                         iconColor: Colors.red,
                       ).animate().fade().slideX(duration: 700.ms),
+                      SettingsButton(
+                        title: l10n.deleteLocalData,
+                        function: () async {
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              final dialogL10n = AppLocalizations.of(
+                                dialogContext,
+                              )!;
+                              return BackdropFilter(
+                                filter: ImageFilter.blur(sigmaY: 3, sigmaX: 3),
+                                child: AlertDialog(
+                                  title: Text(dialogL10n.deleteOrder,style: theme.titleLarge!.copyWith(color: Colors.red),),
+                                  content: SizedBox(
+                                    width: MediaQuery.of(context).size.width * 0.8,
+                                    child: Text(dialogL10n.deleteLocalDataConfirm),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(dialogContext),
+                                      child: Text(
+                                        dialogL10n.cancel,
+                                        style: theme.titleMedium,
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        await context.read<UserCubit>().deleteLocalData();
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor: WidgetStatePropertyAll(
+                                          Colors.red,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        dialogL10n.delete,
+                                        style: theme.titleMedium,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        iconData: Icons.delete_forever,
+                        iconColor: Colors.redAccent,
+                      ).animate().fade().slideX(duration: 800.ms),
                     ],
                   ),
                 ),

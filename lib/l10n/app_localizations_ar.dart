@@ -105,6 +105,39 @@ class AppLocalizationsAr extends AppLocalizations {
   String get letsStart => 'لنبدأ ->';
 
   @override
+  String get onboardingSlide1Title => 'يعمل بدون إنترنت';
+
+  @override
+  String get onboardingSlide1Subtitle =>
+      'أدر العملاء والطلبات بدون شبكة، وقم بالمزامنة مع السحابة عند الاتصال.';
+
+  @override
+  String get onboardingSlide2Title => 'أوامر صوتية ذكية';
+
+  @override
+  String get onboardingSlide2Subtitle =>
+      'تكلّم بالعربية أو الإنجليزية — الذكاء الاصطناعي يملأ تفاصيل الطلب.';
+
+  @override
+  String get onboardingSlide3Title => 'طباعة فواتير احترافية';
+
+  @override
+  String get onboardingSlide3Subtitle =>
+      'إيصالات حرارية وتقارير PDF احترافية من هاتفك.';
+
+  @override
+  String get onboardingQuickSetupTitle => 'إعداد سريع';
+
+  @override
+  String get onboardingBusinessNameLabel => 'اسم النشاط (اختياري)';
+
+  @override
+  String get onboardingPhoneLabel => 'رقم الهاتف (اختياري)';
+
+  @override
+  String get onboardingStartCta => 'ابدأ';
+
+  @override
   String get chooseYourCharacter => 'اختر شخصيتك';
 
   @override
@@ -165,6 +198,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get orContinueWith => 'أو المتابعة مع';
+
+  @override
+  String get continueWithGoogle => 'المتابعة باستخدام Google';
+
+  @override
+  String get completeRegistration => 'إكمال التسجيل';
+
+  @override
+  String get googleProfileTitle => 'أكمل ملفك الشخصي';
+
+  @override
+  String get googleProfileSubtitle =>
+      'أضف رقم هاتفك واختر شخصيتك للبدء في استخدام التطبيق.';
+
+  @override
+  String get accountNameHint => 'الاسم';
+
+  @override
+  String get googleProfileCompleteFailed =>
+      'تعذر حفظ ملفك الشخصي. يرجى المحاولة مرة أخرى.';
 
   @override
   String get selectAvatar => 'اختر الصورة الرمزية';
@@ -559,6 +612,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get connectionError => 'أنت في وضع عدم الاتصال (Offline)';
 
   @override
+  String get aiRequiresInternetConnection =>
+      'الذكاء الاصطناعي يتطلب اتصالاً بالإنترنت';
+
+  @override
   String unpaidOrderMessage(
     Object orderDate,
     Object totalAmount,
@@ -596,4 +653,182 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adCouldNotLoad => 'تعذّر تحميل الإعلان. حاول مرة أخرى بعد قليل.';
+
+  @override
+  String get settingsBusinessFallbackTitle => 'نشاطك التجاري';
+
+  @override
+  String get guestModeHint =>
+      'أنت بتستخدم التطبيق بدون نسخة احتياطية على السحابة. اشترِ بريميوم لمزامنة بياناتك.';
+
+  @override
+  String get settingsPremiumBackupSubtitle =>
+      'بريميوم: نسخ احتياطي وتسجيل دخول';
+
+  @override
+  String get deleteLocalData => 'حذف البيانات المحلية';
+
+  @override
+  String get deleteLocalDataConfirm =>
+      'هل انت متاكد انك تريد حذف جميع البيانات المحلية';
+
+  @override
+  String get premiumPaywallTitle => 'بريميوم';
+
+  @override
+  String get premiumPaywallHeadline => 'ترقّى لبريميوم';
+
+  @override
+  String get premiumPaywallDescription =>
+      'انسخ كل حاجة على السحابة، وخلِّص من الإعلانات، وزوِّد استخدام الطلب بالصوت.';
+
+  @override
+  String get premiumBenefitCloudSync => 'نسخ احتياطي ومزامنة بين أجهزتك';
+
+  @override
+  String get premiumBenefitNoAds => 'بدون إعلانات';
+
+  @override
+  String get premiumBenefitAiVoice =>
+      'حدود أعلى لطلبات الصوت بالذكاء الاصطناعي';
+
+  @override
+  String get premiumSubscribePlaceholder => 'اشترك / ترقّية';
+
+  @override
+  String get premiumRestorePlaceholder => 'استعادة المشتريات';
+
+  @override
+  String get premiumAlreadySubscribedLogin => 'مشترك فعلاً؟ سجّل الدخول من هنا';
+
+  @override
+  String get premiumComingSoon => 'التكامل مع RevenueCat هيتم قريباً';
+
+  @override
+  String get premiumRestoreComingSoon => 'استعادة المشتريات هتتفعّل قريباً';
+
+  @override
+  String get premiumPurchaseSuccess => 'أنت الآن على باقة بريميوم. شكراً لك!';
+
+  @override
+  String get premiumRestoreSuccess => 'تمت استعادة المشتريات بنجاح.';
+
+  @override
+  String get premiumRestoreNoEntitlement =>
+      'لا يوجد اشتراك بريميوم نشط لهذا الحساب.';
+
+  @override
+  String get premiumOfferingsUnavailable =>
+      'الاشتراكات غير متاحة حالياً. تحقق من الاتصال أو حاول لاحقاً.';
+
+  @override
+  String get premiumPurchaseCancelled => 'تم إلغاء الشراء.';
+
+  @override
+  String get premiumPurchaseError => 'تعذّر إتمام الشراء. حاول مرة أخرى.';
+
+  @override
+  String get premiumSignInForSyncHint =>
+      'سجّل الدخول لتفعيل المزامنة مع السحابة على أجهزتك.';
+
+  @override
+  String get premiumPackageMonthly => 'شهري';
+
+  @override
+  String get premiumPackageAnnual => 'سنوي';
+
+  @override
+  String get premiumPackageWeekly => 'أسبوعي';
+
+  @override
+  String get premiumPackageLifetime => 'مدى الحياة';
+
+  @override
+  String get aiVoiceLocalQuotaTitle => 'لقد وصلت للحد الأقصى المجاني';
+
+  @override
+  String get aiVoiceLocalQuotaBody => 'اشترك في الباقة المميزة للمزيد!';
+
+  @override
+  String get clientsImportFromExcelTooltip =>
+      'استيراد من إكسيل أو CSV (.csv أو .xlsx)';
+
+  @override
+  String clientsImportedSuccess(int count) {
+    return 'تم استيراد $count عميلًا بنجاح';
+  }
+
+  @override
+  String clientsImportFailed(String error) {
+    return 'فشل الاستيراد: $error';
+  }
+
+  @override
+  String get printerSettings => 'إعدادات الطابعة';
+
+  @override
+  String get printerSettingsSubtitle => 'اختر طابعة حرارية متصلة بالبلوتوث';
+
+  @override
+  String get printerSelectPairedDevice => 'اختيار الطابعة';
+
+  @override
+  String get printerNoPairedDevices => 'لا توجد أجهزة بلوتوث مقترنة';
+
+  @override
+  String printerConnected(String name) {
+    return 'تم الاتصال بـ $name';
+  }
+
+  @override
+  String printerConnectFailed(String error) {
+    return 'تعذّر الاتصال: $error';
+  }
+
+  @override
+  String get printMethodTitle => 'اختر طريقة الطباعة';
+
+  @override
+  String get printThermalPrinter => 'طابعة حرارية (إيصال)';
+
+  @override
+  String get printStandardPrinter => 'طابعة عادية (A4)';
+
+  @override
+  String get thermalPrintingComingSoon => 'طباعة الإيصال الحرارية قريباً...';
+
+  @override
+  String get thermalPrintingPreparing => 'جاري تجهيز الإيصال…';
+
+  @override
+  String get thermalPrintingSending => 'جاري الإرسال للطابعة…';
+
+  @override
+  String get thermalPrintingSuccess => 'تمت طباعة الإيصال';
+
+  @override
+  String get thermalPrinterNotSelected =>
+      'لم يتم اختيار طابعة. من فضلك اختر طابعة من إعدادات الطابعة.';
+
+  @override
+  String get thermalReceiptPreviewCancel => 'إلغاء';
+
+  @override
+  String get thermalReceiptPreviewPrint => 'طباعة';
+
+  @override
+  String get editProfileChooseLogo => 'اختيار شعار النشاط';
+
+  @override
+  String get editProfileBusinessNameLabel => 'اسم النشاط';
+
+  @override
+  String get editProfileAddressLabel => 'العنوان';
+
+  @override
+  String get receiptThankYou => 'شكراً لتعاملكم معنا';
+
+  @override
+  String get bluetoothPermissionsRequired =>
+      'صلاحيات البلوتوث مطلوبة لاستخدام الطابعة.';
 }

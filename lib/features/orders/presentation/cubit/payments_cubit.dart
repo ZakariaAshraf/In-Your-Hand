@@ -1,14 +1,41 @@
-import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:meta/meta.dart';
+import 'dart:async';
 
+import 'package:bloc/bloc.dart';
+import 'package:in_your_hand/core/session/session_cubit.dart';
+import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../domain/entities/order_entity.dart';
+import '../../domain/entities/payment_entity.dart';
+import '../../domain/repositories/orders_repository.dart';
+import '../../domain/repositories/payments_repository.dart';
 import '../../data/payment_model.dart';
 
 part 'payments_state.dart';
 
 class PaymentsCubit extends Cubit<PaymentsState> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  PaymentsCubit() : super(PaymentsInitial());
+  PaymentsCubit({
+    required PaymentsRepository paymentsRepository,
+    required OrdersRepository ordersRepository,
+    required SessionCubit sessionCubit,
+  })  : _paymentsRepository = paymentsRepository,
+        _ordersRepository = ordersRepository,
+        _sessionCubit = sessionCubit,
+        super(PaymentsInitial()) {
+    _sessionSub = _sessionCubit.stream.listen((state) {
+      if (state is SessionLoaded) {
+        _workspaceId = state.context.workspaceId;
+      }
+    });
+    final existing = _sessionCubit.contextOrNull;
+    if (existing != null) _workspaceId = existing.workspaceId;
+  }
+
+  final PaymentsRepository _paymentsRepository;
+  final OrdersRepository _ordersRepository;
+  final SessionCubit _sessionCubit;
+  StreamSubscription? _sessionSub;
+  String? _workspaceId;
   Future<void> addPayment({
     required String orderId,
     required double amount,
@@ -16,53 +43,75 @@ class PaymentsCubit extends Cubit<PaymentsState> {
     emit(PaymentsLoading());
 
     try {
-      final orderRef = _firestore.collection('orders').doc(orderId);
+      final wid = _workspaceId;
+      if (wid == null) throw Exception('Session not ready');
 
-      await _firestore.runTransaction((transaction) async {
-        final snapshot = await transaction.get(orderRef);
+      final order = await _ordersRepository.getOrderById(
+        workspaceId: wid,
+        id: orderId,
+      );
+      if (order == null) throw Exception('Order not found');
 
-        final currentPaid =
-        (snapshot.data()?['totalPaid'] ?? 0) as num;
+      final newTotalPaid = order.totalPaid + amount;
+      if (newTotalPaid > order.totalAmount) {
+        throw Exception("Payment exceeds total amount");
+      }
 
-        final newTotalPaid = currentPaid.toDouble() + amount;
+      final now = DateTime.now();
+      final paymentEntity = PaymentEntity(
+        id: const Uuid().v4(),
+        workspaceId: wid,
+        orderId: orderId,
+        amount: amount,
+        isDeleted: false,
+        createdAt: now,
+        updatedAt: now,
+        syncStatus: 1,
+        remoteId: null,
+      );
+      await _paymentsRepository.upsertPayment(paymentEntity);
 
-        final totalAmount =
-        (snapshot.data()?['totalAmount'] ?? 0) as num;
-
-        if (newTotalPaid > totalAmount.toDouble()) {
-          throw Exception("Payment exceeds total amount");
-        }
-
-        transaction.update(orderRef, {
-          'totalPaid': newTotalPaid,
-        });
-
-        transaction.set(
-          orderRef.collection('payments').doc(),
-          {
-            'amount': amount,
-            'createdAt': Timestamp.now(),
-          },
-        );
-      });
-      // await getOrders();
+      final updatedOrder = OrderEntity(
+        id: order.id,
+        workspaceId: order.workspaceId,
+        clientId: order.clientId,
+        description: order.description,
+        totalAmount: order.totalAmount,
+        totalPaid: newTotalPaid,
+        notes: order.notes,
+        isDeleted: order.isDeleted,
+        createdAt: order.createdAt,
+        updatedAt: now,
+        syncStatus: 1,
+        remoteId: order.remoteId,
+      );
+      await _ordersRepository.upsertOrder(updatedOrder);
       emit(PaymentsSuccess());
     } catch (e) {
       emit(PaymentsError(errorMessage: e.toString()));
     }
   }
+  void resetAfterLocalDatabaseReset() {
+    emit(PaymentsInitial());
+  }
+
   Future<void> loadPayments(String orderId) async {
     try {
-      final snapshot = await _firestore
-          .collection('orders')
-          .doc(orderId)
-          .collection('payments')
-          .orderBy('createdAt', descending: true)
-          .get();
-
-      final payments = snapshot.docs
-          .map((doc) => PaymentModel.fromFirestore(doc))
-          .toList();
+      final wid = _workspaceId;
+      if (wid == null) throw Exception('Session not ready');
+      final entities = await _paymentsRepository.listPaymentsForOrder(
+        workspaceId: wid,
+        orderId: orderId,
+      );
+      final payments = entities
+          .map(
+            (e) => PaymentModel(
+              id: e.id,
+              amount: e.amount,
+              createdAt: e.createdAt,
+            ),
+          )
+          .toList(growable: false);
 
       emit(PaymentsLoaded(payments));
     } catch (e) {
@@ -70,4 +119,9 @@ class PaymentsCubit extends Cubit<PaymentsState> {
     }
   }
 
+  @override
+  Future<void> close() {
+    _sessionSub?.cancel();
+    return super.close();
+  }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'pdf_rewarded_gate.dart';
+import 'rewarded_ad_gate.dart';
 
 /// Initializes the Mobile Ads SDK before any ad unit is requested.
 ///
@@ -20,5 +20,5 @@ Future<void> initializeMobileAds() async {
   }
 
   // Start loading the first rewarded ad only after the SDK reports ready.
-  PdfRewardedGate.preload();
+  RewardedAdGate.preload();
 }

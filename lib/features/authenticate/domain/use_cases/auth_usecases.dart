@@ -20,3 +20,41 @@ class RegisterUseCase {
     return await authRepository.registerWithEmailAndPassword(email, password);
   }
 }
+
+class SignInWithGoogleUseCase {
+  final AuthRepository _authRepository;
+
+  SignInWithGoogleUseCase(this._authRepository);
+
+  Future<UserEntity?> execute() => _authRepository.signInWithGoogle();
+}
+
+class UserDocumentExistsUseCase {
+  final AuthRepository _authRepository;
+
+  UserDocumentExistsUseCase(this._authRepository);
+
+  Future<bool> execute(String uid) => _authRepository.userDocumentExists(uid);
+}
+
+class CompleteGoogleProfileUseCase {
+  final AuthRepository _authRepository;
+
+  CompleteGoogleProfileUseCase(this._authRepository);
+
+  Future<void> execute(
+    String uid,
+    String name,
+    String phone,
+    String? character,
+  ) =>
+      _authRepository.completeGoogleProfile(uid, name, phone, character);
+}
+
+class SignOutUseCase {
+  final AuthRepository _authRepository;
+
+  SignOutUseCase(this._authRepository);
+
+  Future<void> execute() => _authRepository.signOut();
+}

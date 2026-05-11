@@ -4,6 +4,8 @@ enum VoiceOrderStatus {
   initial,
   permissionDenied,
   ready,
+  /// Free tier AI quota exhausted — UI matches [ready]; listener opens paywall dialog.
+  localQuotaReached,
   listening,
   processing,
   orderReadyToConfirm,

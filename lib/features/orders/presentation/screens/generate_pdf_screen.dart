@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:in_your_hand/core/services/pdf_rewarded_gate.dart';
+import 'package:in_your_hand/core/services/rewarded_ad_gate.dart';
 import 'package:in_your_hand/core/utils/pdf_manger.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -14,7 +14,7 @@ class GeneratePdfScreen extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            PdfRewardedGate.run(context, () {
+            RewardedAdGate.run(context, () {
               showPdfPreview(context);
             });
           },

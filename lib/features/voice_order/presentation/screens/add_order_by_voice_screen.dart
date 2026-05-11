@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/services/gemeni_service.dart';
@@ -6,6 +9,7 @@ import 'package:in_your_hand/core/widgets/custom_button.dart';
 import 'package:in_your_hand/features/clients/data/clients_model.dart';
 import 'package:in_your_hand/features/clients/presentation/cubit/clients_cubit.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
+import 'package:in_your_hand/features/premium/presentation/screens/premium_paywall_screen.dart';
 import 'package:in_your_hand/l10n/app_localizations.dart';
 
 import '../cubit/voice_order_cubit.dart';
@@ -18,10 +22,41 @@ class AddOrderByVoiceScreen extends StatefulWidget {
 }
 
 class _AddOrderByVoiceScreenState extends State<AddOrderByVoiceScreen> {
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
+  bool _aiOffline = false;
+
+  static bool _isAiConnectivityOffline(List<ConnectivityResult> results) {
+    if (results.isEmpty) return true;
+    return !results.any((r) => r != ConnectivityResult.none);
+  }
+
   @override
   void initState() {
     super.initState();
     context.read<VoiceOrderCubit>().init();
+    unawaited(_initConnectivityListener());
+  }
+
+  Future<void> _initConnectivityListener() async {
+    final connectivity = Connectivity();
+    void apply(List<ConnectivityResult> results) {
+      if (!mounted) return;
+      setState(() => _aiOffline = _isAiConnectivityOffline(results));
+    }
+
+    try {
+      apply(await connectivity.checkConnectivity());
+    } catch (_) {
+      apply(const <ConnectivityResult>[]);
+    }
+
+    _connectivitySub ??= connectivity.onConnectivityChanged.listen(apply);
+  }
+
+  @override
+  void dispose() {
+    _connectivitySub?.cancel();
+    super.dispose();
   }
 
   @override
@@ -34,14 +69,32 @@ class _AddOrderByVoiceScreenState extends State<AddOrderByVoiceScreen> {
         title: Text(l10n.addOrderByVoice, style: theme.titleLarge),
         centerTitle: true,
       ),
-      body: BlocConsumer<VoiceOrderCubit, VoiceOrderState>(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          BlocConsumer<VoiceOrderCubit, VoiceOrderState>(
         listenWhen: (prev, curr) {
-          if (curr.status == VoiceOrderStatus.success) return true;
+          if (curr.status == VoiceOrderStatus.success) {
+            return true;
+          }
+          if (curr.status == VoiceOrderStatus.localQuotaReached &&
+              prev.status != VoiceOrderStatus.localQuotaReached) {
+            return true;
+          }
           if (curr.status == VoiceOrderStatus.orderReadyToConfirm &&
-              prev.status != VoiceOrderStatus.orderReadyToConfirm) return true;
+              prev.status != VoiceOrderStatus.orderReadyToConfirm) {
+            return true;
+          }
           return false;
         },
         listener: (context, state) {
+          if (state.status == VoiceOrderStatus.localQuotaReached) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!context.mounted) return;
+              _showAiVoiceQuotaDialog(context);
+            });
+            return;
+          }
           if (state.status == VoiceOrderStatus.success) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(l10n.orderAddedByVoice)),
@@ -94,33 +147,6 @@ class _AddOrderByVoiceScreenState extends State<AddOrderByVoiceScreen> {
           }
 
           if (state.status == VoiceOrderStatus.error && state.errorMessage != null) {
-            if (state.errorMessage == 'voiceLimitReached') {
-              return Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.workspace_premium,
-                      size: 64,
-                      color: Colors.amber,
-                    ),
-                    SizedBox(height: 16.h(context)),
-                    Text(
-                      l10n.voiceLimitReachedTitle,
-                      textAlign: TextAlign.center,
-                      style: theme.titleLarge,
-                    ),
-                    SizedBox(height: 12.h(context)),
-                    Text(
-                      l10n.voiceLimitReachedBody,
-                      textAlign: TextAlign.center,
-                      style: theme.bodyMedium?.copyWith(color: Colors.grey[700]),
-                    ),
-                  ],
-                ),
-              );
-            }
             if (state.errorMessage == 'geminiQuotaExceeded') {
               return Padding(
                 padding: const EdgeInsets.all(24),
@@ -179,7 +205,17 @@ class _AddOrderByVoiceScreenState extends State<AddOrderByVoiceScreen> {
                         ? () => context.read<VoiceOrderCubit>().stopListening()
                         : state.status == VoiceOrderStatus.processing
                             ? null
-                            : () => _startListeningWithLocale(context),
+                            : () {
+                                if (_aiOffline) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(l10n.aiRequiresInternetConnection),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                _startListeningWithLocale(context);
+                              },
                     child: Container(
                       width: 120.w(context),
                       height: 120.w(context),
@@ -257,7 +293,8 @@ class _AddOrderByVoiceScreenState extends State<AddOrderByVoiceScreen> {
                     state.status != VoiceOrderStatus.orderReadyToConfirm)
                   CustomButton(
                     title: l10n.addOrderFromVoice,
-                    onTap: () => _submitOrder(context),
+                    onTap:
+                        _aiOffline ? () => _showAiOfflineSnack(context) : () => _submitOrder(context),
                     height: 56.h(context),
                   ),
                 if (!GeminiService.isConfigured) ...[
@@ -273,6 +310,28 @@ class _AddOrderByVoiceScreenState extends State<AddOrderByVoiceScreen> {
           );
         },
       ),
+          if (_aiOffline)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                bottom: false,
+                child: Material(
+                  color: Colors.deepOrange.shade800,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                    child: Text(
+                      l10n.aiRequiresInternetConnection,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -283,7 +342,55 @@ class _AddOrderByVoiceScreenState extends State<AddOrderByVoiceScreen> {
     context.read<VoiceOrderCubit>().startListening(localeId: localeId);
   }
 
+  void _showAiVoiceQuotaDialog(BuildContext context) {
+    final cubit = context.read<VoiceOrderCubit>();
+    final loc = AppLocalizations.of(context)!;
+    final theme = Theme.of(context).textTheme;
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(loc.aiVoiceLocalQuotaTitle, style: theme.titleLarge),
+          content: Text(loc.aiVoiceLocalQuotaBody),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                cubit.dismissLocalQuotaReached();
+              },
+              child: Text(loc.cancel),
+            ),
+            FilledButton(
+              style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.green)),
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                cubit.dismissLocalQuotaReached();
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const PremiumPaywallScreen(),
+                  ),
+                );
+              },
+              child: Text(loc.premiumSubscribePlaceholder),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAiOfflineSnack(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context)!.aiRequiresInternetConnection)),
+    );
+  }
+
   void _submitOrder(BuildContext context) {
+    if (_aiOffline) {
+      _showAiOfflineSnack(context);
+      return;
+    }
     final clientsState = context.read<ClientsCubit>().state;
     if (clientsState is! ClientsSuccess) {
       ScaffoldMessenger.of(context).showSnackBar(

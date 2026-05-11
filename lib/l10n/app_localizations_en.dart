@@ -104,6 +104,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get letsStart => 'Let\'s Start ->';
 
   @override
+  String get onboardingSlide1Title => 'Works Without Internet';
+
+  @override
+  String get onboardingSlide1Subtitle =>
+      'Manage clients and orders offline. Sync to the cloud when you are online.';
+
+  @override
+  String get onboardingSlide2Title => 'AI Voice Commands';
+
+  @override
+  String get onboardingSlide2Subtitle =>
+      'Speak in Arabic or English — smart AI fills in order details.';
+
+  @override
+  String get onboardingSlide3Title => 'Professional Printing';
+
+  @override
+  String get onboardingSlide3Subtitle =>
+      'Thermal receipts and polished invoices from your phone.';
+
+  @override
+  String get onboardingQuickSetupTitle => 'Quick Setup';
+
+  @override
+  String get onboardingBusinessNameLabel => 'Business name (optional)';
+
+  @override
+  String get onboardingPhoneLabel => 'Phone number (optional)';
+
+  @override
+  String get onboardingStartCta => 'Start';
+
+  @override
   String get chooseYourCharacter => 'Choose Your Character';
 
   @override
@@ -166,6 +199,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orContinueWith => 'or continue with';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get completeRegistration => 'Complete registration';
+
+  @override
+  String get googleProfileTitle => 'Finish your profile';
+
+  @override
+  String get googleProfileSubtitle =>
+      'Add your phone number and choose your character to start using the app.';
+
+  @override
+  String get accountNameHint => 'Name';
+
+  @override
+  String get googleProfileCompleteFailed =>
+      'Could not save your profile. Please try again.';
 
   @override
   String get selectAvatar => 'Select Avatar';
@@ -567,6 +620,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get connectionError => 'You are not connected (offline)';
 
   @override
+  String get aiRequiresInternetConnection =>
+      'AI requires internet connection to process voice';
+
+  @override
   String unpaidOrderMessage(
     Object orderDate,
     Object totalAmount,
@@ -604,4 +661,184 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adCouldNotLoad => 'Ad could not load. Try again in a moment.';
+
+  @override
+  String get settingsBusinessFallbackTitle => 'Your business';
+
+  @override
+  String get guestModeHint =>
+      'You are using the app without cloud backup. Upgrade to Premium to sync.';
+
+  @override
+  String get settingsPremiumBackupSubtitle => 'Premium: cloud backup & sign in';
+
+  @override
+  String get deleteLocalData => 'Delete local data';
+
+  @override
+  String get deleteLocalDataConfirm =>
+      'Are you sure you want to delete all local data';
+
+  @override
+  String get premiumPaywallTitle => 'Premium';
+
+  @override
+  String get premiumPaywallHeadline => 'Go Premium';
+
+  @override
+  String get premiumPaywallDescription =>
+      'Back up everything in the cloud, remove distractions, and do more with voice.';
+
+  @override
+  String get premiumBenefitCloudSync =>
+      'Cloud backup & sync across your devices';
+
+  @override
+  String get premiumBenefitNoAds => 'No ads';
+
+  @override
+  String get premiumBenefitAiVoice => 'Higher limits for AI voice orders';
+
+  @override
+  String get premiumSubscribePlaceholder => 'Subscribe / Upgrade';
+
+  @override
+  String get premiumRestorePlaceholder => 'Restore purchases';
+
+  @override
+  String get premiumAlreadySubscribedLogin => 'Already subscribed? Log in here';
+
+  @override
+  String get premiumComingSoon => 'RevenueCat integration coming soon';
+
+  @override
+  String get premiumRestoreComingSoon => 'Restore purchases coming soon';
+
+  @override
+  String get premiumPurchaseSuccess => 'You are now Premium. Thank you!';
+
+  @override
+  String get premiumRestoreSuccess => 'Purchases restored successfully.';
+
+  @override
+  String get premiumRestoreNoEntitlement =>
+      'No active Premium subscription found for this account.';
+
+  @override
+  String get premiumOfferingsUnavailable =>
+      'Subscriptions are unavailable right now. Check your connection or try again later.';
+
+  @override
+  String get premiumPurchaseCancelled => 'Purchase cancelled.';
+
+  @override
+  String get premiumPurchaseError =>
+      'Purchase could not be completed. Please try again.';
+
+  @override
+  String get premiumSignInForSyncHint =>
+      'Sign in to enable cloud sync across your devices.';
+
+  @override
+  String get premiumPackageMonthly => 'Monthly';
+
+  @override
+  String get premiumPackageAnnual => 'Annual';
+
+  @override
+  String get premiumPackageWeekly => 'Weekly';
+
+  @override
+  String get premiumPackageLifetime => 'Lifetime';
+
+  @override
+  String get aiVoiceLocalQuotaTitle => 'Free AI limit reached';
+
+  @override
+  String get aiVoiceLocalQuotaBody =>
+      'Upgrade to Premium for unlimited voice orders!';
+
+  @override
+  String get clientsImportFromExcelTooltip =>
+      'Import from Excel / CSV (.csv, .xlsx)';
+
+  @override
+  String clientsImportedSuccess(int count) {
+    return '$count clients imported successfully';
+  }
+
+  @override
+  String clientsImportFailed(String error) {
+    return 'Import failed: $error';
+  }
+
+  @override
+  String get printerSettings => 'Printer Settings';
+
+  @override
+  String get printerSettingsSubtitle =>
+      'Select a paired Bluetooth thermal printer';
+
+  @override
+  String get printerSelectPairedDevice => 'Select printer';
+
+  @override
+  String get printerNoPairedDevices => 'No paired Bluetooth devices found';
+
+  @override
+  String printerConnected(String name) {
+    return 'Connected to $name';
+  }
+
+  @override
+  String printerConnectFailed(String error) {
+    return 'Could not connect: $error';
+  }
+
+  @override
+  String get printMethodTitle => 'Choose print method';
+
+  @override
+  String get printThermalPrinter => 'Thermal Printer (Receipt)';
+
+  @override
+  String get printStandardPrinter => 'Standard Printer (A4/PDF)';
+
+  @override
+  String get thermalPrintingComingSoon => 'Thermal printing coming soon...';
+
+  @override
+  String get thermalPrintingPreparing => 'Preparing receipt…';
+
+  @override
+  String get thermalPrintingSending => 'Sending to printer…';
+
+  @override
+  String get thermalPrintingSuccess => 'Receipt printed';
+
+  @override
+  String get thermalPrinterNotSelected =>
+      'No printer selected. Please choose one in Printer Settings.';
+
+  @override
+  String get thermalReceiptPreviewCancel => 'Cancel';
+
+  @override
+  String get thermalReceiptPreviewPrint => 'Print';
+
+  @override
+  String get editProfileChooseLogo => 'Choose logo';
+
+  @override
+  String get editProfileBusinessNameLabel => 'Business name';
+
+  @override
+  String get editProfileAddressLabel => 'Address';
+
+  @override
+  String get receiptThankYou => 'Thank you';
+
+  @override
+  String get bluetoothPermissionsRequired =>
+      'Bluetooth permissions are required to use the printer.';
 }

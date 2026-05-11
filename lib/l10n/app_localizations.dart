@@ -284,6 +284,66 @@ abstract class AppLocalizations {
   /// **'Let\'s Start ->'**
   String get letsStart;
 
+  /// No description provided for @onboardingSlide1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Works Without Internet'**
+  String get onboardingSlide1Title;
+
+  /// No description provided for @onboardingSlide1Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage clients and orders offline. Sync to the cloud when you are online.'**
+  String get onboardingSlide1Subtitle;
+
+  /// No description provided for @onboardingSlide2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Voice Commands'**
+  String get onboardingSlide2Title;
+
+  /// No description provided for @onboardingSlide2Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak in Arabic or English — smart AI fills in order details.'**
+  String get onboardingSlide2Subtitle;
+
+  /// No description provided for @onboardingSlide3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Professional Printing'**
+  String get onboardingSlide3Title;
+
+  /// No description provided for @onboardingSlide3Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Thermal receipts and polished invoices from your phone.'**
+  String get onboardingSlide3Subtitle;
+
+  /// No description provided for @onboardingQuickSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Setup'**
+  String get onboardingQuickSetupTitle;
+
+  /// No description provided for @onboardingBusinessNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Business name (optional)'**
+  String get onboardingBusinessNameLabel;
+
+  /// No description provided for @onboardingPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number (optional)'**
+  String get onboardingPhoneLabel;
+
+  /// No description provided for @onboardingStartCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get onboardingStartCta;
+
   /// No description provided for @chooseYourCharacter.
   ///
   /// In en, this message translates to:
@@ -403,6 +463,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'or continue with'**
   String get orContinueWith;
+
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get continueWithGoogle;
+
+  /// No description provided for @completeRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete registration'**
+  String get completeRegistration;
+
+  /// No description provided for @googleProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish your profile'**
+  String get googleProfileTitle;
+
+  /// No description provided for @googleProfileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your phone number and choose your character to start using the app.'**
+  String get googleProfileSubtitle;
+
+  /// No description provided for @accountNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get accountNameHint;
+
+  /// No description provided for @googleProfileCompleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save your profile. Please try again.'**
+  String get googleProfileCompleteFailed;
 
   /// No description provided for @selectAvatar.
   ///
@@ -1166,6 +1262,12 @@ abstract class AppLocalizations {
   /// **'You are not connected (offline)'**
   String get connectionError;
 
+  /// No description provided for @aiRequiresInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'AI requires internet connection to process voice'**
+  String get aiRequiresInternetConnection;
+
   /// No description provided for @unpaidOrderMessage.
   ///
   /// In en, this message translates to:
@@ -1229,6 +1331,324 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ad could not load. Try again in a moment.'**
   String get adCouldNotLoad;
+
+  /// No description provided for @settingsBusinessFallbackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your business'**
+  String get settingsBusinessFallbackTitle;
+
+  /// No description provided for @guestModeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You are using the app without cloud backup. Upgrade to Premium to sync.'**
+  String get guestModeHint;
+
+  /// No description provided for @settingsPremiumBackupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium: cloud backup & sign in'**
+  String get settingsPremiumBackupSubtitle;
+
+  /// No description provided for @deleteLocalData.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete local data'**
+  String get deleteLocalData;
+
+  /// No description provided for @deleteLocalDataConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete all local data'**
+  String get deleteLocalDataConfirm;
+
+  /// No description provided for @premiumPaywallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premiumPaywallTitle;
+
+  /// No description provided for @premiumPaywallHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Premium'**
+  String get premiumPaywallHeadline;
+
+  /// No description provided for @premiumPaywallDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up everything in the cloud, remove distractions, and do more with voice.'**
+  String get premiumPaywallDescription;
+
+  /// No description provided for @premiumBenefitCloudSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud backup & sync across your devices'**
+  String get premiumBenefitCloudSync;
+
+  /// No description provided for @premiumBenefitNoAds.
+  ///
+  /// In en, this message translates to:
+  /// **'No ads'**
+  String get premiumBenefitNoAds;
+
+  /// No description provided for @premiumBenefitAiVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher limits for AI voice orders'**
+  String get premiumBenefitAiVoice;
+
+  /// No description provided for @premiumSubscribePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe / Upgrade'**
+  String get premiumSubscribePlaceholder;
+
+  /// No description provided for @premiumRestorePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get premiumRestorePlaceholder;
+
+  /// No description provided for @premiumAlreadySubscribedLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Already subscribed? Log in here'**
+  String get premiumAlreadySubscribedLogin;
+
+  /// No description provided for @premiumComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'RevenueCat integration coming soon'**
+  String get premiumComingSoon;
+
+  /// No description provided for @premiumRestoreComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases coming soon'**
+  String get premiumRestoreComingSoon;
+
+  /// No description provided for @premiumPurchaseSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You are now Premium. Thank you!'**
+  String get premiumPurchaseSuccess;
+
+  /// No description provided for @premiumRestoreSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases restored successfully.'**
+  String get premiumRestoreSuccess;
+
+  /// No description provided for @premiumRestoreNoEntitlement.
+  ///
+  /// In en, this message translates to:
+  /// **'No active Premium subscription found for this account.'**
+  String get premiumRestoreNoEntitlement;
+
+  /// No description provided for @premiumOfferingsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions are unavailable right now. Check your connection or try again later.'**
+  String get premiumOfferingsUnavailable;
+
+  /// No description provided for @premiumPurchaseCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase cancelled.'**
+  String get premiumPurchaseCancelled;
+
+  /// No description provided for @premiumPurchaseError.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase could not be completed. Please try again.'**
+  String get premiumPurchaseError;
+
+  /// No description provided for @premiumSignInForSyncHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to enable cloud sync across your devices.'**
+  String get premiumSignInForSyncHint;
+
+  /// No description provided for @premiumPackageMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get premiumPackageMonthly;
+
+  /// No description provided for @premiumPackageAnnual.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual'**
+  String get premiumPackageAnnual;
+
+  /// No description provided for @premiumPackageWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get premiumPackageWeekly;
+
+  /// No description provided for @premiumPackageLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime'**
+  String get premiumPackageLifetime;
+
+  /// No description provided for @aiVoiceLocalQuotaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free AI limit reached'**
+  String get aiVoiceLocalQuotaTitle;
+
+  /// No description provided for @aiVoiceLocalQuotaBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium for unlimited voice orders!'**
+  String get aiVoiceLocalQuotaBody;
+
+  /// No description provided for @clientsImportFromExcelTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Import from Excel / CSV (.csv, .xlsx)'**
+  String get clientsImportFromExcelTooltip;
+
+  /// No description provided for @clientsImportedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} clients imported successfully'**
+  String clientsImportedSuccess(int count);
+
+  /// No description provided for @clientsImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed: {error}'**
+  String clientsImportFailed(String error);
+
+  /// No description provided for @printerSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Printer Settings'**
+  String get printerSettings;
+
+  /// No description provided for @printerSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a paired Bluetooth thermal printer'**
+  String get printerSettingsSubtitle;
+
+  /// No description provided for @printerSelectPairedDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Select printer'**
+  String get printerSelectPairedDevice;
+
+  /// No description provided for @printerNoPairedDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No paired Bluetooth devices found'**
+  String get printerNoPairedDevices;
+
+  /// No description provided for @printerConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected to {name}'**
+  String printerConnected(String name);
+
+  /// No description provided for @printerConnectFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect: {error}'**
+  String printerConnectFailed(String error);
+
+  /// No description provided for @printMethodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose print method'**
+  String get printMethodTitle;
+
+  /// No description provided for @printThermalPrinter.
+  ///
+  /// In en, this message translates to:
+  /// **'Thermal Printer (Receipt)'**
+  String get printThermalPrinter;
+
+  /// No description provided for @printStandardPrinter.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard Printer (A4/PDF)'**
+  String get printStandardPrinter;
+
+  /// No description provided for @thermalPrintingComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Thermal printing coming soon...'**
+  String get thermalPrintingComingSoon;
+
+  /// No description provided for @thermalPrintingPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing receipt…'**
+  String get thermalPrintingPreparing;
+
+  /// No description provided for @thermalPrintingSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending to printer…'**
+  String get thermalPrintingSending;
+
+  /// No description provided for @thermalPrintingSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt printed'**
+  String get thermalPrintingSuccess;
+
+  /// No description provided for @thermalPrinterNotSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No printer selected. Please choose one in Printer Settings.'**
+  String get thermalPrinterNotSelected;
+
+  /// No description provided for @thermalReceiptPreviewCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get thermalReceiptPreviewCancel;
+
+  /// No description provided for @thermalReceiptPreviewPrint.
+  ///
+  /// In en, this message translates to:
+  /// **'Print'**
+  String get thermalReceiptPreviewPrint;
+
+  /// No description provided for @editProfileChooseLogo.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose logo'**
+  String get editProfileChooseLogo;
+
+  /// No description provided for @editProfileBusinessNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Business name'**
+  String get editProfileBusinessNameLabel;
+
+  /// No description provided for @editProfileAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get editProfileAddressLabel;
+
+  /// No description provided for @receiptThankYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you'**
+  String get receiptThankYou;
+
+  /// No description provided for @bluetoothPermissionsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth permissions are required to use the printer.'**
+  String get bluetoothPermissionsRequired;
 }
 
 class _AppLocalizationsDelegate

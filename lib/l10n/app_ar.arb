@@ -36,6 +36,16 @@
   },
   "skip": "تخطي",
   "letsStart": "لنبدأ ->",
+  "onboardingSlide1Title": "يعمل بدون إنترنت",
+  "onboardingSlide1Subtitle": "أدر العملاء والطلبات بدون شبكة، وقم بالمزامنة مع السحابة عند الاتصال.",
+  "onboardingSlide2Title": "أوامر صوتية ذكية",
+  "onboardingSlide2Subtitle": "تكلّم بالعربية أو الإنجليزية — الذكاء الاصطناعي يملأ تفاصيل الطلب.",
+  "onboardingSlide3Title": "طباعة فواتير احترافية",
+  "onboardingSlide3Subtitle": "إيصالات حرارية وتقارير PDF احترافية من هاتفك.",
+  "onboardingQuickSetupTitle": "إعداد سريع",
+  "onboardingBusinessNameLabel": "اسم النشاط (اختياري)",
+  "onboardingPhoneLabel": "رقم الهاتف (اختياري)",
+  "onboardingStartCta": "ابدأ",
   "chooseYourCharacter": "اختر شخصيتك",
   "businessMan": "رجل أعمال",
   "businessWoman": "سيدة أعمال",
@@ -57,6 +67,12 @@
   "registerMessage": "ادخل دلوقتي وتابع البيزنس بتاعك",
   "pleaseFillAllFields": "يرجى ملء جميع الحقول",
   "orContinueWith": "أو المتابعة مع",
+  "continueWithGoogle": "المتابعة باستخدام Google",
+  "completeRegistration": "إكمال التسجيل",
+  "googleProfileTitle": "أكمل ملفك الشخصي",
+  "googleProfileSubtitle": "أضف رقم هاتفك واختر شخصيتك للبدء في استخدام التطبيق.",
+  "accountNameHint": "الاسم",
+  "googleProfileCompleteFailed": "تعذر حفظ ملفك الشخصي. يرجى المحاولة مرة أخرى.",
   "selectAvatar": "اختر الصورة الرمزية",
   "tryAgain": "حاول مرة أخرى",
   "preferences": "التفضيلات",
@@ -189,7 +205,7 @@
   "confirmOrderMessage": "راجع الطلب أدناه. هل تضيفه؟",
   "confirm": "تأكيد",
   "connectionError":"أنت في وضع عدم الاتصال (Offline)",
-
+  "aiRequiresInternetConnection": "الذكاء الاصطناعي يتطلب اتصالاً بالإنترنت",
 
   "deleteAccount": "حذف الحساب",
   "deleteAccountWarningTitle": "حذف الحساب؟",
@@ -207,5 +223,80 @@
         "totalAmount": {},
         "orderDate": {}
       }
+    },
+  "settingsBusinessFallbackTitle": "نشاطك التجاري",
+  "guestModeHint": "أنت بتستخدم التطبيق بدون نسخة احتياطية على السحابة. اشترِ بريميوم لمزامنة بياناتك.",
+  "settingsPremiumBackupSubtitle": "بريميوم: نسخ احتياطي وتسجيل دخول",
+  "deleteLocalData": "حذف البيانات المحلية",
+  "deleteLocalDataConfirm": "هل انت متاكد انك تريد حذف جميع البيانات المحلية",
+  "premiumPaywallTitle": "بريميوم",
+  "premiumPaywallHeadline": "ترقّى لبريميوم",
+  "premiumPaywallDescription": "انسخ كل حاجة على السحابة، وخلِّص من الإعلانات، وزوِّد استخدام الطلب بالصوت.",
+  "premiumBenefitCloudSync": "نسخ احتياطي ومزامنة بين أجهزتك",
+  "premiumBenefitNoAds": "بدون إعلانات",
+  "premiumBenefitAiVoice": "حدود أعلى لطلبات الصوت بالذكاء الاصطناعي",
+  "premiumSubscribePlaceholder": "اشترك / ترقّية",
+  "premiumRestorePlaceholder": "استعادة المشتريات",
+  "premiumAlreadySubscribedLogin": "مشترك فعلاً؟ سجّل الدخول من هنا",
+  "premiumComingSoon": "التكامل مع RevenueCat هيتم قريباً",
+  "premiumRestoreComingSoon": "استعادة المشتريات هتتفعّل قريباً",
+  "premiumPurchaseSuccess": "أنت الآن على باقة بريميوم. شكراً لك!",
+  "premiumRestoreSuccess": "تمت استعادة المشتريات بنجاح.",
+  "premiumRestoreNoEntitlement": "لا يوجد اشتراك بريميوم نشط لهذا الحساب.",
+  "premiumOfferingsUnavailable": "الاشتراكات غير متاحة حالياً. تحقق من الاتصال أو حاول لاحقاً.",
+  "premiumPurchaseCancelled": "تم إلغاء الشراء.",
+  "premiumPurchaseError": "تعذّر إتمام الشراء. حاول مرة أخرى.",
+  "premiumSignInForSyncHint": "سجّل الدخول لتفعيل المزامنة مع السحابة على أجهزتك.",
+  "premiumPackageMonthly": "شهري",
+  "premiumPackageAnnual": "سنوي",
+  "premiumPackageWeekly": "أسبوعي",
+  "premiumPackageLifetime": "مدى الحياة",
+
+  "aiVoiceLocalQuotaTitle": "لقد وصلت للحد الأقصى المجاني",
+  "aiVoiceLocalQuotaBody": "اشترك في الباقة المميزة للمزيد!",
+  "clientsImportFromExcelTooltip": "استيراد من إكسيل أو CSV (.csv أو .xlsx)",
+  "clientsImportedSuccess": "تم استيراد {count} عميلًا بنجاح",
+  "@clientsImportedSuccess": {
+    "placeholders": {
+      "count": {"type": "int"}
     }
+  },
+  "clientsImportFailed": "فشل الاستيراد: {error}",
+  "@clientsImportFailed": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "printerSettings": "إعدادات الطابعة",
+  "printerSettingsSubtitle": "اختر طابعة حرارية متصلة بالبلوتوث",
+  "printerSelectPairedDevice": "اختيار الطابعة",
+  "printerNoPairedDevices": "لا توجد أجهزة بلوتوث مقترنة",
+  "printerConnected": "تم الاتصال بـ {name}",
+  "@printerConnected": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "printerConnectFailed": "تعذّر الاتصال: {error}",
+  "@printerConnectFailed": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "printMethodTitle": "اختر طريقة الطباعة",
+  "printThermalPrinter": "طابعة حرارية (إيصال)",
+  "printStandardPrinter": "طابعة عادية (A4)",
+  "thermalPrintingComingSoon": "طباعة الإيصال الحرارية قريباً...",
+  "thermalPrintingPreparing": "جاري تجهيز الإيصال…",
+  "thermalPrintingSending": "جاري الإرسال للطابعة…",
+  "thermalPrintingSuccess": "تمت طباعة الإيصال",
+  "thermalPrinterNotSelected": "لم يتم اختيار طابعة. من فضلك اختر طابعة من إعدادات الطابعة.",
+  "thermalReceiptPreviewCancel": "إلغاء",
+  "thermalReceiptPreviewPrint": "طباعة",
+  "editProfileChooseLogo": "اختيار شعار النشاط",
+  "editProfileBusinessNameLabel": "اسم النشاط",
+  "editProfileAddressLabel": "العنوان",
+  "receiptThankYou": "شكراً لتعاملكم معنا"
+  ,
+  "bluetoothPermissionsRequired": "صلاحيات البلوتوث مطلوبة لاستخدام الطابعة."
 }

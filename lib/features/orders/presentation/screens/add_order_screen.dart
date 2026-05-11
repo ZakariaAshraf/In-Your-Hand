@@ -1,8 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_your_hand/core/premium/ai_quota_service.dart';
+import 'package:in_your_hand/core/premium/premium_service.dart';
 import 'package:in_your_hand/core/services/gemeni_service.dart';
+import 'package:in_your_hand/core/session/session_cubit.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
+import 'package:in_your_hand/features/clients/domain/repositories/clients_repository.dart';
+import 'package:in_your_hand/features/orders/domain/repositories/orders_repository.dart';
 import 'package:in_your_hand/features/orders/data/order_model.dart';
 import 'package:in_your_hand/features/voice_order/presentation/cubit/voice_order_cubit.dart';
 import 'package:in_your_hand/features/voice_order/presentation/screens/add_order_by_voice_screen.dart';
@@ -74,7 +79,13 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                       builder: (ctx) => BlocProvider(
                         create: (ctx) => VoiceOrderCubit(
                           geminiService: GeminiService(),
+                          sessionCubit: context.read<SessionCubit>(),
+                          ordersRepository: context.read<OrdersRepository>(),
+                          clientsRepository: context.read<ClientsRepository>(),
+                          premiumService: context.read<PremiumService>(),
+                          aiQuotaService: context.read<AiQuotaService>(),
                           ordersCubit: context.read<OrdersCubit>(),
+                          clientsCubit: context.read<ClientsCubit>(),
                         ),
                         child: const AddOrderByVoiceScreen(),
                       ),

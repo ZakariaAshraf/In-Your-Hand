@@ -5,6 +5,7 @@ import 'package:in_your_hand/core/utils/screen_util.dart';
 import '../../../../core/widgets/character_item.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../main_screen.dart';
 import '../manager/auth_cubit.dart';
 
 class ChooseYourCharacterScreen extends StatefulWidget {
@@ -52,9 +53,8 @@ class _ChooseYourCharacterScreenState extends State<ChooseYourCharacterScreen> {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              "/main_screen",
+            Navigator.of(context, rootNavigator: true).pushAndRemoveUntil<void>(
+              MaterialPageRoute<void>(builder: (_) => const MainScreen()),
               (route) => false,
             );
           } else if (state is AuthFailure) {

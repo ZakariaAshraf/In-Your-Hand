@@ -5,13 +5,16 @@ import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/orders/presentation/widgets/order_item.dart';
 
 import '../../../../core/services/ad_manger.dart';
-import '../../../../core/services/pdf_rewarded_gate.dart';
+import '../../../../core/services/rewarded_ad_gate.dart';
 import '../../../../core/utils/pdf_manger.dart';
+import '../../../../core/widgets/print_method_dialog.dart';
 import '../../../../core/widgets/screen_banner_ad.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_toast_widget.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../business_profile/domain/entities/business_profile.dart';
 import '../../../orders/presentation/cubit/orders_cubit.dart';
+import '../../../settings/presentation/Cubit/user_cubit.dart';
 import '../../data/clients_model.dart';
 
 class ClientDetailsScreen extends StatefulWidget {
@@ -49,11 +52,17 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                 if (state is! OrdersSuccess || state.orders.isEmpty){
                   return CustomToastWidget.show(context: context, title: l10n.noOrders, iconPath: "assets/icons/icon.png",);
                 }
-                PdfRewardedGate.run(context, () {
+                BusinessProfile? businessProfile;
+                final userState = context.read<UserCubit>().state;
+                if (userState is UserLoaded) {
+                  businessProfile = userState.profile;
+                }
+                RewardedAdGate.run(context, () {
                   showClientPdfPreview(
                     context,
                     client: widget.client,
                     orders: state.orders,
+                    businessProfile: businessProfile,
                   );
                 });
               },
@@ -233,13 +242,34 @@ class _ClientDetailsScreenState extends State<ClientDetailsScreen> {
                                   state.orders.isEmpty) {
                                 return;
                               }
-                              PdfRewardedGate.run(context, () async {
-                                await printClientPdf(
-                                  context,
-                                  client: widget.client,
-                                  orders: state.orders,
-                                );
-                              });
+                              PrintMethodDialog.show(
+                                context,
+                                onThermalPrinter: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        l10n.thermalPrintingComingSoon,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                onStandardPrinter: () {
+                                  RewardedAdGate.run(context, () async {
+                                    BusinessProfile? businessProfile;
+                                    final userState =
+                                        context.read<UserCubit>().state;
+                                    if (userState is UserLoaded) {
+                                      businessProfile = userState.profile;
+                                    }
+                                    await printClientPdf(
+                                      context,
+                                      client: widget.client,
+                                      orders: state.orders,
+                                      businessProfile: businessProfile,
+                                    );
+                                  });
+                                },
+                              );
                             },
                             height: 70.h(context),
                             width: 330.w(context),

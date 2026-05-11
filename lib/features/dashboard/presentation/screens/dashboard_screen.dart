@@ -20,7 +20,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
-    context.read<DashboardCubit>().loadDashboard(widget.userId);
+    context.read<DashboardCubit>().loadDashboard();
     super.initState();
   }
 

@@ -2,13 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
-import 'package:in_your_hand/features/authenticate/presentation/pages/sign_up.dart';
+import 'package:in_your_hand/features/authenticate/presentation/pages/complete_google_registration_screen.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../settings/presentation/Cubit/user_cubit.dart';
+import '../../../../core/session/session_cubit.dart';
 import '../../../settings/presentation/screens/change_password_screen.dart';
 import '../manager/auth_cubit.dart';
+import '../../../../main_screen.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -35,15 +36,35 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) async {
+          final route = ModalRoute.of(context);
+          final isSignInRouteCurrent = route?.isCurrent ?? true;
+
           if (state is AuthSuccess) {
-            final userId = state.user.id;
-            context.read<UserCubit>().listenToFirebaseStream(userId);
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              "/main_screen",
+            if (!isSignInRouteCurrent) {
+              return;
+            }
+            // Session + sync pipeline (AuthSyncCoordinator) run from SessionCubit.refresh.
+            await context.read<SessionCubit>().refresh();
+            if (!context.mounted) return;
+            Navigator.of(context, rootNavigator: true).pushAndRemoveUntil<void>(
+              MaterialPageRoute<void>(builder: (_) => const MainScreen()),
               (route) => false,
             );
+          } else if (state is AuthNeedsOnboarding) {
+            if (!isSignInRouteCurrent) {
+              return;
+            }
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => CompleteGoogleRegistrationScreen(
+                  user: state.user,
+                ),
+              ),
+            );
           } else if (state is AuthFailure) {
+            if (!isSignInRouteCurrent) {
+              return;
+            }
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
             ScaffoldMessenger.of(context).showSnackBar(
@@ -55,7 +76,9 @@ class _SignInState extends State<SignIn> {
           }
         },
         builder: (context, state) {
-          if (state is AuthLoading) {
+          final route = ModalRoute.of(context);
+          final isSignInRouteCurrent = route?.isCurrent ?? true;
+          if (state is AuthLoading && isSignInRouteCurrent) {
             return const Center(child: CircularProgressIndicator());
           } else {
             return Stack(
@@ -98,7 +121,6 @@ class _SignInState extends State<SignIn> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 30),
                       CustomTextField(
                         controller: emailController,
                         hintText: l10n.email,
@@ -149,42 +171,111 @@ class _SignInState extends State<SignIn> {
                           },
                         ),
                       ),
-
-                      SizedBox(height: 50.h(context)),
+                      SizedBox(height: 20.h(context)),
+                      Center(
+                        child: CustomButton(
+                          color: Colors.transparent,
+                          textStyle: theme.titleMedium!.copyWith(color: Colors.green),
+                          width: 300.w(context),
+                          isInvert: true,
+                          title: l10n.continueAsGuest,
+                          onTap: () async {
+                            await context.read<SessionCubit>().ensureGuest();
+                            if (!context.mounted) return;
+                            Navigator.of(context, rootNavigator: true)
+                                .pushAndRemoveUntil<void>(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const MainScreen(),
+                              ),
+                                  (route) => false,
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      // Premium paywall will own Google sign-in again (RevenueCat).
+                      // Row(
+                      //   children: [
+                      //     const Expanded(child: Divider()),
+                      //     Padding(
+                      //       padding: const EdgeInsets.symmetric(horizontal: 12),
+                      //       child: Text(
+                      //         l10n.orContinueWith,
+                      //         style: theme.bodySmall?.copyWith(
+                      //           color: Colors.grey.shade600,
+                      //           fontWeight: FontWeight.w500,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     const Expanded(child: Divider()),
+                      //   ],
+                      // ),
+                      // SizedBox(height: 16.h(context)),
                       // Center(
-                      //   child: CustomButton(
+                      //   child: SizedBox(
                       //     width: 300.w(context),
-                      //     isInvert: true,
-                      //     title: l10n.continueAsGuest,
-                      //     onTap: () {},
+                      //     height: 52.h(context),
+                      //     child: OutlinedButton(
+                      //       style: OutlinedButton.styleFrom(
+                      //         foregroundColor: const Color(0xFF3C4043),
+                      //         backgroundColor: Colors.white,
+                      //         side: const BorderSide(color: Color(0xFFDADCE0)),
+                      //         shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(10),
+                      //         ),
+                      //         elevation: 0,
+                      //       ),
+                      //       onPressed: () {
+                      //         context.read<AuthCubit>().signInWithGoogle();
+                      //       },
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Image.asset(
+                      //             "assets/icons/ic_google.png",
+                      //             width: 24.w(context),
+                      //             height: 24.h(context),
+                      //           ),
+                      //           SizedBox(width: 12.w(context)),
+                      //           Text(
+                      //             l10n.continueWithGoogle,
+                      //             style: theme.titleMedium?.copyWith(
+                      //               fontWeight: FontWeight.w600,
+                      //               fontSize: 16.sp(context),
+                      //               color: const Color(0xFF3C4043),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
                       //   ),
                       // ),
-                      SizedBox(height: 60.h(context)),
-
-                      Divider(),
-                      Row(
-                        children: [
-                          Text(
-                            l10n.dontHaveAccount,
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SignUp(),
-                                ),
-                                (route) => true,
-                              );
-                            },
-                            child: Text(
-                              l10n.create,
-                              style: TextStyle(color: Color(0xff1F4C6B)),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // SizedBox(height: 40.h(context)),
+                      // Divider(),
+                      // Sign-up is gated behind Premium / paywall for new accounts.
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       l10n.dontHaveAccount,
+                      //       style: TextStyle(color: Colors.grey),
+                      //     ),
+                      //     TextButton(
+                      //       onPressed: () {
+                      //         Navigator.pushAndRemoveUntil(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => const SignUp(),
+                      //           ),
+                      //           (route) => true,
+                      //         );
+                      //       },
+                      //       child: Text(
+                      //         l10n.create,
+                      //         style: TextStyle(color: Color(0xff1F4C6B)),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),

@@ -1,22 +1,23 @@
 part of 'user_cubit.dart';
 
 @immutable
-sealed class UserState {}
-
-final class UserInitial extends UserState {}
-class UserLoading extends UserState {}
-
-class UserLoaded extends UserState {
-final AppUserModel user;
-
-UserLoaded(this.user);
+sealed class UserState {
+  const UserState();
 }
-class UserSuccess extends UserState {}
-final class UserAccountDeleted extends UserState {}
 
-
-class UserError extends UserState {
-final String message;
-
-UserError(this.message);
+final class UserLoading extends UserState {
+  const UserLoading();
 }
+
+final class UserLoaded extends UserState {
+  const UserLoaded(this.profile);
+
+  final BusinessProfile profile;
+}
+
+final class UserError extends UserState {
+  const UserError(this.message);
+
+  final String message;
+}
+

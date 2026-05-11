@@ -37,6 +37,16 @@
   },
   "skip": "Skip",
   "letsStart": "Let's Start ->",
+  "onboardingSlide1Title": "Works Without Internet",
+  "onboardingSlide1Subtitle": "Manage clients and orders offline. Sync to the cloud when you are online.",
+  "onboardingSlide2Title": "AI Voice Commands",
+  "onboardingSlide2Subtitle": "Speak in Arabic or English — smart AI fills in order details.",
+  "onboardingSlide3Title": "Professional Printing",
+  "onboardingSlide3Subtitle": "Thermal receipts and polished invoices from your phone.",
+  "onboardingQuickSetupTitle": "Quick Setup",
+  "onboardingBusinessNameLabel": "Business name (optional)",
+  "onboardingPhoneLabel": "Phone number (optional)",
+  "onboardingStartCta": "Start",
   "chooseYourCharacter": "Choose Your Character",
   "chooseCharacterDescription": "Select the profile that best describes you to personalize your journey.",
   "businessMan": "Business Man",
@@ -57,6 +67,12 @@
   "passwordTooWeak": "Please make the password stronger (see requirements below)",
   "pleaseFillAllFields": "Please fill all fields",
   "orContinueWith": "or continue with",
+  "continueWithGoogle": "Continue with Google",
+  "completeRegistration": "Complete registration",
+  "googleProfileTitle": "Finish your profile",
+  "googleProfileSubtitle": "Add your phone number and choose your character to start using the app.",
+  "accountNameHint": "Name",
+  "googleProfileCompleteFailed": "Could not save your profile. Please try again.",
   "selectAvatar": "Select Avatar",
   "tryAgain": "Try Again",
   "preferences": "PREFERENCES",
@@ -187,6 +203,7 @@
   "confirmOrderMessage": "Review the order below. Add it?",
   "confirm": "Confirm",
   "connectionError": "You are not connected (offline)",
+  "aiRequiresInternetConnection": "AI requires internet connection to process voice",
 
   "unpaidOrderMessage": "Hello, you have {totalUnpaid} remaining out of {totalAmount} for the order dated {orderDate}",
 
@@ -198,5 +215,80 @@
   "deleteAccountRequireRecentLogin": "For security, please sign out and sign in again, then try deleting your account.",
   "deleteAccountEnterPassword": "Enter your current password to confirm deletion.",
   "deleteAccountPasswordRequired": "Please enter your password.",
-  "adCouldNotLoad": "Ad could not load. Try again in a moment."
+  "adCouldNotLoad": "Ad could not load. Try again in a moment.",
+  "settingsBusinessFallbackTitle": "Your business",
+  "guestModeHint": "You are using the app without cloud backup. Upgrade to Premium to sync.",
+  "settingsPremiumBackupSubtitle": "Premium: cloud backup & sign in",
+  "deleteLocalData": "Delete local data",
+  "deleteLocalDataConfirm": "Are you sure you want to delete all local data",
+  "premiumPaywallTitle": "Premium",
+  "premiumPaywallHeadline": "Go Premium",
+  "premiumPaywallDescription": "Back up everything in the cloud, remove distractions, and do more with voice.",
+  "premiumBenefitCloudSync": "Cloud backup & sync across your devices",
+  "premiumBenefitNoAds": "No ads",
+  "premiumBenefitAiVoice": "Higher limits for AI voice orders",
+  "premiumSubscribePlaceholder": "Subscribe / Upgrade",
+  "premiumRestorePlaceholder": "Restore purchases",
+  "premiumAlreadySubscribedLogin": "Already subscribed? Log in here",
+  "premiumComingSoon": "RevenueCat integration coming soon",
+  "premiumRestoreComingSoon": "Restore purchases coming soon",
+  "premiumPurchaseSuccess": "You are now Premium. Thank you!",
+  "premiumRestoreSuccess": "Purchases restored successfully.",
+  "premiumRestoreNoEntitlement": "No active Premium subscription found for this account.",
+  "premiumOfferingsUnavailable": "Subscriptions are unavailable right now. Check your connection or try again later.",
+  "premiumPurchaseCancelled": "Purchase cancelled.",
+  "premiumPurchaseError": "Purchase could not be completed. Please try again.",
+  "premiumSignInForSyncHint": "Sign in to enable cloud sync across your devices.",
+  "premiumPackageMonthly": "Monthly",
+  "premiumPackageAnnual": "Annual",
+  "premiumPackageWeekly": "Weekly",
+  "premiumPackageLifetime": "Lifetime",
+
+  "aiVoiceLocalQuotaTitle": "Free AI limit reached",
+  "aiVoiceLocalQuotaBody": "Upgrade to Premium for unlimited voice orders!",
+  "clientsImportFromExcelTooltip": "Import from Excel / CSV (.csv, .xlsx)",
+  "clientsImportedSuccess": "{count} clients imported successfully",
+  "@clientsImportedSuccess": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "clientsImportFailed": "Import failed: {error}",
+  "@clientsImportFailed": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "printerSettings": "Printer Settings",
+  "printerSettingsSubtitle": "Select a paired Bluetooth thermal printer",
+  "printerSelectPairedDevice": "Select printer",
+  "printerNoPairedDevices": "No paired Bluetooth devices found",
+  "printerConnected": "Connected to {name}",
+  "@printerConnected": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "printerConnectFailed": "Could not connect: {error}",
+  "@printerConnectFailed": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "printMethodTitle": "Choose print method",
+  "printThermalPrinter": "Thermal Printer (Receipt)",
+  "printStandardPrinter": "Standard Printer (A4/PDF)",
+  "thermalPrintingComingSoon": "Thermal printing coming soon...",
+  "thermalPrintingPreparing": "Preparing receipt…",
+  "thermalPrintingSending": "Sending to printer…",
+  "thermalPrintingSuccess": "Receipt printed",
+  "thermalPrinterNotSelected": "No printer selected. Please choose one in Printer Settings.",
+  "thermalReceiptPreviewCancel": "Cancel",
+  "thermalReceiptPreviewPrint": "Print",
+  "editProfileChooseLogo": "Choose logo",
+  "editProfileBusinessNameLabel": "Business name",
+  "editProfileAddressLabel": "Address",
+  "receiptThankYou": "Thank you"
+  ,
+  "bluetoothPermissionsRequired": "Bluetooth permissions are required to use the printer."
 }

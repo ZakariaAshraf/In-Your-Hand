@@ -1,53 +1,65 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:in_your_hand/core/session/session_cubit.dart';
 import 'package:in_your_hand/features/dashboard/data/dashboard_model.dart';
 import 'package:meta/meta.dart';
+
+import '../../../orders/domain/repositories/orders_repository.dart';
 
 part 'dashboard_state.dart';
 
 class DashboardCubit extends Cubit<DashboardState> {
-  DashboardCubit() : super(DashboardInitial());
+  DashboardCubit({
+    required OrdersRepository ordersRepository,
+    required SessionCubit sessionCubit,
+  })  : _ordersRepository = ordersRepository,
+        _sessionCubit = sessionCubit,
+        super(DashboardInitial()) {
+    _sessionSub = _sessionCubit.stream.listen((state) {
+      if (state is SessionLoaded) {
+        _workspaceId = state.context.workspaceId;
+        loadDashboard();
+      }
+    });
+    final existing = _sessionCubit.contextOrNull;
+    if (existing != null) {
+      _workspaceId = existing.workspaceId;
+      loadDashboard();
+    }
+  }
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final OrdersRepository _ordersRepository;
+  final SessionCubit _sessionCubit;
+  StreamSubscription? _sessionSub;
+  String? _workspaceId;
 
-  String get userId => _auth.currentUser!.uid;
-  Future<void> loadDashboard(String userId) async {
+  Future<void> refreshAfterLocalDatabaseReset() => loadDashboard();
+
+  Future<void> loadDashboard() async {
     emit(DashboardLoading());
 
     try {
-      final uid = _auth.currentUser?.uid ?? userId;
-      if (uid.isEmpty) {
-        emit(DashboardError(errorMessage: "User not logged in"));
-        return;
-      }
-      final snapshot = await _firestore
-          .collection('orders')
-          .where('userId', isEqualTo: uid)
-          .get();
+      final wid = _workspaceId;
+      if (wid == null) throw Exception('Session not ready');
+
+      final orders = await _ordersRepository.listOrders(workspaceId: wid);
 
       double totalAmount = 0;
       double totalPaid = 0;
-      int totalOrders = snapshot.docs.length;
+      int totalOrders = orders.length;
 
       final clientsWithDebtSet = <String>{};
       final clientsIds = <String>{};
 
-      for (var doc in snapshot.docs) {
-        final data = doc.data();
+      for (final o in orders) {
+        totalAmount += o.totalAmount;
+        totalPaid += o.totalPaid;
 
-        final amount = (data['totalAmount'] ?? 0) as num;
-        final paid = (data['totalPaid'] ?? 0) as num;
-        final clientId = data['clientId'];
-
-        totalAmount += amount.toDouble();
-        totalPaid += paid.toDouble();
-
-        if (paid < amount) {
+        if (o.totalPaid < o.totalAmount) {
+          final clientId = o.clientId;
           clientsWithDebtSet.add(clientId);
           clientsIds.add(clientId);
-
         }
       }
 
@@ -63,5 +75,11 @@ class DashboardCubit extends Cubit<DashboardState> {
     } catch (e) {
       emit(DashboardError(errorMessage: e.toString()));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _sessionSub?.cancel();
+    return super.close();
   }
 }

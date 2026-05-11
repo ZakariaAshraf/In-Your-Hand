@@ -5,7 +5,8 @@ import 'package:in_your_hand/features/authenticate/presentation/pages/sign_in.da
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../manager/auth_cubit.dart';
+import '../../../../core/session/session_cubit.dart';
+import '../../../../main_screen.dart';
 import 'choose_your_character_screen.dart';
 
 class SignUp extends StatefulWidget {
@@ -239,6 +240,22 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                   ],
+                ),
+                TextButton(
+                  onPressed: () async {
+                    await context.read<SessionCubit>().ensureGuest();
+                    if (!context.mounted) return;
+                    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil<
+                        void>(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const MainScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  },
+                  child: Text(
+                    l10n.continueAsGuest,
+                  ),
                 ),
               ],
             ),

@@ -6,7 +6,7 @@ import '../../../../core/utils/app_colors.dart';
 class SettingsButton extends StatelessWidget {
   final String title;
   final Color? iconColor;
-  final Function function;
+  final VoidCallback? function;
   final IconData iconData;
   const SettingsButton(
       {super.key,
@@ -19,7 +19,7 @@ class SettingsButton extends StatelessWidget {
     return Card(
         elevation: 0.5,
         child: ListTile(
-          onTap: () => function(),
+          onTap: function,
           leading: Icon(
             iconData,
             color: iconColor ??AppColors.blackSecondary,

@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import '../../../../core/cache/cache_helper.dart';
 import '../../domain/entities/user_entity.dart';
@@ -11,9 +9,19 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   final SignInUseCase signInUseCase;
   final RegisterUseCase registerUseCase;
+  final CompleteGoogleProfileUseCase completeGoogleProfileUseCase;
+  final SignInWithGoogleUseCase signInWithGoogleUseCase;
+  final UserDocumentExistsUseCase userDocumentExistsUseCase;
+  final SignOutUseCase signOutUseCase;
 
-  AuthCubit({required this.signInUseCase, required this.registerUseCase})
-      : super(AuthInitial());
+  AuthCubit({
+    required this.signInUseCase,
+    required this.registerUseCase,
+    required this.completeGoogleProfileUseCase,
+    required this.signInWithGoogleUseCase,
+    required this.userDocumentExistsUseCase,
+    required this.signOutUseCase,
+  }) : super(AuthInitial());
 
   Future<void> signIn(String email, String password) async {
     emit(AuthLoading());
@@ -26,27 +34,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> saveUserData({
-    required String name,
-    required String phone,
-    String? character,
-  }) async {
-    try {
-      String userId = FirebaseAuth.instance.currentUser!.uid;
-      await FirebaseFirestore.instance.collection("users").doc(userId).set({
-        'name': name,
-        'phone': phone,
-        'createdAt': FieldValue.serverTimestamp(),
-        'character': character,
-        'isPremium': false,
-        'voiceOrdersUsed': 0,
-        'voiceOrdersResetDate': FieldValue.serverTimestamp(),
-      });
-    } catch (e) {
-      emit(AuthFailure("Error saving user data: $e"));
-    }
-  }
-
   Future<void> register(
       {required String email,
       required String password,
@@ -56,8 +43,13 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       final user = await registerUseCase.execute(email, password);
-       await saveUserData(name: name, phone: phone,character: characterPath);
-      await CacheHelper.set(key: CacheKeys.uId, value: user!.id);
+      await completeGoogleProfileUseCase.execute(
+        user!.id,
+        name,
+        phone,
+        characterPath,
+      );
+      await CacheHelper.set(key: CacheKeys.uId, value: user.id);
       await CacheHelper.set(key: CacheKeys.userName, value: name);
       await CacheHelper.set(key: CacheKeys.userCharacter, value: characterPath);
       await CacheHelper.set(key: CacheKeys.userPhone, value: phone);
@@ -67,8 +59,56 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void signOut() async{
-    await FirebaseAuth.instance.signOut();
+  Future<void> signInWithGoogle() async {
+    emit(AuthLoading());
+    try {
+      final user = await signInWithGoogleUseCase.execute();
+      if (user == null) {
+        emit(AuthInitial());
+        return;
+      }
+
+      final hasProfile = await userDocumentExistsUseCase.execute(user.id);
+      if (hasProfile) {
+        await CacheHelper.set(key: CacheKeys.uId, value: user.id);
+        emit(AuthSuccess(user: user));
+      } else {
+        emit(AuthNeedsOnboarding(user: user));
+      }
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
+
+  Future<void> completeGoogleProfileFlow(
+    UserEntity user,
+    String phone,
+    String? characterPath,
+    String name,
+  ) async {
+    emit(AuthLoading());
+    try {
+      await completeGoogleProfileUseCase.execute(
+        user.id,
+        name,
+        phone,
+        characterPath,
+      );
+      await CacheHelper.set(key: CacheKeys.uId, value: user.id);
+      await CacheHelper.set(key: CacheKeys.userName, value: name);
+      await CacheHelper.set(
+        key: CacheKeys.userCharacter,
+        value: characterPath ?? '',
+      );
+      await CacheHelper.set(key: CacheKeys.userPhone, value: phone);
+      emit(AuthSuccess(user: user));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
+
+  Future<void> signOut() async {
+    await signOutUseCase.execute();
     await CacheHelper.remove(key: CacheKeys.uId);
     await CacheHelper.remove(key: CacheKeys.userName);
     await CacheHelper.remove(key: CacheKeys.userCharacter);
