@@ -48,7 +48,7 @@ class OnboardingScreen extends StatelessWidget {
             child: Icon(icon, size: 120, color: Colors.white.withValues(alpha: 0.92)),
           ),
 
-          const SizedBox(height: 32), // مسافة بين البوكس والنصوص
+          const SizedBox(height: 32),
 
           Text(
             title,

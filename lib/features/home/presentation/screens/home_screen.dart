@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_your_hand/core/services/ad_manger.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
+import 'package:in_your_hand/core/widgets/screen_banner_ad.dart';
 import 'package:in_your_hand/core/widgets/custom_button.dart';
 import 'package:in_your_hand/features/clients/presentation/screens/add_clients_screen.dart';
 
@@ -34,8 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Column(
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             BlocBuilder<OrdersCubit, OrdersState>(builder: (context, state) {
@@ -333,6 +338,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+            ),
+          ),
+          ScreenBannerAd(adUnitId: AdManger.mainTabBanner),
+        ],
       ),
     );
   }

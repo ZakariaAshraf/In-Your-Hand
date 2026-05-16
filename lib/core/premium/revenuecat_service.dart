@@ -8,7 +8,7 @@ class RevenueCatService {
   RevenueCatService._();
   static final RevenueCatService instance = RevenueCatService._();
 
-  static const String entitlementPremiumId = 'premium';
+  static const String entitlementPremiumId = 'In Your Hand Pro';
 
   bool _configured = false;
   String? _lastSyncedWorkspaceId;

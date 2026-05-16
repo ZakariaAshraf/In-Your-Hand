@@ -48,11 +48,11 @@ class VoiceOrderCubit extends Cubit<VoiceOrderState> {
   final SpeechToText _speech = SpeechToText();
 
   Future<bool> _isVoiceAiQuotaOk(String workspaceId) async {
-    if (await _premiumService.isPremium()) return true;
-    return _aiQuotaService.canUseVoiceAi(
-      workspaceId,
-      freeLimit: VoiceOrderLimits.freeVoiceOrdersPerPeriod,
-    );
+    final premium = _premiumService.isPremiumSync;
+    final limit = premium
+        ? VoiceOrderLimits.premiumVoiceOrdersPerPeriod
+        : VoiceOrderLimits.freeVoiceOrdersPerPeriod;
+    return _aiQuotaService.canUseVoiceAi(workspaceId, freeLimit: limit);
   }
 
   /// Returns `false` if mic / Gemini must stop (quota or Premium gate failed).
@@ -329,9 +329,7 @@ class VoiceOrderCubit extends Cubit<VoiceOrderState> {
         },
       );
       await ordersCubit.getOrders();
-      if (!(await _premiumService.isPremium())) {
-        await _aiQuotaService.incrementVoiceAiUsage(wid);
-      }
+      await _aiQuotaService.incrementVoiceAiUsage(wid);
       emit(VoiceOrderState(
         status: VoiceOrderStatus.success,
         isSpeechAvailable: state.isSpeechAvailable,

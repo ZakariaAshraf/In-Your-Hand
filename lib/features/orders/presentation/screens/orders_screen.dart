@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/generated/extentions.dart';
+import 'package:in_your_hand/core/services/ad_manger.dart';
+import 'package:in_your_hand/core/widgets/screen_banner_ad.dart';
 import 'package:in_your_hand/core/utils/app_colors.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
-import 'package:in_your_hand/core/widgets/custom_button.dart';
 import 'package:in_your_hand/features/orders/presentation/screens/add_order_screen.dart';
 import 'package:in_your_hand/features/orders/presentation/widgets/order_item.dart';
 
@@ -60,8 +61,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
         ],
         title: Text(l10n.orders, style: theme.titleLarge),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
           children: [
             SizedBox(
               height: 60.h(context),
@@ -163,6 +167,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ),
           ],
         ),
+            ),
+          ),
+          ScreenBannerAd(adUnitId: AdManger.mainTabBanner),
+        ],
       ),
     );
   }

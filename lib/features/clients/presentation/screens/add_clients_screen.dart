@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_your_hand/core/services/ad_manager.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/core/widgets/custom_button.dart';
 import 'package:in_your_hand/core/widgets/custom_text_field.dart';
@@ -24,6 +25,8 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
   TextEditingController notesController = TextEditingController();
   bool isNameEmpty = true;
   String fullPhoneNumber = '';
+  /// True from first tap until post-save interstitial (or error) completes — keeps button disabled while state is Success during ad load.
+  bool _submitInFlight = false;
 
   @override
   void initState() {
@@ -42,13 +45,25 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
     var theme = Theme
         .of(context)
         .textTheme;
-    final direction = Directionality.of(context);
     final l10n = AppLocalizations.of(context)!;
     return BlocListener<ClientsCubit, ClientsState>(
       listenWhen: (prev, curr) =>
-      prev is ClientsLoading && curr is ClientsSuccess,
-      listener: (context, state) {
-          Navigator.pop(context);
+          _submitInFlight &&
+          prev is ClientsLoading &&
+          (curr is ClientsSuccess || curr is ClientsError),
+      listener: (context, state) async {
+        if (!_submitInFlight) return;
+        if (state is ClientsError) {
+          if (mounted) {
+            setState(() => _submitInFlight = false);
+          }
+          return;
+        }
+        try {
+          await AdManager.showInterstitialAd();
+        } catch (_) {}
+        if (!context.mounted) return;
+        Navigator.of(context).pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -114,23 +129,27 @@ class _AddClientsScreenState extends State<AddClientsScreen> {
             SizedBox(height: 20.h(context)),
             BlocBuilder<ClientsCubit, ClientsState>(
               builder: (context, state) {
-                final isLoading = state is ClientsLoading;
+                final busy = _submitInFlight;
                 return CustomButton(
-                  title: isLoading ? l10n.processing : l10n.saveClient,
-                  onTap: (isNameEmpty || isLoading) ? null : () {
-                    final uid = FirebaseAuth.instance.currentUser?.uid;
-                    final finalPhone = fullPhoneNumber.isNotEmpty
-                        ? fullPhoneNumber
-                        : phoneController.text;
-                    final client = ClientModel(
-                      userId: uid ?? "",
-                      name: nameController.text,
-                      notes: notesController.text,
-                      phone: finalPhone,
-                      createdAt: DateTime.now(),
-                    );
-                    context.read<ClientsCubit>().addClient(client);
-                  },
+                  title: l10n.saveClient,
+                  isLoading: busy,
+                  onTap: (isNameEmpty || busy)
+                      ? null
+                      : () {
+                          setState(() => _submitInFlight = true);
+                          final uid = FirebaseAuth.instance.currentUser?.uid;
+                          final finalPhone = fullPhoneNumber.isNotEmpty
+                              ? fullPhoneNumber
+                              : phoneController.text;
+                          final client = ClientModel(
+                            userId: uid ?? "",
+                            name: nameController.text,
+                            notes: notesController.text,
+                            phone: finalPhone,
+                            createdAt: DateTime.now(),
+                          );
+                          context.read<ClientsCubit>().addClient(client);
+                        },
                   height: 70.h(context),
                   width: 330.w(context),
                 );

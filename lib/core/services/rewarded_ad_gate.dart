@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_your_hand/core/premium/premium_service.dart';
 
 import '../../l10n/app_localizations.dart';
 import 'ad_manger.dart';
@@ -12,11 +13,14 @@ import 'ad_manger.dart';
 class RewardedAdGate {
   RewardedAdGate._();
 
+  static const PremiumService _premium = PremiumService();
+
   static int _spareUses = 0;
   static RewardedAd? _preloaded;
   static bool _loadInFlight = false;
 
-  static void preload() {
+  static Future<void> preload() async {
+    if (_premium.isPremiumSync) return;
     if (_preloaded != null || _loadInFlight) return;
     _loadInFlight = true;
     RewardedAd.load(
@@ -25,6 +29,10 @@ class RewardedAdGate {
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
           _loadInFlight = false;
+          if (_premium.isPremiumSync) {
+            ad.dispose();
+            return;
+          }
           _preloaded = ad;
         },
         onAdFailedToLoad: (error) {
@@ -40,10 +48,14 @@ class RewardedAdGate {
     BuildContext context,
     FutureOr<void> Function() action,
   ) async {
+    if (_premium.isPremiumSync) {
+      await action();
+      return;
+    }
     if (_spareUses > 0) {
       _spareUses--;
       await action();
-      preload();
+      unawaited(preload());
       return;
     }
 
@@ -66,12 +78,12 @@ class RewardedAdGate {
       ad.fullScreenContentCallback = FullScreenContentCallback(
         onAdDismissedFullScreenContent: (a) {
           a.dispose();
-          preload();
+          unawaited(preload());
         },
         onAdFailedToShowFullScreenContent: (a, err) {
           debugPrint('RewardedAdGate show failed: $err');
           a.dispose();
-          preload();
+          unawaited(preload());
           showLoadError();
         },
       );
@@ -87,6 +99,11 @@ class RewardedAdGate {
     final cached = _preloaded;
     _preloaded = null;
     if (cached != null) {
+      if (_premium.isPremiumSync) {
+        cached.dispose();
+        await action();
+        return;
+      }
       await present(cached);
       return;
     }
@@ -96,12 +113,17 @@ class RewardedAdGate {
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (loaded) async {
+          if (_premium.isPremiumSync) {
+            loaded.dispose();
+            await executeAction();
+            return;
+          }
           await present(loaded);
         },
         onAdFailedToLoad: (error) {
           debugPrint('RewardedAdGate load failed: $error');
           showLoadError();
-          preload();
+          unawaited(preload());
         },
       ),
     );

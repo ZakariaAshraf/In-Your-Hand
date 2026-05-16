@@ -20,5 +20,5 @@ Future<void> initializeMobileAds() async {
   }
 
   // Start loading the first rewarded ad only after the SDK reports ready.
-  RewardedAdGate.preload();
+  await RewardedAdGate.preload();
 }

@@ -1494,6 +1494,42 @@ abstract class AppLocalizations {
   /// **'Lifetime'**
   String get premiumPackageLifetime;
 
+  /// No description provided for @premiumBillingMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed monthly'**
+  String get premiumBillingMonthly;
+
+  /// No description provided for @premiumBillingAnnual.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed annually'**
+  String get premiumBillingAnnual;
+
+  /// No description provided for @premiumBillingWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed weekly'**
+  String get premiumBillingWeekly;
+
+  /// No description provided for @premiumBillingLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time purchase'**
+  String get premiumBillingLifetime;
+
+  /// No description provided for @premiumBillingDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get premiumBillingDefault;
+
+  /// No description provided for @premiumAnnualSaveBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Save 20%'**
+  String get premiumAnnualSaveBadge;
+
   /// No description provided for @aiVoiceLocalQuotaTitle.
   ///
   /// In en, this message translates to:

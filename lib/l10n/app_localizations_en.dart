@@ -752,6 +752,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumPackageLifetime => 'Lifetime';
 
   @override
+  String get premiumBillingMonthly => 'Billed monthly';
+
+  @override
+  String get premiumBillingAnnual => 'Billed annually';
+
+  @override
+  String get premiumBillingWeekly => 'Billed weekly';
+
+  @override
+  String get premiumBillingLifetime => 'One-time purchase';
+
+  @override
+  String get premiumBillingDefault => 'Subscription';
+
+  @override
+  String get premiumAnnualSaveBadge => 'Save 20%';
+
+  @override
   String get aiVoiceLocalQuotaTitle => 'Free AI limit reached';
 
   @override

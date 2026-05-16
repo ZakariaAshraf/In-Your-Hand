@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_your_hand/core/services/ad_manger.dart';
 import 'package:in_your_hand/core/services/rewarded_ad_gate.dart';
+import 'package:in_your_hand/core/widgets/screen_banner_ad.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
 import 'package:in_your_hand/features/clients/presentation/models/client_import_outcome.dart';
 import 'package:in_your_hand/core/widgets/default_message_card.dart';
@@ -93,8 +95,11 @@ class _ClientsScreenState extends State<ClientsScreen> {
         ],
         title: Text(l10n.clients, style: theme.titleLarge),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(12),
@@ -182,6 +187,10 @@ class _ClientsScreenState extends State<ClientsScreen> {
             ),
           ],
         ),
+            ),
+          ),
+          ScreenBannerAd(adUnitId: AdManger.mainTabBanner),
+        ],
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_your_hand/core/premium/premium_ad_refresh_notifier.dart';
 import 'package:in_your_hand/core/premium/premium_service.dart';
 import 'package:in_your_hand/core/premium/revenuecat_service.dart';
 import 'package:in_your_hand/core/session/session_cubit.dart';
@@ -47,6 +48,161 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen> {
     }
   }
 
+  String _billingCycleSubtitle(Package package, AppLocalizations l10n) {
+    switch (package.packageType) {
+      case PackageType.monthly:
+        return l10n.premiumBillingMonthly;
+      case PackageType.annual:
+        return l10n.premiumBillingAnnual;
+      case PackageType.weekly:
+        return l10n.premiumBillingWeekly;
+      case PackageType.lifetime:
+        return l10n.premiumBillingLifetime;
+      default:
+        return l10n.premiumBillingDefault;
+    }
+  }
+
+  List<Package> _sortedPackages(List<Package> packages) {
+    int rank(Package p) {
+      switch (p.packageType) {
+        case PackageType.annual:
+          return 0;
+        case PackageType.monthly:
+          return 1;
+        case PackageType.weekly:
+          return 2;
+        case PackageType.lifetime:
+          return 3;
+        default:
+          return 4;
+      }
+    }
+
+    final copy = List<Package>.from(packages);
+    copy.sort((a, b) => rank(a).compareTo(rank(b)));
+    return copy;
+  }
+
+  Widget _buildPackageCard({
+    required Package pkg,
+    required AppLocalizations l10n,
+    required TextTheme textTheme,
+    required ColorScheme colorScheme,
+  }) {
+    final isAnnual = pkg.packageType == PackageType.annual;
+    final borderColor =
+        isAnnual ? colorScheme.primary : colorScheme.outlineVariant;
+    final borderWidth = isAnnual ? 2.5 : 1.0;
+    final onPrimary = colorScheme.onPrimary;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Opacity(
+        opacity: _busy ? 0.48 : 1.0,
+        child: Material(
+          color: isAnnual
+              ? colorScheme.primaryContainer.withValues(alpha: 0.35)
+              : colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
+          borderRadius: BorderRadius.circular(16),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: _busy ? null : () => _purchase(pkg),
+            borderRadius: BorderRadius.circular(16),
+            child: Ink(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: borderColor, width: borderWidth),
+                boxShadow: isAnnual
+                    ? [
+                        BoxShadow(
+                          color: colorScheme.primary.withValues(alpha: 0.22),
+                          blurRadius: 16,
+                          spreadRadius: 0,
+                          offset: const Offset(0, 6),
+                        ),
+                      ]
+                    : null,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  _packageTitle(pkg, l10n),
+                                  style: textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              if (isAnnual) ...[
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    l10n.premiumAnnualSaveBadge,
+                                    style: textTheme.labelSmall?.copyWith(
+                                      color: onPrimary,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            pkg.storeProduct.priceString,
+                            style: textTheme.headlineSmall?.copyWith(
+                              color: Colors.green,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            _billingCycleSubtitle(pkg, l10n),
+                            style: textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              height: 1.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Icon(
+                      isAnnual ? Icons.star_rounded : Icons.arrow_forward_ios_rounded,
+                      size: isAnnual ? 28 : 18,
+                      color: isAnnual
+                          ? colorScheme.primary
+                          : colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _purchase(Package package) async {
     final l10n = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
@@ -68,6 +224,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen> {
       }
 
       await premiumService.isPremium();
+      PremiumAdRefreshNotifier.instance.notifyPremiumMayHaveChanged();
 
       if (!mounted) return;
       if (nav.canPop()) {
@@ -144,6 +301,7 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen> {
 
       if (active) {
         await premiumService.isPremium();
+        PremiumAdRefreshNotifier.instance.notifyPremiumMayHaveChanged();
         if (!mounted) return;
         if (nav.canPop()) {
           nav.pop();
@@ -305,38 +463,17 @@ class _PremiumPaywallScreenState extends State<PremiumPaywallScreen> {
                         );
                       }
 
+                      final ordered = _sortedPackages(packages);
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          for (final pkg in packages) ...[
-                            FilledButton.tonal(
-                              onPressed: _busy ? null : () => _purchase(pkg),
-                              style: FilledButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                  horizontal: 12,
-                                ),
-                                alignment: Alignment.centerLeft,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _packageTitle(pkg, l10n),
-                                    style: theme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    pkg.storeProduct.priceString,
-                                    style: theme.bodyLarge,
-                                  ),
-                                ],
-                              ),
+                          for (final pkg in ordered)
+                            _buildPackageCard(
+                              pkg: pkg,
+                              l10n: l10n,
+                              textTheme: theme,
+                              colorScheme: colorScheme,
                             ),
-                            const SizedBox(height: 10),
-                          ],
                         ],
                       );
                     },

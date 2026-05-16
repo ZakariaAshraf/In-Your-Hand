@@ -251,6 +251,12 @@
   "premiumPackageAnnual": "سنوي",
   "premiumPackageWeekly": "أسبوعي",
   "premiumPackageLifetime": "مدى الحياة",
+  "premiumBillingMonthly": "يُجدد شهرياً",
+  "premiumBillingAnnual": "يُجدد سنوياً",
+  "premiumBillingWeekly": "يُجدد أسبوعياً",
+  "premiumBillingLifetime": "شراء لمرة واحدة",
+  "premiumBillingDefault": "اشتراك",
+  "premiumAnnualSaveBadge": "وفّر 20%",
 
   "aiVoiceLocalQuotaTitle": "لقد وصلت للحد الأقصى المجاني",
   "aiVoiceLocalQuotaBody": "اشترك في الباقة المميزة للمزيد!",

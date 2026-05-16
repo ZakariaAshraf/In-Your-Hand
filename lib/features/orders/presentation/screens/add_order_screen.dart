@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_your_hand/core/premium/ai_quota_service.dart';
 import 'package:in_your_hand/core/premium/premium_service.dart';
+import 'package:in_your_hand/core/services/ad_manager.dart';
 import 'package:in_your_hand/core/services/gemeni_service.dart';
 import 'package:in_your_hand/core/session/session_cubit.dart';
 import 'package:in_your_hand/core/utils/screen_util.dart';
@@ -34,6 +35,8 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   bool isAmountEmpty = true;
   String? _selectedClientName;
   String? _selectedClientId;
+  /// True from first tap until post-save interstitial (or error) completes.
+  bool _submitInFlight = false;
   // OrderStatus? _selectedStatus;
 
   @override
@@ -61,9 +64,22 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
     return BlocListener<OrdersCubit, OrdersState>(
       listenWhen: (prev, curr) =>
-      prev is OrdersLoading && curr is OrdersSuccess,
-      listener: (context, state) {
-          Navigator.pop(context);
+          _submitInFlight &&
+          prev is OrdersLoading &&
+          (curr is OrdersSuccess || curr is OrdersError),
+      listener: (context, state) async {
+        if (!_submitInFlight) return;
+        if (state is OrdersError) {
+          if (mounted) {
+            setState(() => _submitInFlight = false);
+          }
+          return;
+        }
+        try {
+          await AdManager.showInterstitialAd();
+        } catch (_) {}
+        if (!context.mounted) return;
+        Navigator.of(context).pop();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -73,7 +89,9 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
               IconButton(
                 icon: const Icon(Icons.mic,color: Colors.red,),
                 tooltip: l10n.addOrderByVoice,
-                onPressed: () async {
+                onPressed: _submitInFlight
+                    ? null
+                    : () async {
                   final added = await Navigator.of(context).push<bool>(
                     MaterialPageRoute(
                       builder: (ctx) => BlocProvider(
@@ -195,7 +213,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
               SizedBox(height: 15.h(context)),
               BlocBuilder<OrdersCubit, OrdersState>(
                 builder: (context, state) {
-                  final isLoading = state is OrdersLoading;
+                  final busy = _submitInFlight;
                   final total = double.tryParse(totalAmountController.text) ?? 0;
                   final paid = double.tryParse(totalPaidAmountController.text) ?? 0;
                   bool isButtonDisabled =
@@ -204,14 +222,16 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                           total <= 0 ||
                           paid < 0 ||
                           paid > total ||
-                          isLoading;
+                          busy;
                   return Center(
                     child: CustomButton(
-                      title: isLoading ? l10n.processing : l10n.saveOrder,
+                      title: l10n.saveOrder,
+                      isLoading: busy,
                       onTap: isButtonDisabled
                           ? null
                           : () {
-                        final uid = FirebaseAuth.instance.currentUser?.uid;
+                              setState(() => _submitInFlight = true);
+                              final uid = FirebaseAuth.instance.currentUser?.uid;
                               final order = OrderModel(
                                 userId: uid ?? "",
                                 totalAmount: total,
@@ -221,15 +241,16 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                                 clientId: _selectedClientId ?? "",
                                 totalPaid: paid,
                               );
-                        if (!order.isValidPayment) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(l10n.paidAmountCannotExceedTotal),
-                            ),
-                          );
-                          return;
-                        }
-                        context.read<OrdersCubit>().addOrder(order);
+                              if (!order.isValidPayment) {
+                                setState(() => _submitInFlight = false);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(l10n.paidAmountCannotExceedTotal),
+                                  ),
+                                );
+                                return;
+                              }
+                              context.read<OrdersCubit>().addOrder(order);
                             },
                       height: 70.h(context),
                       width: 330.w(context),

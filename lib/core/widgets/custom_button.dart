@@ -12,22 +12,29 @@ class CustomButton extends StatelessWidget {
   final TextStyle? textStyle;
   final double? circularRadius;
   final bool isInvert;
+  /// When true, tap is ignored and a small progress indicator is shown instead of [title].
+  final bool isLoading;
 
   const CustomButton({
     super.key,
     required this.title,
     required this.onTap,
     this.color,
-    this.isInvert = true, this.width, this.height, this.circularRadius, this.textStyle,
+    this.isInvert = true,
+    this.width,
+    this.height,
+    this.circularRadius,
+    this.textStyle,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
 
     var theme = Theme.of(context);
-    bool isDisabled = onTap == null;
+    final bool isDisabled = onTap == null || isLoading;
     return GestureDetector(
-      onTap: onTap,
+      onTap: isLoading ? null : onTap,
       child: Container(
         height:height ?? 60.h(context),
         width: width ??250.w(context),
@@ -38,12 +45,23 @@ class CustomButton extends StatelessWidget {
           color: isDisabled ? Colors.grey : (color ?? AppColors.primary),
         ),
         child: Center(
-          child: Text(
-            title,
-            style: isInvert
-                ?textStyle ?? theme.textTheme.titleLarge!.copyWith(color: Colors.white)
-                :textStyle ??  theme.textTheme.titleLarge!.copyWith(color: Colors.black),
-          ),
+          child: isLoading
+              ? SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: isInvert ? Colors.white : Colors.black,
+                  ),
+                )
+              : Text(
+                  title,
+                  style: isInvert
+                      ? textStyle ??
+                          theme.textTheme.titleLarge!.copyWith(color: Colors.white)
+                      : textStyle ??
+                          theme.textTheme.titleLarge!.copyWith(color: Colors.black),
+                ),
         ),
       ),
     ).animate()

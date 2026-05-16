@@ -15,4 +15,14 @@ class AdManger {
   static String clientDetailsBanner = isTest
       ? "ca-app-pub-3940256099942544/9214589741"
       : "ca-app-pub-5907953906414563/7395727170";
+
+  /// Anchored banner on main tab surfaces (home / orders / clients lists).
+  static String mainTabBanner = isTest
+      ? "ca-app-pub-3940256099942544/6300978111"
+      : "ca-app-pub-5907953906414563/5320330778";
+
+  /// Full-screen ad after saving an order or client (replace placeholder in AdMob).
+  static String interstitialAfterSave = isTest
+      ? "ca-app-pub-3940256099942544/1033173712"
+      : "ca-app-pub-5907953906414563/8081841040";
 }

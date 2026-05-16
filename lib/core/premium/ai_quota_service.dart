@@ -29,7 +29,7 @@ class AiQuotaService {
     return count;
   }
 
-  /// Returns whether another voice-AI completion is allowed this month (Premium bypasses externally).
+  /// Returns whether another voice-AI completion is allowed this month for [workspaceId].
   Future<bool> canUseVoiceAi(String workspaceId, {int freeLimit = 1}) async {
     final prefs = await SharedPreferences.getInstance();
     final usage = await _usageAfterMonthSync(

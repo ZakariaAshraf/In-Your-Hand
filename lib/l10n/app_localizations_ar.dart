@@ -744,6 +744,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get premiumPackageLifetime => 'مدى الحياة';
 
   @override
+  String get premiumBillingMonthly => 'يُجدد شهرياً';
+
+  @override
+  String get premiumBillingAnnual => 'يُجدد سنوياً';
+
+  @override
+  String get premiumBillingWeekly => 'يُجدد أسبوعياً';
+
+  @override
+  String get premiumBillingLifetime => 'شراء لمرة واحدة';
+
+  @override
+  String get premiumBillingDefault => 'اشتراك';
+
+  @override
+  String get premiumAnnualSaveBadge => 'وفّر 20%';
+
+  @override
   String get aiVoiceLocalQuotaTitle => 'لقد وصلت للحد الأقصى المجاني';
 
   @override

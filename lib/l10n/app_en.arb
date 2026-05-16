@@ -243,6 +243,12 @@
   "premiumPackageAnnual": "Annual",
   "premiumPackageWeekly": "Weekly",
   "premiumPackageLifetime": "Lifetime",
+  "premiumBillingMonthly": "Billed monthly",
+  "premiumBillingAnnual": "Billed annually",
+  "premiumBillingWeekly": "Billed weekly",
+  "premiumBillingLifetime": "One-time purchase",
+  "premiumBillingDefault": "Subscription",
+  "premiumAnnualSaveBadge": "Save 20%",
 
   "aiVoiceLocalQuotaTitle": "Free AI limit reached",
   "aiVoiceLocalQuotaBody": "Upgrade to Premium for unlimited voice orders!",
