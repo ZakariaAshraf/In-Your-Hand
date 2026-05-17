@@ -13,9 +13,10 @@ import 'package:in_your_hand/features/dashboard/presentation/cubit/dashboard_cub
 import 'package:in_your_hand/features/orders/presentation/cubit/payments_cubit.dart';
 import 'package:in_your_hand/features/home/presentation/screens/home_screen.dart';
 import 'package:in_your_hand/features/orders/presentation/cubit/orders_cubit.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
-
 import 'core/cache/cache_helper.dart';
+import 'core/config/app_status_service.dart';
+import 'core/config/screens/force_update_screen.dart';
+import 'core/config/screens/maintenance_screen.dart';
 import 'core/premium/ai_quota_service.dart';
 import 'core/premium/premium_service.dart';
 import 'core/premium/revenuecat_service.dart';
@@ -71,12 +72,22 @@ void main() async {
   await CacheHelper.init();
   // Guest workspace + optional restored Firebase session before first frame.
   final sessionContext = await SessionBootstrap.load();
-  await RevenueCatService.instance.init(sessionContext.workspaceId);
-  await PremiumService.init();
-  final Widget initialHome =
-      CacheHelper.isOnboardingSeen ? const MainScreen() : const OnboardingScreen();
-  // final appUserId = await Purchases.appUserID;
-  // print("My RevenueCat ID is: $appUserId");
+
+  final startupGate = await AppStatusService.instance.evaluate();
+  final Widget initialHome = switch (startupGate) {
+    AppStartupMaintenance() => const MaintenanceScreen(),
+    AppStartupForceUpdate(:final storeUrl) =>
+      ForceUpdateScreen(storeUrl: storeUrl),
+    AppStartupOk() => CacheHelper.isOnboardingSeen
+        ? const MainScreen()
+        : const OnboardingScreen(),
+  };
+
+  if (startupGate is AppStartupOk) {
+    await RevenueCatService.instance.init(sessionContext.workspaceId);
+    await PremiumService.init();
+  }
+
   runApp(ProviderScope(child: MyApp(initialHome: initialHome)));
 }
 
